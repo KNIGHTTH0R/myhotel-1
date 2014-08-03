@@ -1,0 +1,148 @@
+<div class="row-fluid">
+    <div class="span12">
+        <h3 class="heading">Quản lý đơn hàng</h3>
+        <form action="" name='frm' id="frm" method='post'>
+            <table id="rounded-corner" class="table_set_room">
+                <thead>
+                    <tr>
+                        <th scope="col" class="rounded-company" colspan="5" style="padding: 4px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="font-weight: bold;">                 
+                        <td>Từ ngày</td>
+                        <td>Đến ngày</td>
+                        <td>Khách sạn</td>  
+                        <td>Loại phòng</td>
+                        <td>Trạng thái</td>
+                    </tr>
+                    <tr>                 
+                        <td><input name="DateFromSearch" type="text" readonly="readonly" value="<?php echo ($_POST['DateFromSearch']) ? $_POST['DateFromSearch'] : date('d/m/Y'); ?>" style="width: 120px" id="dateFrom" /></td>
+                        <td><input name="DateToSearch" type="text" readonly="readonly" value="<?php echo ($_POST['DateToSearch']) ? $_POST['DateToSearch'] : date('d/m/Y', strtotime('+7 day')); ?>" style="width: 120px" id="dateTo" /></td>
+                        <td><?php echo $this->HotelInfo['Hotel_Name']; ?></td>  
+                        <td>
+                            <select name="RoomSearch" id="RoomSearch">
+                                <option value="" <?php echo ($_POST['RoomSearch'] == "") ? "selected='selected'" : ""; ?>>Tất cả</option>
+                                <?php foreach ($this->Room as $v) { ?>
+                                    <option <?php echo ($_POST['RoomSearch'] == $v['Room_Id']) ? "selected='selected'" : ""; ?> value="<?php echo $v['Room_Id']; ?>"><?php echo $v['Room_Name']; ?></option>
+                                <?php } ?>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="StatusSearch">
+                                <option <?php echo ($_POST['StatusSearch'] == '') ? "selected='selected'" : ""; ?> value="">Tất cả</option>
+                                <option <?php echo ($_POST['StatusSearch'] == '1') ? "selected='selected'" : ""; ?> value="1">Đã đọc</option>
+                                <option <?php echo ($_POST['StatusSearch'] == '2') ? "selected='selected'" : ""; ?> value="2">Đã xác nhận</option>
+                                <option <?php echo ($_POST['StatusSearch'] == '3') ? "selected='selected'" : ""; ?> value="3">Chưa đọc</option>
+                                <option <?php echo ($_POST['StatusSearch'] == '4') ? "selected='selected'" : ""; ?> value="4">Đang thanh toán</option>
+                                <option <?php echo ($_POST['StatusSearch'] == '-1') ? "selected='selected'" : ""; ?> value="-1">Hủy</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" align="right">
+                            <button id="export-excel" class="btn btn-inverse" type="submit">Xuất Excel</button>
+                            <button id="btn_search_room" class="btn btn-inverse" name="submit" type="submit">Tìm kiếm</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <input type="hidden" name="typeAction" id="typeAction" value="search" />
+            <table id="rounded-corner">
+                <thead>
+                    <tr>
+                        <th colspan="4" style="background: none">Tổng số giao dịch: <?php echo (is_array($this->Order)) ? count($this->Order) : 0; ?></th>
+                        <th colspan="4" style="background: none; text-align: right">Tổng tiền: <?php echo MyZend_Function::formatPriceAddCommas($this->TotalAmount); ?> VND</th>
+                    </tr>
+                </thead>
+                <thead>
+                    <tr>
+                        <th scope="col" class="rounded">Mã đặt phòng</th>
+                        <th scope="col" class="rounded">Tình trạng</th>
+                        <th scope="col" class="rounded">Tên khách hàng</th>
+                        <th scope="col" class="rounded">Ngày đặt phòng</th>
+                        <th scope="col" class="rounded">Ngày nhận phòng</th>
+                        <th scope="col" class="rounded">Ngày trả phòng</th>
+                        <th scope="col" class="rounded">Tiền thanh toán</th>
+                        <th scope="col" class="rounded">Chi tiết</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($this->Order as $v) { ?>
+                        <?php
+                        $statusName;
+                        switch ($v['HotelOrder_Status']) {
+                            case 1:
+                                $statusName = 'Đã đọc';
+                                break;
+                            case 2:
+                                $statusName = 'Đã xác nhận';
+                                break;
+                            case 3;
+                                $statusName = 'Chưa đọc';
+                                break;
+                            case 4:
+                                $statusName = 'Đang thanh toán';
+                                break;
+                            case -1;
+                                $statusName = 'Hủy';
+                                break;
+                        }
+                        ?>
+                        <tr>                 
+                            <td><?php echo $v['HotelOrder_Code']; ?></td>
+                            <td><?php echo $statusName; ?></td>
+                            <td><?php echo $v['HotelOrder_ContactName']; ?></td>
+                            <td><?php echo MyZend_Function::formatDateYMDHIS_DMY($v['HotelOrder_BookDate'], '/'); ?></td> 
+                            <td><?php echo MyZend_Function::formatDateYMDHIS_DMY($v['HotelOrder_StayDate'], '/'); ?></td>
+                            <td><?php echo MyZend_Function::formatDateYMDHIS_DMY($v['HotelOrder_OutDate'], '/'); ?></td>
+                            <td><?php echo MyZend_Function::formatPriceAddCommas($v['HotelOrder_TotalAmount']); ?></td>
+                            <td><a class="order_detail_show" target='_blank' href="<?php echo _URL_HPARTNER . '/order/edit/id/' . $v['HotelOrder_Id']; ?>"><img src="<?php echo _HPARTNER_URL . '/images/edit.gif'; ?>" /></a></td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+<script>
+    $(function() {
+        $("#dateFrom, #dateTo").datepicker({
+            showOn: "button",
+            buttonImage: "<?php echo _HPARTNER_URL . '/images/calendar_icon.png'; ?>",
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+        $("#export-excel").click(function() {
+            $("#frm").attr('action', '<?php echo _URL_HPARTNER; ?>/order/export');
+            $("#frm").attr('target', '_blank');
+        });
+
+        $("#btn_search_room").click(function() {
+            $("#frm").attr('action', '<?php echo _URL_HPARTNER; ?>/order');
+            $("#frm").attr('target', '_self');
+        });
+    });
+</script>
+
+<script type="text/javascript" src="<?php echo _HPARTNER_URL; ?>/js/jquery.min.js"></script>
+<script>
+    !window.jQuery && document.write('<script src="<?php echo _HPARTNER_URL; ?>/fancybox-1.3.4/jquery-1.4.3.min.js"><\/script>');
+</script>
+<script type="text/javascript" src="<?php echo _HPARTNER_URL; ?>/fancybox-1.3.4/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="<?php echo _HPARTNER_URL; ?>/fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo _HPARTNER_URL; ?>/fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+<script type="text/javascript">
+    $.noConflict();
+    jQuery(document).ready(function() {
+        jQuery(".order_detail_show").fancybox({
+            'width': '75%',
+            'height': '75%',
+            'autoScale': false,
+            'transitionIn': 'none',
+            'transitionOut': 'none',
+            'type': 'iframe'
+        });
+    });
+
+</script>

@@ -1,0 +1,129 @@
+<?php if (count($this->WarningMsg) > 0) { ?>
+	<div class="warning_box">
+		<?php echo current($this->WarningMsg); ?>
+	</div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+	<div class="valid_box">
+		<?php echo current($this->SuccessMsg); ?>
+	</div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+	<div class="error_box">
+		<?php echo current($this->ErrorMsg); ?>
+	</div>
+<?php } ?>
+<div class="form">
+    <form action="" method="post" class="niceform" name='frm' enctype="multipart/form-data">
+        <fieldset>
+            <dl class="part_title">Thông tin khách hàng</dl>       
+            <dl>
+                <dt><label>Tên khách hàng</label></dt>
+                <dd><?php echo stripslashes($this->HotelOrder['HotelOrder_ContactName']); ?></dd>
+            </dl>
+            <dl>
+                <dt><label>Địa chỉ liên hệ</label></dt>
+                <dd><?php echo stripslashes($this->HotelOrder['HotelOrder_ContactAddress']); ?></dd>
+            </dl>
+            <dl>
+                <dt><label>Điện thoại liên hệ</label></dt>
+                <dd><?php echo stripslashes($this->HotelOrder['HotelOrder_ContactPhone']); ?></dd>
+            </dl>
+            <dl>
+                <dt><label>Email</label></dt>
+                <dd><?php echo stripslashes($this->HotelOrder['HotelOrder_ContactEmail']); ?></dd>
+            </dl>
+            <dl class="part_title">Chi tiết đặt phòng</dl>
+            <dl>
+                <dt><label>Mã đặt phòng</label></dt>
+                <dd><?php echo stripslashes($this->HotelOrder['HotelOrder_Code']); ?></dd>
+            </dl>
+            <dl>
+                <dt><label>Khách sạn</label></dt>
+                <dd><?php echo stripslashes($this->HotelOrder['Hotel_Name']); ?></dd>
+            </dl>
+            <dl>
+                <dt><label>Loại phòng</label></dt>
+                <dd><?php echo stripslashes($this->HotelOrder['Room_Name']); ?></dd>
+            </dl>
+            <dl>
+                <dt><label>Số phòng</label></dt>
+                <dd><?php echo stripslashes($this->HotelOrder['HotelOrder_Room']); ?></dd>
+            </dl>
+            <dl>
+                <dt><label>Ngày đặt phòng</label></dt>
+                <dd><?php echo MyZend_Function::formatDateYMDHIS_DMY($this->HotelOrder['HotelOrder_BookDate'], '/'); ?></dd>
+            </dl>
+            <dl>
+                <dt><label>Ngày nhận phòng</label></dt>
+                <dd><?php echo MyZend_Function::formatDateYMDHIS_DMY($this->HotelOrder['HotelOrder_StayDate'], '/'); ?></dd>
+            </dl>
+            <dl>
+                <dt><label>Ngày trả phòng</label></dt>
+                <dd><?php echo MyZend_Function::formatDateYMDHIS_DMY($this->HotelOrder['HotelOrder_OutDate'], '/'); ?></dd>
+            </dl>
+            <dl>
+                <dt><label>Đêm ở</label></dt>
+                <dd><?php echo stripslashes($this->HotelOrder['HotelOrder_NightsStay']); ?></dd>
+            </dl>
+            <dl>
+                <dt><label>Người lớn</label></dt>
+                <dd><?php echo stripslashes($this->HotelOrder['HotelOrder_Adult']); ?></dd>
+            </dl>
+            <dl>
+                <dt><label>Giường phụ</label></dt>
+                <dd><?php echo stripslashes($this->HotelOrder['HotelOrder_ExtraBed']); ?></dd>
+            </dl>
+
+			<dl>
+                <dt><label>Chính sách hủy phòng</label></dt>
+                <dd><?php echo stripslashes($this->HotelOrder['PolicyCancel_Name']); ?></dd>
+            </dl>
+            <dl>
+                <dt><label>Tổng tiền</label></dt>
+                <dd><?php echo MyZend_Function::formatPriceAddCommas($this->HotelOrder['HotelOrder_Total']); ?> VND</dd>
+            </dl>
+			<dl>
+                <dt><label>Khuyến mãi</label></dt>
+                <dd><?php echo stripslashes($this->HotelOrder['RoomPromotion_Name']); ?></dd>
+            </dl>
+			<dl>
+                <dt><label>Giá trị khuyến mãi</label></dt>
+                <dd>(<?php echo $this->HotelOrder['HotelOrder_Discount']; ?>%)/đơn hàng</dd>
+            </dl>
+			<dl>
+                <dt><label>Thành tiền phải thanh toán</label></dt>
+                <dd><strong><?php echo MyZend_Function::formatPriceAddCommas($this->HotelOrder['HotelOrder_TotalAmount']); ?> VND</strong></dd>
+            </dl>
+            
+            <dl>
+                <dt><label>Trạng thái</label></dt>
+                <dd>
+					<?php if ($this->HotelOrder['HotelOrder_Status'] != '-1') { ?>
+	                    <select name="Status">
+	                        <option <?php echo ($this->HotelOrder['HotelOrder_Status'] == '1') ? "selected='selected'" : ""; ?> value="1">Đã đọc</option>
+	                        <option <?php echo ($this->HotelOrder['HotelOrder_Status'] == '2') ? "selected='selected'" : ""; ?> value="2">Đã xác nhận</option>
+	                        <option <?php echo ($this->HotelOrder['HotelOrder_Status'] == '3') ? "selected='selected'" : ""; ?> value="3">Chưa đọc</option>
+	                        <option <?php echo ($this->HotelOrder['HotelOrder_Status'] == '4') ? "selected='selected'" : ""; ?> value="4">Đang thanh toán</option>
+	                        <option <?php echo ($this->HotelOrder['HotelOrder_Status'] == '-1') ? "selected='selected'" : ""; ?> value="-1">Hủy</option>
+	                    </select>
+					<?php } else { ?>
+	                    Hủy
+					<?php } ?>
+                </dd>
+            </dl>
+			<?php if ($this->HotelOrder['HotelOrder_Status'] != '-1') { ?>
+	            <dl class="submit">
+	                <a onclick="checkForm()" class="bt_blue"><span class="bt_blue_lft"></span><strong>Cập nhật</strong><span class="bt_blue_r"></span></a>
+	            </dl>
+			<?php } ?>
+        </fieldset>
+    </form>
+</div>
+<script>
+					function checkForm() {
+						document.frm.submit();
+					}
+</script>

@@ -1,0 +1,150 @@
+<?php if (count($this->WarningMsg) > 0) { ?>
+	<div class="warning_box">
+		<?php echo current($this->WarningMsg); ?>
+	</div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+	<div class="valid_box">
+		<?php echo current($this->SuccessMsg); ?>
+	</div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+	<div class="error_box">
+		<?php echo current($this->ErrorMsg); ?>
+	</div>
+<?php } ?>
+<style>
+    input[type=text], input[type=password] {
+        width: 300px;
+    }
+
+    #Email, #Password, #RePassword, #dl-repass {
+        display: none;
+    }
+
+    #update-email, #update-password {
+        text-decoration: underline;
+        color: #1E5BAE;
+        cursor: pointer;
+    }    
+</style>
+<div class="form">
+    <form action="" method="post" class="niceform" name='frm' enctype="multipart/form-data">
+        <fieldset>
+			<dl class="part_title">Thông tin cơ bản</dl>
+            <dl>
+                <dt><label for="email">Tên :</label></dt>
+                <dd><input placeholder="Tên" type="text" name="Name" id="Name" size="34" class="require" value="<?php echo $this->Member['User_Name']; ?>" /></dd>
+            </dl>
+			<dl>
+                <dt><label>Ngày sinh:</label></dt>
+                <dd><input type="text" value="<?php echo MyZend_Function::formatDateYMDHIS_DMY($this->Member['User_Birthday'], '/'); ?>" style="width: 120px" id="Birthday" name='Birthday' /></dd>
+            </dl>
+			<dl>
+                <dt><label>Số điện thoại:</label></dt>
+                <dd><input type="text" value="<?php echo $this->Member['User_Phone']; ?>" id="Phone" name='Phone' /></dd>
+            </dl>
+			<dl>
+                <dt><label>Địa chỉ:</label></dt>
+                <dd><input type="text" value="<?php echo $this->Member['User_Address']; ?>" id="Address" name='Address' /></dd>
+            </dl>
+			<dl class="part_title">Thông tin đăng nhập</dl>
+            <dl>
+                <dt><label>Email:</label></dt>
+                <dd><span id="update-email">Cập nhật</span><input placeholder="Email" type="text" name="Email" id="Email" size="34" class="require" value="<?php echo $this->Member['User_Email']; ?>" /></dd>
+            </dl>
+            <dl>
+                <dt><label>Mật khẩu:</label></dt>
+                <dd><span id="update-password">Cập nhật</span><input placeholder="Mật khẩu" type="password" name="Password" id="Password" size="34" class="require" value="" /></dd>
+            </dl>
+            <dl id="dl-repass">
+                <dt><label>Nhập lại mật khẩu:</label></dt>
+                <dd><input placeholder="Nhập lại mật khẩu" type="password" name="RePassword" id="RePassword" size="34" class="require" value="" /></dd>
+            </dl>
+
+            <dl>
+                <dt><label for="color">Trạng thái</label></dt>
+                <dd>
+                    <select style="width: 100px" name="Status" id="Status">
+                        <option value="1" <?php echo ($this->Member['User_Status'] == 1) ? "selected='selected'" : ""; ?>>Hoạt động</option>
+                        <option value="0" <?php echo ($this->Member['User_Status'] == 0) ? "selected='selected'" : ""; ?>>Tạm dừng</option>
+                    </select>
+                </dd>
+            </dl>
+
+            <dl class="submit">
+                <a onclick="checkForm()" class="bt_blue"><span class="bt_blue_lft"></span><strong>Cập nhật</strong><span class="bt_blue_r"></span></a>
+            </dl>
+        </fieldset>
+    </form>
+</div>
+
+<script>
+
+					$("#Password,#RePassword").focus(function() {
+						$(this).val("");
+					});
+
+
+					function checkForm() {
+						var name = $("#Name").val();
+						var email = $("#Email").val();
+						var password = $("#Password").val();
+						var repassword = $("#RePassword").val();
+						if (name == '') {
+							alert('Vui lòng nhập Tên.');
+							$("#FirstName").focus();
+							return;
+						}
+
+						if ($("#Email").is(":visible") && email == '') {
+							alert('Vui lòng nhập Email.');
+							$("#Email").focus();
+							return;
+						} else if (!checkEmail(email)) {
+							alert('Email không hợp lệ. Vui lòng nhập lại.');
+							$("#Email").focus();
+							return;
+						} else {
+							$.post("<?php echo _URL . '/iadm/member/check-email/'; ?>", {email: email}, function(data) {
+								if (email != '<?php echo $this->Member['User_Email']; ?>') {
+									if (data == 1) {
+										alert('Email đã tồn tại. Vui lòng nhập Email khác.');
+										$("#Email").focus();
+										return;
+									}
+								}
+								if ($("#Password").is(":visible") && (password != "" || repassword != "") && password != repassword) {
+									alert('Nhập lại mật khẩu không đúng. Vui lòng nhập lại.');
+									$("#RePassword").focus();
+									return;
+								}
+								document.frm.submit();
+							});
+						}
+					}
+
+					$(function() {
+						$("#update-email").click(function() {
+							$("#Email").show();
+							$(this).hide();
+						});
+						$("#update-password").click(function() {
+							$("#Password").show();
+							$("#RePassword").show();
+							$("#dl-repass").show();
+							$(this).hide();
+						});
+					});
+					$(function() {
+						$("#Birthday").datepicker({
+							showOn: "button",
+							buttonImage: "<?php echo _BACKEND_URL . '/images/calendar_icon.png'; ?>",
+							buttonImageOnly: true,
+							dateFormat: "dd/mm/yy"
+						});
+					});
+
+</script>

@@ -1,0 +1,71 @@
+<html>
+    <head>
+        <title>Ajax Image Upload</title>
+    </head>
+    <script src="<?php echo _BACKEND_URL; ?>/uploadimage/js/jquery.min.js"></script>
+    <script src="<?php echo _BACKEND_URL; ?>/uploadimage/js/jquery.wallform.js"></script>
+    <script>
+		$(document).ready(function() {
+
+			$('#photoimg').die('click').live('change', function() {
+				//$("#preview").html('');
+
+				$("#imageform").ajaxForm({target: '#preview',
+					beforeSubmit: function() {
+
+						console.log('ttest');
+						$("#imageloadstatus").show();
+						$("#imageloadbutton").hide();
+					},
+					success: function() {
+						console.log('test');
+						$("#imageloadstatus").hide();
+						$("#imageloadbutton").show();
+					},
+					error: function() {
+						console.log('xtest');
+						$("#imageloadstatus").hide();
+						$("#imageloadbutton").show();
+					}}).submit();
+
+
+			});
+		});
+    </script>
+
+    <style>
+        body
+        {
+            font-family:arial;
+        }
+        #preview
+        {
+            color:#cc0000;
+            font-size:12px;
+            margin-bottom: 20px;
+            float: left;
+        }
+        .imgList 
+        {
+            border:1px solid #dedede;
+            padding:4px;	
+            float:left;	
+			margin: 8px;
+        }
+		
+    </style>
+    <body>
+        <div>
+            <div id='preview'></div>
+            <form id="imageform" method="post" enctype="multipart/form-data" action='<?php echo _URL_ADMIN; ?>/upload-image/upload/' style="clear:both">
+                <h1>Tải hình ảnh khách sạn</h1> 
+                <div id='imageloadstatus' style='display:none'><img src="<?php echo _BACKEND_URL; ?>/uploadimage/loader.gif" alt="Uploading...."/></div>
+                <div id='imageloadbutton'>
+                    <input type="file" name="photos[]" id="photoimg" multiple="true" />
+                </div>
+            </form>
+
+
+        </div>
+    </body>
+</html>

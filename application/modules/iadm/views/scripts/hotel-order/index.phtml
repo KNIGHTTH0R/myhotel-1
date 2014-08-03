@@ -1,0 +1,162 @@
+          
+<?php if (count($this->WarningMsg) > 0) { ?>
+	<div class="warning_box">
+		<?php echo current($this->WarningMsg); ?>
+	</div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+	<div class="valid_box">
+		<?php echo current($this->SuccessMsg); ?>
+	</div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+	<div class="error_box">
+		<?php echo current($this->ErrorMsg); ?>
+	</div>
+<?php } ?>      
+<form action="<?php echo _URL_ADMIN . '/hotel-order/index'; ?>" name='frm' method='post'>
+    <table id="rounded-corner" class="table_set_room">
+        <thead>
+            <tr>
+                <th scope="col" class="rounded-company" colspan="5" style="padding: 4px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="font-weight: bold;">                 
+                <td>Đặt phòng từ ngày</td>
+                <td>Đặt phòng đến ngày</td>
+                <td>Khách sạn</td>  
+                <td>Loại phòng</td>
+				<td>Trạng thái</td>
+            </tr>
+            <tr>                 
+                <td><input type="text" readonly="readonly" name="DateFromSearch" value="<?php echo ($this->search['DateFromSearch']) ? $this->search['DateFromSearch'] : date('d/m/Y'); ?>" style="width: 120px" id="dateFrom" /></td>
+                <td><input type="text" readonly="readonly" name="DateToSearch" value="<?php echo ($this->search['DateToSearch']) ? $this->search['DateToSearch'] : date('d/m/Y', strtotime('+7 day')); ?>" style="width: 120px" id="dateTo" /></td>
+                <td>
+                    <select name="HotelSearch" id="Hotel">
+                        <option value="">Tất cả</option>
+						<?php foreach ($this->Hotel as $v) { ?>
+							<option <?php echo ($this->search['HotelSearch'] == $v['Hotel_Id']) ? "selected='selected'" : ""; ?> value="<?php echo $v['Hotel_Id']; ?>"><?php echo $v['Hotel_Name']; ?></option>
+						<?php } ?>
+                    </select>
+                </td>  
+                <td>
+                    <select name="RoomSearch" id="Room">
+                        <option value="">Tất cả</option>
+						<?php
+						if ($this->Room) {
+							foreach ($this->Room as $v) {
+								?>
+								<option <?php echo ($this->search['RoomSearch'] == $v['Room_Id']) ? "selected='selected'" : ""; ?> value="<?php echo $v['Room_Id']; ?>"><?php echo $v['Room_Name']; ?></option>
+							<?php } ?>
+						<?php } ?>
+                    </select>
+                </td>
+				<td>
+					<select name="StatusSearch">
+						<option <?php echo ($_POST['StatusSearch'] == '') ? "selected='selected'" : ""; ?> value="">Tất cả</option>
+						<option <?php echo ($_POST['StatusSearch'] == '1') ? "selected='selected'" : ""; ?> value="1">Đã đọc</option>
+						<option <?php echo ($_POST['StatusSearch'] == '2') ? "selected='selected'" : ""; ?> value="2">Đã xác nhận</option>
+						<option <?php echo ($_POST['StatusSearch'] == '3') ? "selected='selected'" : ""; ?> value="3">Chưa đọc</option>
+						<option <?php echo ($_POST['StatusSearch'] == '4') ? "selected='selected'" : ""; ?> value="4">Đang thanh toán</option>
+						<option <?php echo ($_POST['StatusSearch'] == '-1') ? "selected='selected'" : ""; ?> value="-1">Hủy</option>
+					</select>
+				</td>
+            </tr>
+            <tr>
+                <td colspan="5">
+                    <a onclick="document.frm.submit()" id="btn_search_room" class="bt_green"><span class="bt_green_lft"></span><strong>Tìm kiếm</strong><span class="bt_green_r"></span></a>
+                    <input type="hidden" name="typeAction" value="search" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table id="rounded-corner" style="margin-bottom: 10px">
+        <thead>
+            <tr>
+                <th scope="col" class="rounded">Mã đặt phòng</th>
+                <th scope="col" class="rounded">Tình trạng</th>
+                <th scope="col" class="rounded">Tên khách hàng</th>
+                <th scope="col" class="rounded">Ngày đặt phòng</th>
+                <th scope="col" class="rounded">Ngày nhận phòng</th>
+                <th scope="col" class="rounded">Ngày trả phòng</th>
+                <th scope="col" class="rounded"></th>
+            </tr>
+        </thead>
+		<?php if (count($this->listOrder) > 0) { ?>
+			<tfoot>
+				<tr>
+					<td colspan="6" class="rounded-foot-left"><em>Hiển thị <?php echo $this->fromItem; ?> đến <?php echo $this->toItem; ?> / <?php echo $this->countOrderAll; ?> kết quả</em></td>
+					<td class="rounded-foot-right">&nbsp;</td>
+				</tr>
+			</tfoot>
+			<tbody>
+				<?php
+				foreach ($this->listOrder as $v) {
+					$statusName;
+					switch ($v['HotelOrder_Status']) {
+						case 1:
+							$statusName = 'Đã đọc';
+							break;
+						case 2:
+							$statusName = 'Đã xác nhận';
+							break;
+						case 3;
+							$statusName = 'Chưa đọc';
+							break;
+						case 4:
+							$statusName = 'Đang thanh toán';
+							break;
+						case -1;
+							$statusName = 'Hủy';
+							break;
+					}
+					?>
+					<tr>
+						<td><?php echo $v['HotelOrder_Code']; ?></td>
+						<td><?php echo $statusName; ?></td>
+						<td><?php echo $v['HotelOrder_ContactName']; ?></td>
+						<td><?php echo MyZend_Function::formatDateYMDHIS_DMY($v['HotelOrder_BookDate'], '/'); ?></td>
+						<td><?php echo MyZend_Function::formatDateYMDHIS_DMY($v['HotelOrder_StayDate'], '/'); ?></td>
+						<td><?php echo MyZend_Function::formatDateYMDHIS_DMY($v['HotelOrder_OutDate'], '/'); ?></td>
+						<td><a target='_blank' href="<?php echo _URL_ADMIN . '/hotel-order/edit/id/' . $v['HotelOrder_Id']; ?>"><img src="<?php echo _BACKEND_URL . '/images/edit.gif'; ?>" /></a></td>
+					</tr>
+				<?php } ?>
+			</tbody>
+		<?php } else { ?>
+			<tr>
+				<td colspan="7" class="result">
+					<div class='no-result'>Không tìm thấy kết quả</a>
+				</td>
+			</tr>
+		<?php } ?>
+    </table>
+</form>
+
+<script>
+						$(function() {
+							$("#dateFrom, #dateTo").datepicker({
+								showOn: "button",
+								buttonImage: "<?php echo _BACKEND_URL . '/images/calendar_icon.png'; ?>",
+								buttonImageOnly: true,
+								dateFormat: "dd/mm/yy"
+							});
+
+							$("#Hotel").change(function() {
+								if ($(this).val() != '') {
+									$.post("<?php echo _URL . '/iadm/hotel-order/mapping-hotel/'; ?>", {hotelId: $(this).val()}, function(result) {
+										var strOptionRoom;
+										var data = eval(result);
+										strOptionRoom = "<option value=''>Tất cả</option>";
+										$.each(data, function(i, item) {
+											strOptionRoom += "<option value='" + item.Room_Id + "'>" + item.Room_Name + "</option>";
+										});
+										$("#Room").html(strOptionRoom);
+									});
+								}
+							});
+						});
+
+</script>

@@ -1,0 +1,264 @@
+          
+<?php if (count($this->WarningMsg) > 0) { ?>
+	<div class="warning_box">
+		<?php echo current($this->WarningMsg); ?>
+	</div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+	<div class="valid_box">
+		<?php echo current($this->SuccessMsg); ?>
+	</div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+	<div class="error_box">
+		<?php echo current($this->ErrorMsg); ?>
+	</div>
+<?php } ?>      
+<form action="<?php echo _URL_ADMIN . '/hotel-room-set/index'; ?>" name='frm' method='post'>
+    <table id="rounded-corner" class="table_set_room">
+        <thead>
+            <tr>
+                <th scope="col" class="rounded-company" colspan="4" style="padding: 4px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="font-weight: bold;">                 
+                <td>Khách sạn</td>
+                <td>Loại phòng</td>
+            </tr>
+            <tr>                 
+                <td>
+                    <select placeholder="Khách sạn" name="Hotel" id="Hotel">
+                        <option value="">&nbsp;</option>
+						<?php foreach ($this->Hotel as $v) { ?>
+							<option value="<?php echo $v['Hotel_Id']; ?>"><?php echo $v['Hotel_Name']; ?></option>
+						<?php } ?>
+                    </select>
+                </td>
+                <td>
+                    <select name="Room" id="Room">
+                        <option></option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table id="rounded-corner" class="table_set_room">
+        <thead>
+            <tr>
+                <th scope="col" class="rounded-company" colspan="4" style="padding: 4px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="font-weight: bold;">                 
+                <td>Từ ngày</td>
+                <td>Đến ngày</td>
+                <td>Ngày áp dụng trong tuần</td>  
+                <td>Bổ sung chính sách hủy phòng</td>
+            </tr>
+            <tr>                 
+                <td><input type="text" readonly="readonly" value="<?php echo date('d/m/Y'); ?>" style="width: 120px" id="dateFrom" /></td>
+                <td><input type="text" readonly="readonly" value="<?php echo date('d/m/Y', strtotime('+7 day')); ?>" style="width: 120px" id="dateTo" /></td>
+                <td>
+                    <input type="checkbox" checked="checked" id="dayCheckbox_0"/> CN
+                    <input type="checkbox" checked="checked" id="dayCheckbox_1"/> Hai
+                    <input type="checkbox" checked="checked" id="dayCheckbox_2"/> Ba
+                    <input type="checkbox" checked="checked" id="dayCheckbox_3"/> Tư
+                    <input type="checkbox" checked="checked" id="dayCheckbox_4"/> Năm
+                    <input type="checkbox" checked="checked" id="dayCheckbox_5"/> Sáu
+                    <input type="checkbox" checked="checked" id="dayCheckbox_6"/> Bảy
+                </td>  
+                <td><input type="checkbox" id="isSetExistedPolicy" name="isSetExistedPolicy" value="1"></td>
+            </tr>
+        </tbody>
+    </table>
+    <table id="rounded-corner" class="table_set_room">
+        <tbody>
+            <tr style="font-weight: bold;">    
+				<td></td>
+                <td>Đơn</td>
+                <td>Đôi</td>
+                <td>Giường Bổ Sung</td>  
+                <td>Tiền</td>
+                <td>Số phòng chỉ định</td>
+                <td>Bao gồm ăn sáng</td>
+            </tr>
+            <tr>       
+				<td>Bao gồm thuế <span id="Tax"></span>%</td>
+                <td><input type="text" id="txtSingleNetRate" value="" style="width: 60px" onkeyup="this.value = (addCommas(this.value));" /></td>
+                <td><input type="text" id="txtDoubleNetRate" value="" style="width: 60px" onkeyup="this.value = (addCommas(this.value));" /></td>
+                <td><input type="text" id="txtExtraBed" value="" style="width: 60px" onkeyup="this.value = (addCommas(this.value));" /></td>  
+                <td>VND</td>
+                <td><input type="text" id="txtAllotment" value="" style="width: 30px"/></td>
+                <td><input type="checkbox" checked="checked" id="chkBFIncludedCheckBox" name="chkBFIncludedCheckBox" /></td>
+            </tr>
+            <tr><td colspan="7"><a id="btn_set_room" class="bt_green"><span class="bt_green_lft"></span><strong>Thêm</strong><span class="bt_green_r"></span></a></td></tr>
+        </tbody>
+    </table>
+
+    <input type="hidden" name="typeAction" value="index" />
+    <table id="rounded-corner">
+        <thead>
+            <tr>
+                <th scope="col" class="rounded">Thứ</th>
+<!--                <th scope="col" class="rounded">Ngày</th>-->
+                <th scope="col" class="rounded">Mệnh giá</th>
+                <th scope="col" class="rounded">Đơn</th>
+                <th scope="col" class="rounded">Đôi</th>
+                <th scope="col" class="rounded">Giường Bổ Sung</th>
+                <th scope="col" class="rounded">Số phòng chỉ định</th>
+                <th scope="col" class="rounded-q4">Bữa sáng</th>
+            </tr>
+        </thead>
+        <tbody id="item_set_room">
+            <tr>                 
+                <td></td>
+<!--                <td></td>-->
+                <td></td>
+                <td></td>  
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+
+    </table>
+</form>
+<a onclick="document.frm.submit()" class="bt_green"><span class="bt_green_lft"></span><strong>Lưu</strong><span class="bt_green_r"></span></a>
+<a onclick="cancel()" class="bt_red"><span class="bt_red_lft"></span><strong>Hủy</strong><span class="bt_red_r"></span></a> 
+
+<script>
+					$(function() {
+						$("#dateFrom, #dateTo").datepicker({
+							showOn: "button",
+							buttonImage: "<?php echo _BACKEND_URL . '/images/calendar_icon.png'; ?>",
+							buttonImageOnly: true,
+							dateFormat: "dd/mm/yy"
+						});
+						$("#btn_set_room").click(function() {
+							var datefrom = $("#dateFrom").val();
+							var dateto = $("#dateTo").val();
+							var datefromArr = datefrom.split('/');
+							var datetoArr = dateto.split('/');
+							var strtoDateF = new Date(datefromArr[2], datefromArr[1], datefromArr[0]);
+							var strtoDateT = new Date(datetoArr[2], datetoArr[1], datetoArr[0]);
+							var dateNow = new Date('<?php echo date('Y'); ?>', '<?php echo date('m'); ?>', '<?php echo date('d'); ?>');
+							var SingleNetRate = $("#txtSingleNetRate").val().split('.').join('');
+							var DoubleNetRate = $("#txtDoubleNetRate").val().split('.').join('');
+							
+							if (strtoDateF < dateNow) {
+								alert('Từ ngày không được nhỏ hơn ngày hiện tại.');
+								return;
+							}
+							if (strtoDateF > strtoDateT) {
+								alert('Từ ngày không được lớn hơn Đến ngày.');
+								return;
+							}
+							if ($("#Hotel").val() == '') {
+								alert('Vui lòng chọn Khách sạn.');
+								return;
+							}
+							if ($("#Room").val() == '') {
+								alert('Vui lòng chọn Loại phòng.');
+								return;
+							}
+							if ($("#txtSingleNetRate").val() == '') {
+								alert('Vui lòng nhập giá phòng Đơn.');
+								$("#txtSingleNetRate").focus();
+								return;
+							}
+							if ($("#txtDoubleNetRate").val() == '') {
+								alert('Vui lòng nhập giá phòng Đôi.');
+								$("#txtDoubleNetRate").focus();
+								return;
+							}
+							if ($("#txtExtraBed").val() == '') {
+								alert('Vui lòng nhập giá Giường Phụ.');
+								$("#txtExtraBed").focus();
+								return;
+							}
+							if ($("#txtAllotment").val() == '') {
+								alert('Vui lòng nhập Số phòng chỉ định.');
+								$("#txtAllotment").focus();
+								return;
+							}
+							if (SingleNetRate > DoubleNetRate) {
+								alert('Giá Phòng Đơn không thể lớn hơn Phòng Đôi.');
+								return;
+							}
+							
+							var chkBFIncludedCheckBox = 0;
+							if ($("#chkBFIncludedCheckBox").is(":checked")) {
+								chkBFIncludedCheckBox = 1;
+							}
+							$("#item_set_room").html("");
+							$.post("<?php echo _URL . '/iadm/hotel-room-set/set-room-preview/'; ?>",
+									{
+										dateFrom: $("#dateFrom").val(),
+										dateTo: $("#dateTo").val(),
+										SingleNetRate: $("#txtSingleNetRate").val(),
+										DoubleNetRate: $("#txtDoubleNetRate").val(),
+										ExtraBed: $("#txtExtraBed").val(),
+										Allotment: $("#txtAllotment").val(),
+										chkBFIncludedCheckBox: chkBFIncludedCheckBox,
+									},
+									function(result) {
+										var data = eval(result);
+										var strItemSetRoom = '';
+										$(".valid_box").remove();
+										var stt = 1;
+										$.each(data, function(i, item) {
+											
+											if (stt > 7) {
+												var hidden = "style='display:none'";
+											}
+											if ($("#dayCheckbox_" + item.Day).is(":checked")) {
+												CheckchkBFIncludedCheckBox = (item.chkBFIncludedCheckBox == 1) ? "Có" : "Không";
+												strItemSetRoom += '<tr ' + hidden  + '>';
+												strItemSetRoom += '<td>' + dayName(item.Day) + '</td>';
+//												strItemSetRoom += '<td>' + item.Date + '</td>';
+												strItemSetRoom += '<td>VND</td>';
+												strItemSetRoom += '<td>' + item.SingleNetRate + '</td>';
+												strItemSetRoom += '<td>' + item.DoubleNetRate + '</td>';
+												strItemSetRoom += '<td>' + item.ExtraBed + '</td>';
+												strItemSetRoom += '<td>' + item.Allotment + '</td>';
+												strItemSetRoom += '<td>' + CheckchkBFIncludedCheckBox + '</td>';
+												strItemSetRoom += '<input type="hidden" name="Date[' + item.Stt + ']" value="' + item.DateFormat + '" />';
+												strItemSetRoom += '<input type="hidden" name="SingleNetRate[' + item.Stt + ']" value="' + item.SingleNetRate + '" />';
+												strItemSetRoom += '<input type="hidden" name="DoubleNetRate[' + item.Stt + ']" value="' + item.DoubleNetRate + '" />';
+												strItemSetRoom += '<input type="hidden" name="ExtraBed[' + item.Stt + ']" value="' + item.ExtraBed + '" />';
+												strItemSetRoom += '<input type="hidden" name="Allotment[' + item.Stt + ']" value="' + item.Allotment + '" />';
+												strItemSetRoom += '<input type="hidden" name="CheckchkBFIncludedCheckBox[' + item.Stt + ']" value="' + item.chkBFIncludedCheckBox + '" />';
+												strItemSetRoom += '</tr>';
+												stt++;
+											}
+											
+										});
+										$("#item_set_room").html(strItemSetRoom);
+									});
+						});
+						$("#Hotel").change(function() {
+							if ($(this).val() != '') {
+								$("#Tax").html('');
+								$.post("<?php echo _URL . '/iadm/hotel-room-set/mapping-hotel/'; ?>", {hotelId: $(this).val()}, function(result) {
+									var strOptionRoom;
+									var data = eval(result);
+									strOptionRoom = "<option value=''>&nbsp;</option>";
+									$.each(data, function(i, item) {
+										strOptionRoom += "<option value='" + item.Room_Id + "'>" + item.Room_Name + "</option>";
+										$("#Tax").html(item.Tax);
+									});
+									$("#Room").html(strOptionRoom);
+								});
+							}
+						});
+					});
+					
+					function cancel() {
+						$("#item_set_room").html("");
+					}
+					
+</script>

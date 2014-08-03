@@ -1,0 +1,168 @@
+<link rel="stylesheet" href="<?php echo _HPARTNER_URL; ?>/css/jquery-ui2.css" />
+<div class="row-fluid">
+    <div class="span12">
+		<div>
+			<?php echo $this->render('hotel-picture/tab.phtml'); ?>
+		</div>
+		<?php
+		if (count($this->SuccessMsg) > 0) {
+			echo '<div class="form_alert form_alert-info">' . current($this->SuccessMsg) . '</div>';
+		}
+		if (count($this->ErrorMsg) > 0) {
+			echo '<div class="form_alert form_alert-error">' . current($this->ErrorMsg) . '</div>';
+		}
+		?>
+		<div class="formSep">
+			<div class="row-fluid">
+				<div id="accordion">
+					<h3>Upload hình ảnh khách sạn</h3>
+					<div style="background: none">
+						<div>
+							<p>Số lượng upload không quá: <strong><?php echo _QUOTA_PICTURE_UPLOAD;?> hình</strong></p>
+							<p>Dung lượng mỗi hình không quá: <strong><?php echo _SIZE_PICTURE_UPLOAD/1024;?> KB</strong></p>
+							<form id="imageSubmitform" method="post" enctype="multipart/form-data" action='?tab=tab1' style="clear:both; margin: 0">
+								<div class="tab-button-accordion">
+									<button id="add_confirm" class="btn btn-inverse btn-green" type="button">Thêm ảnh</button>
+									<button id="edit_confirm" class="btn btn-inverse btn-blue" type="submit">Upload ảnh</button>
+									<button id="cancel_confirm" class="btn btn-inverse btn-yellow" type="button" onclick="cancelUpload()">Hủy upload</button>
+									<img id="imageloadstatus" style="display: none" src="<?php echo _HPARTNER_URL; ?>/uploadimage/loader.gif" alt="Uploading...."/>
+								</div>
+								<div id='preview'></div>
+								<input type="hidden" name="type" value="upload" />
+							</form>
+							<form id="imageform" method="post" enctype="multipart/form-data" action='<?php echo _URL_HPARTNER; ?>/upload-image/upload/' style="clear:both">
+								<div id='imageloadbutton' style="display: none">
+									<input type="file" name="photos[]" id="photoimg" multiple="true" />
+								</div>
+							</form>
+						</div>
+					</div>
+					<h3>Khách sạn: <?php echo $this->HotelInfo['Hotel_Name']; ?></h3>
+					<div style="border: none; background: none; float: left; margin-top: 0; padding-top: 0">
+						<form id="imageSubmitform" method="post" enctype="multipart/form-data" action='?tab=tab2' style="clear:both; margin: 0">
+							<div id="showListImage" class="showListImage">
+								<?php echo '<ul id="sortable2">'; ?>
+								<?php foreach ($this->listImage as $v) { ?>
+									<?php
+									echo '<li id="li_imgListHotel_' . $v['HotelPicture_Id'] . '" class="ui-state-default">
+									<div class="del_img" onclick="delPictureHotel(' . $v['HotelPicture_Id'] . ', \'' . $v['HotelPicture_Name'] . '\', this)">
+									<img src="' . _HPARTNER_URL . '/images/icon_delete.png" />
+									</div>
+									<table class="table_img_list" id="table_img_listHotel_' . $v['HotelPicture_Id'] . '">';
+									echo '<tr><td class="img">';
+									?>
+									<img src="<?php echo MyZend_Function::thumb(_PICTURE_HOTEL_URL . '/' . $v['HotelPicture_Name'], 106, 106); ?>" class="imgList" />
+									<?php
+									echo '</td></tr>';
+									echo '<tr><td>';
+									echo '<select name="pictureview_imgListHotel[' . $v['HotelPicture_Id'] . ']">';
+									echo '<option value="0" ' . (($v['PictureView_Id'] == 0) ? "selected=\"selected\"" : "") . '>Chọn tiêu đề ảnh</option>';
+									foreach ($this->PictureView as $vv) {
+										echo '<option ' . (($vv['PictureView_Id'] == $v['PictureView_Id']) ? "selected=\"selected\"" : "") . ' value="' . $vv['PictureView_Id'] . '">' . $vv['PictureView_Name'] . '</option>';
+									}
+									echo '</select>';
+									echo '</td></tr>';
+									echo '<tr><td><select name="status_imgListHotel[' . $v['HotelPicture_Id'] . ']"><option value="1" ' . (($v['HotelPicture_Status'] == 1) ? "selected='selected'" : "") . '>Hiển thị</option><option value="0" ' . (($v['HotelPicture_Status'] == 0) ? "selected='selected'" : "") . '>Ẩn</option></select></td></tr>';
+									echo '<tr><td><input placeholder="Tiêu đề ảnh" type="text" name="title_imgListHotel[' . $v['HotelPicture_Id'] . ']" value="' . $v['HotelPicture_Title'] . '" /></td></tr>';
+									echo '</table><input type="hidden" name="position_imgListHotel[' . $v['HotelPicture_Id'] . ']" class="position_imgList" value="' . $v['HotelPicture_Position'] . '" /></li>';
+									?>
+								<?php } ?>
+								<?php echo '</ul>'; ?>
+							</div>
+							<input type="hidden" name="type" value="update" />
+							<div class="tab-button-accordion" style="text-align: right"><button id="edit_confirm" class="btn btn-inverse" type="submit">Cập nhật</button></div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+    </div>                        
+</div>  
+
+<?php
+$activeTab = 'active: 1,';
+if ($_POST) {
+	$tab = $_GET['tab'];
+	switch ($tab) {
+		case 'tab1':
+			$activeTab .= 'active: 0,';
+			break;
+		case 'tab2':
+			$activeTab .= 'active: 1,';
+			break;
+	}
+}
+?>
+<script>
+										$(function() {
+											$("#accordion").accordion({
+												heightStyle: "content",
+<?php echo $activeTab; ?>
+											});
+											$("#sortable2").sortable({
+												stop: function(event, ui) {
+													$.map($(this).find('li'), function(el) {
+														$("#" + el.id).find(".position_imgList").val($(el).index());
+													});
+												}
+											});
+											$("#sortable2").disableSelection();
+										});</script>
+<script src="<?php echo _HPARTNER_URL; ?>/uploadimage/js/jquery.min.js"></script>
+<script src="<?php echo _HPARTNER_URL; ?>/uploadimage/js/jquery.wallform.js"></script>
+<script>
+	$.noConflict();
+	jQuery(document).ready(function() {
+
+		jQuery('#photoimg').die('click').live('change', function() {
+			//$("#preview").html('');
+
+			jQuery("#imageform").ajaxForm({target: '#preview',
+				beforeSubmit: function() {
+
+					console.log('beforeSubmit');
+					jQuery("#imageloadstatus").show();
+					//					jQuery("#imageloadbutton").hide();
+				},
+				success: function() {
+					console.log('success');
+					jQuery("#imageloadstatus").hide();
+					//					jQuery("#imageloadbutton").show();
+				},
+				error: function() {
+					console.log('error');
+					jQuery("#imageloadstatus").hide();
+					//					jQuery("#imageloadbutton").show();
+				}}).submit();
+		});
+	});</script>
+
+<script>
+	function delPicTemp(uploadid, imagename, thIs) {
+		if (confirm('Bạn có chắc chắn muốn xóa?')) {
+			$.post("<?php echo _URL_HPARTNER . '/hotel-picture/del-pic-temp'; ?>", {id: uploadid, image: imagename}, function(data) {
+				$("#li_imgList_" + uploadid).remove();
+			});
+		}
+	}
+
+	function delPictureHotel(id, imagename, thIs) {
+		if (confirm('Bạn có chắc chắn muốn xóa?')) {
+			$.post("<?php echo _URL_HPARTNER . '/hotel-picture/del-pic-hotel'; ?>", {id: id, image: imagename}, function(data) {
+				$("#li_imgListHotel_" + id).remove();
+			});
+		}
+	}
+
+	function cancelUpload() {
+		$("#sortable").remove();
+	}
+
+	$(function() {
+		$("#add_confirm").click(function() {
+			$("#photoimg").trigger('click');
+		});
+	});
+</script>	
+

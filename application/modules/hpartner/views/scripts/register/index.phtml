@@ -1,0 +1,299 @@
+<?php if ($this->PageProcess == 1) { ?>
+    <div class="register_box">
+        <form action="" method="post" id="formLogin" name="formLogin" autocomplete="off">
+            <div class="top_b">Đăng ký làm đối tác</div> 
+            <?php
+            if (count($this->errorMess) > 0) {
+                echo '<div class="alert alert-error alert-login">' . current($this->errorMess) . '</div>';
+            }
+            ?>
+
+            <div style="padding: 10px;">
+                Đăng ký khách sạn của bạn với <?php echo _WEB_NAME;?> đơn giản, nhanh chóng và miễn phí.
+            </div>
+            <div class="cnt_b" style="padding-top: 10px">
+                <div class="title-type">Thông tin khách sạn</div>
+                <div class="formSep">
+                    <div class="row-fluid">
+                        <div class="span8">
+                            <label>Tên khách sạn <span class="f_req">*</span></label>
+                            <input maxlength="255" class="" type="text" id="Hotel_Name" name="Hotel_Name" value="<?php echo $_POST['Hotel_Name']; ?>" />
+                        </div>
+                    </div>
+                </div>
+                <div class="formSep">
+                    <div class="row-fluid">
+                        <div class="span8">
+                            <label>Xếp hạng sao</label>
+                            <select name="Star" id="Star" style="width: 100px">
+                                <?php for ($i = 0; $i <= 5; $i++) { ?>
+                                    <option <?php echo ($_POST['Star'] == $i) ? "selected='selected'" : ""; ?> value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="formSep">
+                    <div class="row-fluid">
+                        <div class="span8">
+                            <label>Số phòng <span class="f_req">*</span></label>
+                            <input maxlength="255" type="text" id="Room" name="Room" value="<?php echo $_POST['Room']; ?>" style="width: 90px" />
+                        </div>
+                    </div>
+                </div>
+                <div class="formSep">
+                    <div class="row-fluid">
+                        <div class="span8">
+                            <label>Tỉnh/Thành <span class="f_req">*</span></label>
+                            <select name="Province" id="Province">
+                                <option value="">&nbsp;</option>
+                                <?php foreach ($this->Province as $v) { ?>
+                                    <option <?php echo ($_POST['Province'] == $v['Province_Id']) ? "selected='selected'" : ""; ?> value="<?php echo $v['Province_Id']; ?>"><?php echo $v['Province_Name']; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="formSep">
+                    <div class="row-fluid">
+                        <div class="span8">
+                            <label>Quận/Huyện <span class="f_req">*</span></label>
+                            <select name="District" id="District">
+                                <option value="">&nbsp;</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="formSep">
+                    <div class="row-fluid">
+                        <div class="span8">
+                            <label>Loại khách sạn <span class="f_req">*</span></label>
+                            <select name="HotelType" id="HotelType">
+                                <option value="">&nbsp;</option>
+                                <?php foreach ($this->HotelType as $v) { ?>
+                                    <option <?php echo ($_POST['HotelType'] == $v['HotelType_Id']) ? "selected='selected'" : ""; ?> value="<?php echo $v['HotelType_Id']; ?>"><?php echo $v['HotelType_Name']; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="formSep">
+                    <div class="row-fluid">
+                        <div class="span8">
+                            <label>Địa chỉ <span class="f_req">*</span></label>
+                            <input maxlength="255" class="" type="text" id="Address" name="Address" value="<?php echo $_POST['Address']; ?>" />
+                        </div>
+                    </div>
+                </div>
+                <div class="formSep">
+                    <div class="row-fluid">
+                        <div class="span8">
+                            <label>Số điện thoại chính <span class="f_req">*</span></label>
+                            <input maxlength="255" class="" type="text" id="Hotel_Phone" name="Hotel_Phone" value="<?php echo $_POST['Hotel_Phone']; ?>" />
+                        </div>
+                    </div>
+                </div>
+                <div class="formSep">
+                    <div class="row-fluid">
+                        <div class="span8">
+                            <label>Số Fax </label>
+                            <input maxlength="255" class="" type="text" id="Hotel_Fax" name="Hotel_Fax" value="<?php echo $_POST['Hotel_Fax']; ?>" />
+                        </div>
+                    </div>
+                </div>
+                <div class="formSep">
+                    <div class="row-fluid">
+                        <div class="span8">
+                            <label>Website </label>
+                            <input maxlength="255" class="" type="text" id="Hotel_Website" name="Hotel_Website" value="<?php echo $_POST['Hotel_Website']; ?>" />
+                        </div>
+                    </div>
+                </div>
+                <div class="title-type">Thông tin liên hệ</div>
+                <div class="formSep">
+                    <div class="row-fluid">
+                        <div class="span8">
+                            <label>Tên liên lạc chính: <span class="f_req">*</span></label>
+                            <input maxlength="255" class="" type="text" id="Name" name="Name" value="<?php echo $_POST['Name']; ?>" />
+                        </div>
+                    </div>
+                </div>
+                <div class="formSep">
+                    <div class="row-fluid">
+                        <div class="span8">
+                            <label>Số điện thoại: <span class="f_req">*</span></label>
+                            <input maxlength="255" class="" type="text" id="Phone" name="Phone" value="<?php echo $_POST['Phone']; ?>" />
+                        </div>
+                    </div>
+                </div>
+                <div class="formSep">
+                    <div class="row-fluid">
+                        <div class="span8">
+                            <label>Email: <span class="f_req">*</span></label>
+                            <input maxlength="255" class="" type="text" id="Email" name="Email" value="<?php echo $_POST['Email']; ?>" />
+                        </div>
+                    </div>
+                </div>
+                <div class="formSep">
+                    <div class="row-fluid">
+                        <div class="span8">
+                            <label>Nhập lại Email: <span class="f_req">*</span></label>
+                            <input maxlength="255" class="" type="text" id="ReEmail" name="ReEmail" value="<?php echo $_POST['ReEmail']; ?>" />
+                        </div>
+                    </div>
+                </div>
+                <div class="formSep">
+                    <div class="row-fluid">
+                        <div class="span8">
+                            <label>Mã xác thực: <span class="f_req">*</span></label>
+                            <input style="width: 100px" maxlength="5" class="" type="text" id="Captcha" name="Captcha" value="" />
+                            <img id="imgCaptcha" src='<?php echo _FRONTEND_URL . '/cacheImages/' . $this->CaptchaGenerate; ?>.png' />
+                            <img id="refreshCaptcha" src="<?php echo _HPARTNER_URL; ?>/images/refresh.png" />
+                            <input type="hidden" name="Cid" id="Cid" value="" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="btm_b clearfix">
+                <button type="button" class="btn btn-inverse pull-right" onclick="checkForm()">Đăng ký</button>					
+            </div>  
+        </form>
+    </div>
+
+    <div class="links_b links_btm clearfix">
+        <span><a href="<?php echo _URL_HPARTNER; ?>/login">Đăng nhập</a></span>
+    </div> 
+
+    <script>
+                    function checkForm() {
+                        if ($("#Hotel_Name").val() == '') {
+                            alert('Vui lòng nhập Tên khách sạn.');
+                            $("#Hotel_Name").focus();
+                            return;
+                        }
+                        if ($("#Room").val() == '' || $("#Room").val() == 0) {
+                            alert('Vui lòng nhập Số phòng.');
+                            $("#Room").focus();
+                            return;
+                        }
+                        if ($("#Province").val() == '') {
+                            alert('Vui lòng chọn Tỉnh/Thành.');
+                            return;
+                        }
+                        if ($("#District").val() == '') {
+                            alert('Vui lòng chọn Quận/Huyện.');
+                            return;
+                        }
+                        if ($("#HotelType").val() == '') {
+                            alert('Vui lòng chọn Loại khách sạn.');
+                            return;
+                        }
+                        if ($("#Address").val() == '') {
+                            alert('Vui lòng nhập Địa chỉ.');
+                            $("#Address").focus();
+                            return;
+                        }
+                        if ($("#Hotel_Phone").val() == '') {
+                            alert('Vui lòng nhập Số điện thoại chính.');
+                            $("#Hotel_Phone").focus();
+                            return;
+                        } else if (checkPhone($("#Hotel_Phone").val()) == false) {
+                            alert('Số điện thoại chính không hợp lệ. Vui lòng nhập lại.');
+                            $("#Phone").focus();
+                            return;
+                        }
+                        if ($("#Name").val() == '') {
+                            alert('Vui lòng nhập Tên liên lạc chính.');
+                            $("#Name").focus();
+                            return;
+                        }
+                        if ($("#Phone").val() == '') {
+                            alert('Vui lòng nhập Số điện thoại liên hệ.');
+                            $("#Phone").focus();
+                            return;
+                        } else if (checkPhone($("#Phone").val()) == false) {
+                            alert('Số điện thoại liên hệ không hợp lệ. Vui lòng nhập lại.');
+                            $("#Phone").focus();
+                            return;
+                        }
+                        if ($("#Email").val() == '') {
+                            alert('Vui lòng nhập Email.');
+                            $("#Email").focus();
+                            return;
+                        } else if (checkEmail($("#Email").val()) == false) {
+                            alert('Email không hợp lệ. Vui lòng nhập lại.');
+                            $("#Email").focus();
+                            return;
+                        }
+                        if ($("#ReEmail").val() == '') {
+                            alert('Vui lòng nhập lại Email.');
+                            $("#ReEmail").focus();
+                            return;
+                        } else if ($("#ReEmail").val() != $("#Email").val()) {
+                            alert('Nhập lại Email không đúng.');
+                            $("#ReEmail").focus();
+                            return;
+                        } else {
+                            $.post("<?php echo _URL . '/hpartner/register/check-exist-email/'; ?>", {Email: $("#Email").val()}, function(result) {
+                                if (result > 0) {
+                                    alert('Email này đã có người sử dụng. Vui lòng nhập Email khác.');
+                                    $("#Email").focus();
+                                    return;
+                                } else {
+                                    if ($("#Captcha").val() == '') {
+                                        alert('Vui lòng nhập Mã xác thực.');
+                                        $("#Captcha").focus();
+                                        return;
+                                    }
+                                    document.formLogin.submit();
+                                }
+                            });
+                        }
+                    }
+
+                    $(function() {
+                        $("#Province").change(function() {
+                            $("#District").attr("disabled", "disabled");
+                            $.post("<?php echo _URL . '/hpartner/register/mapping-province/'; ?>", {provinceId: $(this).val()}, function(result) {
+                                var strOptionDistrict;
+                                var data = eval(result);
+                                var districtSelect = '<?php echo $_POST['District']; ?>';
+                                strOptionDistrict = "<option value=''>&nbsp;</option>";
+                                $.each(data, function(i, item) {
+                                    strOptionDistrict += "<option " + ((districtSelect == item.District_Id) ? 'selected="selected"' : '') + " value='" + item.District_Id + "'>" + item.District_Name + "</option>";
+                                });
+                                $("#District").removeAttr("disabled");
+                                $("#District").html(strOptionDistrict);
+                            });
+                        });
+
+                        $("#refreshCaptcha").click(function() {
+                            $.post("<?php echo _URL . '/hpartner/request/refresh-captcha/'; ?>", '', function(resultRefreshCaptcha) {
+                                $("#imgCaptcha").attr('src', '<?php echo _FRONTEND_URL . '/cacheImages/'; ?>' + resultRefreshCaptcha + '.png');
+                            });
+                        });
+
+                    });
+
+    <?php if (isset($_POST['District'])) { ?>
+                        $(function() {
+                            $("#Province").trigger('change');
+                        });
+    <?php } ?>
+    </script>
+<?php } else { ?>
+    <div class="register_box">
+        <form action="" method="post" id="formLogin" name="formLogin">
+            <div class="top_b">Đăng ký làm đối tác</div> 
+            <?php if (count($this->SuccessMsg) > 0) { ?>
+                <div class="alert alert-info alert-login info-regis-success">
+                    <?php echo $this->BodyEmail;?>
+                </div>
+            <?php } ?>
+        </form>
+    </div>
+    <div class="links_b links_btm clearfix">
+        <span><a href="<?php echo _URL_HPARTNER; ?>/login">Đăng nhập</a></span>
+    </div> 
+<?php } ?>

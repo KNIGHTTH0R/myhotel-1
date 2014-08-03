@@ -1,0 +1,10 @@
+<ul class='tab-title-picture'>
+	<li class='current'><a href='<?php echo _URL_HPARTNER . '/hotel-picture'; ?>'><span class="stepNb">1</span>Hình ảnh khách sạn</a></li>
+	<?php $st = 1; foreach($this->ListRoom as $v) { $st += 1;?>
+	<li class='current'>
+		<a href='<?php echo _URL_HPARTNER . '/hotel-picture/room/id/' . $v['Room_Id']; ?>'>
+			<span class="stepNb"><?php echo $st;?></span><?php echo $v['Room_Name'];?>
+		</a>
+	</li>
+	<?php }?>
+</ul>

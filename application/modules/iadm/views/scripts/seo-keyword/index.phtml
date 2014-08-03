@@ -1,0 +1,90 @@
+         
+<?php if (count($this->WarningMsg) > 0) { ?>
+	<div class="warning_box">
+		<?php echo current($this->WarningMsg); ?>
+	</div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+	<div class="valid_box">
+		<?php echo current($this->SuccessMsg); ?>
+	</div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+	<div class="error_box">
+		<?php echo current($this->ErrorMsg); ?>
+	</div>
+<?php } ?>       
+
+<form action="<?php echo _URL_ADMIN . '/seo-keyword/delete'; ?>" name='frm' method='post'>
+    <table id="rounded-corner">
+        <thead>
+            <tr>
+                <th scope="col" class="rounded-company"><input type="checkbox" name="checkAll" id="checkAll" value="" /></th>
+                <th scope="col" class="rounded">Đường dẫn</th>
+                <th scope="col" class="rounded">Từ khóa</th>
+                <th scope="col" class="rounded">Trạng thái</th>
+                <th scope="col" class="rounded">Sửa</th>
+                <th scope="col" class="rounded-q4">Xóa</th>
+            </tr>
+        </thead>
+		<?php if (count($this->listSeoKeyword) > 0) { ?>
+	        <tfoot>
+	            <tr>
+	                <td colspan="5" class="rounded-foot-left"><em>Hiển thị <?php echo $this->fromItem; ?> đến <?php echo $this->toItem; ?> / <?php echo $this->CountSeoKeywordAll; ?> kết quả</em></td>
+	                <td class="rounded-foot-right">&nbsp;</td>
+
+	            </tr>
+	        </tfoot>
+	        <tbody>
+				<?php foreach ($this->listSeoKeyword as $v) { ?>
+					<tr>
+						<td><input type="checkbox" name="checkboxDel[]" value="<?php echo $v['Id']; ?>" /></td>               
+						<td><?php echo $v['Link']; ?></td>
+						<td><?php echo $v['Keyword']; ?></td>
+						<td>
+							<img class="status-img" id="status_<?php echo $v['Id']; ?>" 
+								 onclick="updateStatus(<?php echo $v['Id']; ?>)" 
+								 src="<?php echo _BACKEND_URL . '/images/' . (($v['Status'] == 1) ? 'icon_approve.png' : 'icon_unapprove.png'); ?>" />
+						</td>
+						<td><a href="<?php echo _URL_ADMIN . '/seo-keyword/edit/id/' . $v['Id']; ?>"><img src="<?php echo _BACKEND_URL; ?>/images/user_edit.png" alt="" title="" border="0" /></a></td>
+						<td><a href="<?php echo _URL_ADMIN . '/seo-keyword/delete/id/' . $v['Id']; ?>" class="ask"><img src="<?php echo _BACKEND_URL; ?>/images/trash.png" alt="" title="" border="0" /></a></td>
+					</tr>
+				<?php } ?>
+	        </tbody>
+		<?php } else { ?>
+			<tr>
+				<td colspan="6" class="result">
+					<div class='no-result'>Không tìm thấy kết quả</a>
+				</td>
+			</tr>
+		<?php } ?>
+    </table>
+</form>
+<a href="<?php echo _URL_ADMIN . '/seo-keyword/add'; ?>" class="bt_green"><span class="bt_green_lft"></span><strong>Thêm</strong><span class="bt_green_r"></span></a>
+<a onclick="checkForm()" class="bt_red"><span class="bt_red_lft"></span><strong>Xóa</strong><span class="bt_red_r"></span></a> 
+		<?php echo $this->paginationControl($this->page, 'Sliding', 'page.phtml', array('controller' => 'seo-keyword')); ?>
+
+<script>
+								 function checkForm() {
+									 var checkValue = $("input[name='checkboxDel[]']:checked").length;
+									 if (checkValue == 0) {
+										 alert('Vui lòng chọn Từ khóa cần xóa.');
+										 return false;
+									 }
+									 if (confirm('Bạn có chắc chắn muốn xóa?')) {
+										 document.frm.submit();
+									 }
+								 }
+
+								 function updateStatus(id) {
+									 $.post('<?php echo _URL_ADMIN . '/seo-keyword/updatestatus/'; ?>', {id: id, table: '<?php echo _PREFIX; ?>seo_keyword'}, function(result) {
+										 if (result == 1) {
+											 $("#status_" + id).attr("src", "<?php echo _BACKEND_URL . '/images/icon_approve.png'; ?>");
+										 } else {
+											 $("#status_" + id).attr("src", "<?php echo _BACKEND_URL . '/images/icon_unapprove.png'; ?>");
+										 }
+									 })
+								 }
+</script>

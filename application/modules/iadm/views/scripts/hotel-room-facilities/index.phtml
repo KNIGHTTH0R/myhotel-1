@@ -1,0 +1,92 @@
+          
+<?php if (count($this->WarningMsg) > 0) { ?>
+    <div class="warning_box">
+        <?php echo current($this->WarningMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+    <div class="valid_box">
+        <?php echo current($this->SuccessMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+    <div class="error_box">
+        <?php echo current($this->ErrorMsg); ?>
+    </div>
+<?php } ?>       
+
+<form action="<?php echo _URL_ADMIN . '/hotel-room-facilities/delete'; ?>" name='frm' method='post'>
+    <table id="rounded-corner">
+        <thead>
+            <tr>
+                <th scope="col" class="rounded-company"><input type="checkbox" name="checkAll" id="checkAll" value="" /></th>
+                <th scope="col" class="rounded">Hình ảnh</th>
+                <th scope="col" class="rounded">Tiện nghi</th>
+                <th scope="col" class="rounded">Trạng thái</th>
+                <th scope="col" class="rounded">Sửa</th>
+                <th scope="col" class="rounded-q4">Xóa</th>
+            </tr>
+        </thead>
+        <?php if (count($this->listFacilities) > 0) { ?>
+            <tfoot>
+                <tr>
+                    <td colspan="5" class="rounded-foot-left"><em>Hiển thị <?php echo $this->fromItem; ?> đến <?php echo $this->toItem; ?> / <?php echo $this->countFacilitiesAll; ?> kết quả</em></td>
+                    <td class="rounded-foot-right">&nbsp;</td>
+                </tr>
+            </tfoot>
+            <tbody>
+                <?php foreach ($this->listFacilities as $v) { ?>
+                    <tr>
+                        <td><input type="checkbox" name="checkboxDel[]" value="<?php echo $v['Facilities_Id']; ?>" /></td>
+                        <td>
+                            <img <?php echo ($v['Facilities_Picture'] != "" && is_file(_PICTURE_PATH . '/' . $v['Facilities_Picture'])) ? 'class="small-picture-index"' : ''; ?> 
+                                src="<?php echo _THUMB_URL . '?src=' . (($v['Facilities_Picture'] != '' && is_file(_PICTURE_PATH . '/' . $v['Facilities_Picture'])) ? _PICTURE_URL . '/' . $v['Facilities_Picture'] : _BACKEND_URL . '/images/no-image.png') . '&amp;w=32&amp;h=32'; ?>" />
+                        </td>
+                        <td><?php echo $v['Facilities_Name']; ?></td>
+                        <td>
+                            <img class="status-img" id="status_<?php echo $v['Facilities_Id']; ?>" 
+                                 onclick="updateStatus(<?php echo $v['Facilities_Id']; ?>)" 
+                                 src="<?php echo _BACKEND_URL . '/images/' . (($v['Facilities_Status'] == 1) ? 'icon_approve.png' : 'icon_unapprove.png'); ?>" />
+                        </td>
+                        <td><a href="<?php echo _URL_ADMIN . '/hotel-room-facilities/edit/id/' . $v['Facilities_Id']; ?>"><img src="<?php echo _BACKEND_URL; ?>/images/user_edit.png" alt="" title="" border="0" /></a></td>
+                        <td><a href="<?php echo _URL_ADMIN . '/hotel-room-facilities/delete/id/' . $v['Facilities_Id']; ?>" class="ask"><img src="<?php echo _BACKEND_URL; ?>/images/trash.png" alt="" title="" border="0" /></a></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        <?php } else { ?>
+            <tr>
+                <td colspan="6" class="result">
+                    <div class='no-result'>Không tìm thấy kết quả</a>
+                </td>
+            </tr>
+        <?php } ?>
+    </table>
+</form>
+<a href="<?php echo _URL_ADMIN . '/hotel-room-facilities/add'; ?>" class="bt_green"><span class="bt_green_lft"></span><strong>Thêm</strong><span class="bt_green_r"></span></a>
+<a onclick="checkForm()" class="bt_red"><span class="bt_red_lft"></span><strong>Xóa</strong><span class="bt_red_r"></span></a> 
+        <?php echo $this->paginationControl($this->page, 'Sliding', 'page.phtml', array('controller' => 'hotel-room-facilities')); ?>
+
+<script>
+                             function checkForm() {
+                                 var checkValue = $("input[name='checkboxDel[]']:checked").length;
+                                 if (checkValue == 0) {
+                                     alert('Vui lòng chọn dòng cần xóa.');
+                                     return false;
+                                 }
+                                 if (confirm('Bạn có chắc chắn muốn xóa?')) {
+                                     document.frm.submit();
+                                 }
+                             }
+
+                             function updateStatus(id) {
+                                 $.post('<?php echo _URL_ADMIN . '/hotel-room-facilities/updatestatus/'; ?>', {id: id, table: '<?php echo _PREFIX; ?>hotel_room_facilities', statusName: 'Facilities_Status', idName: 'Facilities_Id'}, function(result) {
+                                     if (result == 1) {
+                                         $("#status_" + id).attr("src", "<?php echo _BACKEND_URL . '/images/icon_approve.png'; ?>");
+                                     } else {
+                                         $("#status_" + id).attr("src", "<?php echo _BACKEND_URL . '/images/icon_unapprove.png'; ?>");
+                                     }
+                                 })
+                             }
+</script>

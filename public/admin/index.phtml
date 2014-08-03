@@ -1,0 +1,237 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>ADMIN PANEL</title>
+        <link rel="stylesheet" type="text/css" href="<?php echo _BACKEND_URL; ?>/css/style_column1.css" />
+        <link rel="stylesheet" href="<?php echo _BACKEND_URL; ?>/css/jquery-ui.css" />
+        <link rel="stylesheet" type="text/css" media="all" href="<?php echo _BACKEND_URL; ?>/css/niceforms-default.css" />
+        <script src="<?php echo _BACKEND_URL; ?>/js/jquery-1.9.1.js"></script>
+        <script src="<?php echo _BACKEND_URL; ?>/js/jquery-ui.js"></script>
+        <script type="text/javascript" src="<?php echo _BACKEND_URL; ?>/js/ddaccordion.js"></script>
+        <script type="text/javascript">
+			ddaccordion.init({
+				headerclass: "submenuheader", //Shared CSS class name of headers group
+				contentclass: "submenu", //Shared CSS class name of contents group
+				revealtype: "click", //Reveal content when user clicks or onmouseover the header? Valid value: "click", "clickgo", or "mouseover"
+				mouseoverdelay: 200, //if revealtype="mouseover", set delay in milliseconds before header expands onMouseover
+				collapseprev: true, //Collapse previous content (so only one open at any time)? true/false 
+				defaultexpanded: [], //index of content(s) open by default [index1, index2, etc] [] denotes no content
+				onemustopen: false, //Specify whether at least one header should be open always (so never all headers closed)
+				animatedefault: false, //Should contents open by default be animated into view?
+				persiststate: true, //persist state of opened contents within browser session?
+				toggleclass: ["", ""], //Two CSS classes to be applied to the header when it's collapsed and expanded, respectively ["class1", "class2"]
+				togglehtml: ["suffix", "<img src='<?php echo _BACKEND_URL; ?>/images/plus.gif' class='statusicon' />", "<img src='<?php echo _BACKEND_URL; ?>/images/minus.gif' class='statusicon' />"], //Additional HTML added to the header when it's collapsed and expanded, respectively  ["position", "html1", "html2"] (see docs)
+				animatespeed: "fast", //speed of animation: integer in milliseconds (ie: 200), or keywords "fast", "normal", or "slow"
+				oninit: function(headers, expandedindices) { //custom code to run when headers have initalized
+					//do nothing
+				},
+				onopenclose: function(header, index, state, isuseractivated) { //custom code to run whenever a header is opened or closed
+					//do nothing
+				}
+			})
+        </script>
+
+        <script type="text/javascript" src="<?php echo _BACKEND_URL; ?>/js/jconfirmaction.jquery.js"></script>
+        <script type="text/javascript">
+
+			$(document).ready(function() {
+				$('.ask').jConfirmAction();
+			});
+
+        </script>
+
+
+<!--        <script src="<?php echo _BACKEND_URL; ?>/tinymce/jscripts/tiny_mce/tiny_mce.js" type="text/javascript"></script>
+<script>
+        $(function() {
+                /*************tinyMCE***************/
+                tinyMCE.init({
+                        // General options
+                        mode: "textareas",
+                        theme: "advanced",
+                        editor_selector: "Editor_Body",
+                        plugins: "imagemanager,autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,autosave,visualblocks",
+                        height: "280",
+                        // Theme options
+                        theme_advanced_buttons1: "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
+                        theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+                        theme_advanced_buttons3: "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
+                        theme_advanced_buttons4: "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak,restoredraft,visualblocks,|,insertimage",
+                        theme_advanced_toolbar_location: "top",
+                        theme_advanced_toolbar_align: "left",
+                        theme_advanced_statusbar_location: "bottom",
+                        theme_advanced_resizing: true,
+                        // Skin options
+                        // skin : "o2k7",
+                        // skin_variant : "silver",
+
+                        // Example content CSS (should be your site CSS)
+                        content_css: "css/content.css",
+                        //Config URL view image
+                        relative_urls: 'true',
+                        remove_script_host: 'true',
+                        document_base_url: "<?php echo _URL . '/'; ?>",
+                        // Drop lists for link/image/media/template dialogs
+                        template_external_list_url: "lists/template_list.js",
+                        external_link_list_url: "lists/link_list.js",
+                        external_image_list_url: "lists/image_list.js",
+                        media_external_list_url: "lists/media_list.js",
+                        // Style formats
+                        style_formats: [
+                                {title: 'Bold text', inline: 'b'},
+                                {title: 'Red text', inline: 'span', styles: {color: '#ff0000'}},
+                                {title: 'Red header', block: 'h1', styles: {color: '#ff0000'}},
+                                {title: 'Example 1', inline: 'span', classes: 'example1'},
+                                {title: 'Example 2', inline: 'span', classes: 'example2'},
+                                {title: 'Table styles'},
+                                {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
+                        ],
+                        // Replace values for the template plugin
+                        template_replace_values: {
+                                username: "Some User",
+                                staffid: "991234"
+                        }
+                });
+
+                /********TinyMCE quote editor*****/
+                tinyMCE.init({
+                        mode: "textareas",
+                        theme: "simple",
+                        editor_selector: "Editor_Quote",
+                        height: '150',
+                        width: '690',
+                        // Style formats
+                        style_formats: [
+                                {title: 'Bold text', inline: 'b'},
+                                {title: 'Red text', inline: 'span', styles: {color: '#ff0000'}},
+                                {title: 'Red header', block: 'h1', styles: {color: '#ff0000'}},
+                                {title: 'Example 1', inline: 'span', classes: 'example1'},
+                                {title: 'Example 2', inline: 'span', classes: 'example2'},
+                                {title: 'Table styles'},
+                                {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
+                        ]
+                });
+        })
+</script>-->
+
+        <!-- CKEDITOR-->
+        <script src="<?php echo _BACKEND_URL; ?>/ckeditor/ckeditor.js" type="text/javascript" charset="utf-8"></script>
+        <script src="<?php echo _BACKEND_URL; ?>/ckeditor/adapters/jquery.js"></script>
+        <script>
+			$(document).ready(function() {
+				//Body
+				$(".Editor_Body").each(function() {
+					CKEDITOR.replace($(this).attr('id'), {
+						height: '250px',
+						width: '800px',
+						filebrowserBrowseUrl: "<?php echo _BACKEND_URL; ?>/ckeditor/ckfinder/ckfinder.html",
+						filebrowserImageBrowseUrl: "<?php echo _BACKEND_URL; ?>/ckeditor/ckfinder/ckfinder.html?type=Images",
+						filebrowserFlashBrowseUrl: "<?php echo _BACKEND_URL; ?>/ckeditor/ckfinder/ckfinder.html?type=Flash",
+						filebrowserUploadUrl: "<?php echo _BACKEND_URL; ?>/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files",
+						filebrowserImageUploadUrl: "<?php echo _BACKEND_URL; ?>/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images",
+						filebrowserFlashUploadUrl: "<?php echo _BACKEND_URL; ?>/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash",
+					});
+				});
+				//Quote
+				$(".Editor_Body").each(function() {
+					CKEDITOR.replace($(this).attr('id'), {
+						toolbar: [
+							{name: 'document', items: ['Source', '-', 'NewPage', 'Preview', '-', 'Templates']}, // Defines toolbar group with name (used to create voice label) and items in 3 subgroups.
+							['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'], // Defines toolbar group without name.
+							'/', // Line break - next group will be placed in new line.
+							{name: 'basicstyles', items: ['Bold', 'Italic']}
+						]
+					});
+				});
+			});
+        </script>
+
+
+
+
+    </head>
+    <body>
+        <div id="main_container">
+
+            <div class="header">
+                <div class="logo"><a href="#"><img src="<?php echo _BACKEND_URL; ?>/images/logo.gif" alt="" title="" border="0" /></a></div>
+
+                <div class="right_header">Chào <?php echo $this->User['Name']; ?> | <a href="<?php echo _URL; ?>/iadm/logout" class="logout">Logout</a></div>
+            </div>
+
+            <div class="main_content">
+
+                <div class="menu">
+                    <ul>
+                        <li><a class="" href="<?php echo _URL_ADMIN; ?>">Home</a></li>
+
+
+                        <li><a>Nội dung trang</a>                
+                            <ul>
+                                <li><a href="<?php echo _URL_ADMIN . '/content'; ?>" title="">Quản lý Nội dung trang</a></li>  
+                            </ul>
+                        </li>            
+                        <li><a>Website</a>                
+                            <ul>
+                                <li><a href="<?php echo _URL_ADMIN . '/web-info'; ?>" title="">Thông tin website</a></li>
+                                <li><a href="<?php echo _URL_ADMIN . '/email-system'; ?>" title="">Cấu hình gửi Email (SMTP)</a></li>  
+                                <li><a href="<?php echo _URL_ADMIN . '/seo-keyword'; ?>" title="">Quản lý từ khóa</a></li>   
+                                <li><a href="<?php echo _URL_ADMIN . '/admin-access'; ?>">Tài khoản quản trị</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a>Quản lý chung</a>
+                            <ul>
+                                <li><a href="<?php echo _URL_ADMIN . '/hotel-province'; ?>">Tỉnh/Thành</a></li>
+                                <li><a href="<?php echo _URL_ADMIN . '/hotel-district'; ?>">Quận/Huyện</a></li>
+                                <li><a href="<?php echo _URL_ADMIN . '/hotel-type'; ?>">Loại khách sạn</a></li>
+                                <li><a href="<?php echo _URL_ADMIN . '/hotel-geo-near'; ?>">Khu vực</a></li>
+                                <li><a href="<?php echo _URL_ADMIN . '/hotel-facilities'; ?>">Tiện nghi khách sạn</a></li>
+                                <li><a href="<?php echo _URL_ADMIN . '/hotel-useful'; ?>">Thông tin hữu ích</a></li>
+                                <li><a href="<?php echo _URL_ADMIN . '/hotel-room-facilities'; ?>">Tiện nghi phòng</a></li>
+                                <li><a href="<?php echo _URL_ADMIN . '/hotel-room-bed'; ?>">Loại giường</a></li>
+                                <li><a href="<?php echo _URL_ADMIN . '/hotel-sights'; ?>">Địa danh</a></li>
+                                <li><a href="<?php echo _URL_ADMIN . '/hotel-room-view'; ?>">Hướng nhìn phòng</a></li>
+                                <li><a href="<?php echo _URL_ADMIN . '/hotel-room-policy-cancel'; ?>">Chính sách hủy phòng</a></li>
+								<li><a href="<?php echo _URL_ADMIN . '/hotel-picture-view'; ?>">Loại hình ảnh</a></li>
+                            </ul>
+                        </li>
+                        <li><a>Khách sạn</a>
+                            <ul>
+                                <li><a href="<?php echo _URL_ADMIN . '/hotel'; ?>">Quản lý khách sạn</a></li>
+                                <li><a href="<?php echo _URL_ADMIN . '/hotel-room'; ?>">Quản lý loại phòng</a></li>
+								<li><a href="<?php echo _URL_ADMIN . '/hotel-room-set'; ?>">Biểu giá và chỉ định phòng</a></li>
+                                <li><a href="<?php echo _URL_ADMIN . '/hotel-room-management'; ?>">Quản lý phòng</a></li>
+                                <li><a href="<?php echo _URL_ADMIN . '/hotel-room-price-management'; ?>">Quản lý giá phòng</a></li>
+                                <li><a href="<?php echo _URL_ADMIN . '/hotel-room-policy-cancel-set'; ?>">Quản lý c-sách hủy phòng</a></li>
+                                <li><a href="<?php echo _URL_ADMIN . '/hotel-room-promotion'; ?>">Quản lý khuyến mãi</a></li>
+                                <li><a href="<?php echo _URL_ADMIN . '/hotel-order'; ?>">Quản lý đặt phòng</a></li>
+                            </ul>
+                        </li>
+						<!--                        <li><a class="sub1">Bình luận & đánh giá</a>
+													<ul>
+														<li><a href="<?php echo _URL_ADMIN . '/hotel-partner'; ?>">Bình luận</a></li>
+														<li><a href="<?php echo _URL_ADMIN . '/hotel'; ?>">Đánh giá</a></li>
+													</ul>
+												</li>-->
+                        <li><a href="<?php echo _URL_ADMIN . '/hotel-partner'; ?>">Đối tác</a></li>
+                        <li><a class="sub1" href="<?php echo _URL_ADMIN . '/member'; ?>">Thành viên</a></li>
+                    </ul>
+                </div> 
+
+                <div class="center_content">  
+                    <div class="right_content"> 
+                        <h2><?php echo $this->navigation()->breadcrumbs()->setSeparator(' ▶' . PHP_EOL)->setMinDepth(0); ?></h2>
+						<?php echo $this->layout()->content; ?>  
+                    </div>
+                </div>   <!--end of center content -->               
+                <div class="clear"></div>
+            </div> <!--end of main content-->
+            <div class="footer">
+                <!--                <div class="left_footer">Thiết kế bởi <a href="#">anhtuan15071987@gmail.com</a></div>              -->
+            </div>
+        </div>		
+        <script type="text/javascript" src="<?php echo _BACKEND_URL; ?>/js/scripts.js"></script>
+    </body>
+</html>

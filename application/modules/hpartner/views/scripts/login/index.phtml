@@ -1,0 +1,65 @@
+<div class="wrap_login_box">
+    <div class="login_box">
+        <form action="<?php echo _URL_HPARTNER; ?>/login" method="post" id="formLogin" name="formLogin" autocomplete="off">
+            <div class="top_b">Xin chào, Quý đối tác</div> 
+			<?php
+			if (count($this->errorMess) > 0) {
+				echo '<div class="alert alert-error alert-login">' . current($this->errorMess) . '</div>';
+			}
+			?>
+			<?php
+			if (count($this->message) > 0) {
+				echo '<div class="alert alert-info alert-login">' . current($this->message) . '</div>';
+			}
+			?>
+            <div class="cnt_b">
+                <div class="formRow">
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-user"></i></span><input type="text" id="email" name="email" placeholder="Email" value="<?php echo $this->Email; ?>" />
+                    </div>
+                </div>
+                <div class="formRow">
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-lock"></i></span><input type="password" id="password" name="password" placeholder="Mật khẩu" value="<?php echo $this->Password; ?>" />
+                    </div>
+                </div>
+                <div class="formRow clearfix">
+                    <label class="checkbox"><input type="checkbox" name="rememberLogin" id="rememberLogin" value="1" <?php echo ($this->RememberLogin == 1) ? "checked='checked'" : ""; ?> /> Nhớ mật khẩu</label>
+                </div>
+            </div>
+            <div class="btm_b clearfix">
+                <a href="<?php echo _URL_HPARTNER; ?>/login/forgot">Quên mật khẩu?</a>  <button type="button" class="btn btn-inverse pull-right" onclick="checkForm()">Đăng nhập</button>					
+            </div>  
+        </form>
+
+    </div>
+    <img src="<?php echo _HPARTNER_URL; ?>/images/BE3_login.jpg" />
+    <div class="links_b links_btm clearfix">
+        Thật dễ dàng trở thành đối tác của chúng tôi
+        <span><a href="<?php echo _URL_HPARTNER; ?>/register">Kết nối ngay hôm nay!</a></span>
+    </div>
+</div>
+
+
+<script>
+					function checkForm() {
+						var email = document.formLogin.email.value;
+						var password = document.formLogin.password.value;
+						if (email == '') {
+							alert('Vui lòng nhập Email.');
+							document.formLogin.email.focus();
+							return;
+						} else if (checkEmail($("#email").val()) == false) {
+							alert('Email không hợp lệ. Vui lòng nhập lại.');
+							$("#email").focus();
+							return;
+						}
+						if (password == '') {
+							alert('Vui lòng nhập Mật khẩu.');
+							document.formLogin.password.focus();
+							return;
+						}
+
+						document.formLogin.submit();
+					}
+</script>

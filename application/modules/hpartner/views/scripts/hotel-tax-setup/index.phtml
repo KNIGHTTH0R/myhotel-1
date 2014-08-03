@@ -1,0 +1,34 @@
+<form name="frm" id="frm" method="post" action="">
+
+    <div class="row-fluid">
+        <div class="span12">
+            <h3 class="heading">Cài đặt thuế</h3>
+            <?php
+            if (count($this->SuccessMsg) > 0) {
+                echo '<div class="form_alert form_alert-info">' . current($this->SuccessMsg) . '</div>';
+            }
+            if (count($this->ErrorMsg) > 0) {
+                echo '<div class="form_alert form_alert-error">' . current($this->ErrorMsg) . '</div>';
+            }
+            ?>
+            <p>Thuế của website sẽ trả cho Đối tác</p>          
+            <table class="table table-bordered table-striped table_vam" id="dt_enterprises">
+                <thead>
+                    <tr>               
+                        <th>Khách sạn</th>
+                        <th>Thuế</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><?php echo $this->HotelInfo['Hotel_Name'];?></td>
+                        <td><input style="width: 100px" name="Tax" type="text" value="<?php echo $this->HotelInfo['Hotel_Tax'];?>" /> %</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="form-actions">
+                <button id="edit_submit" class="btn btn-inverse" type="submit">Đồng ý chỉnh sửa</button>
+            </div>
+        </div>
+    </div>
+</form>

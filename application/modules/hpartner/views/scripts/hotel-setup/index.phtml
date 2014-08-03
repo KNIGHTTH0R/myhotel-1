@@ -1,0 +1,85 @@
+<div class="row-fluid">
+    <div class="span12">
+        <h3 class="heading">Cài đặt khách sạn</h3>
+		<?php
+		if (count($this->SuccessMsg) > 0) {
+			echo '<div class="form_alert form_alert-info">' . current($this->SuccessMsg) . '</div>';
+		}
+		if (count($this->ErrorMsg) > 0) {
+			echo '<div class="form_alert form_alert-error">' . current($this->ErrorMsg) . '</div>';
+		}
+		?>
+        <form class="form_validation_ttip" name="frm" id="frm" method="post" action="">
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Trẻ nhỏ tính đến </label>
+						<select name="InfantAge" id="InfantAge" style="width: 180px">
+							<?php for ($i = 0; $i <= 5; $i++) { ?>
+								<option <?php echo ($this->HotelInfo['Hotel_InfantAge'] == $i) ? "selected='selected'" : ""; ?> value="<?php echo $i; ?>"><?php echo $i; ?></option>
+							<?php } ?>
+						</select> tuổi
+                    </div>
+                </div>
+            </div>
+			<div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Trẻ lớn tính từ </label>
+						<span id="span_InfantAge"><?php echo $this->HotelInfo['Hotel_InfantAge'] + 1; ?></span> &nbsp;Cho đến
+						<select name="ChildAgeTo" id="ChildAgeTo" style="width: 110px">
+							<?php for ($i = 0; $i <= 21; $i++) { ?>
+								<option <?php echo ($this->HotelInfo['Hotel_ChildAgeTo'] == $i) ? "selected='selected'" : ""; ?> value="<?php echo $i; ?>"><?php echo $i; ?></option>
+							<?php } ?>
+						</select> tuổi
+                    </div>
+                </div>
+            </div>
+			<div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Số tuổi khách tối thiểu: </label>
+						<select name="MinGuestAge" id="MinGuestAge" style="width: 180px">
+							<?php for ($i = 0; $i <= 21; $i++) { ?>
+								<option <?php echo ($this->HotelInfo['Hotel_MinGuestAge'] == $i) ? "selected='selected'" : ""; ?> value="<?php echo $i; ?>"><?php echo $i; ?></option>
+							<?php } ?>
+						</select> tuổi
+                    </div>
+                </div>
+            </div>
+			<div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Giường phụ bắt buộc cho người từ </label>
+						<select name="MaxChildAge" id="MaxChildAge" style="width: 180px">
+							<?php for ($i = 0; $i <= 21; $i++) { ?>
+								<option <?php echo ($this->HotelInfo['Hotel_MaxChildAge'] == $i) ? "selected='selected'" : ""; ?> value="<?php echo $i; ?>"><?php echo $i; ?></option>
+							<?php } ?>
+						</select> tuổi
+                    </div>
+                </div>
+            </div>
+			<div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Trẻ em ở miễn phí</label>	
+						<input type="radio" name="ChildStayFree" value="1" id="ChildStayFree1" <?php echo ($this->HotelInfo['Hotel_ChildStayFree'] == 1) ? "checked='checked'" : ""; ?>  /> <span for="ChildStayFree1">Có</span>
+						&nbsp;&nbsp;&nbsp;
+						<input type="radio" name="ChildStayFree" value="0" id="ChildStayFree0" <?php echo ($this->HotelInfo['Hotel_ChildStayFree'] == 0) ? "checked='checked'" : ""; ?> /> <span for="ChildStayFree0">Không</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button id="edit_submit" class="btn btn-inverse" type="submit">Đồng ý chỉnh sửa</button>
+            </div>
+        </form>
+    </div>                        
+</div>  
+
+<script>
+	$(function() {
+		$("#InfantAge").change(function() {
+			$("#span_InfantAge").html(parseInt($(this).val()) + 1);
+		});
+	})
+</script>

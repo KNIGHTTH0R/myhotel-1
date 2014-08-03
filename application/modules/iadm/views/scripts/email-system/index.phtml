@@ -1,0 +1,69 @@
+
+
+<?php if (count($this->WarningMsg) > 0) { ?>
+    <div class="warning_box">
+        <?php echo current($this->WarningMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+    <div class="valid_box">
+        <?php echo current($this->SuccessMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+    <div class="error_box">
+        <?php echo current($this->ErrorMsg); ?>
+    </div>
+<?php } ?>
+<div class="form">
+    <form action="" method="post" class="niceform" name='frm' enctype="multipart/form-data">
+        <fieldset>
+
+            <dl>
+                <dt><label for="email">Host SMTP:</label></dt>
+                <dd>
+                    <input placeholder="Host SMTP" type="text" disabled="disabled" name="HostSMTP" id="HostSMTP" size="34" style="width:250px" value="<?php echo $this->EmailSystem['HostSMTP']; ?>" />
+                    <br><span>(Địa chỉ Mail Server)</span>
+                </dd>
+            </dl>
+            <dl>
+                <dt><label for="email">Username SMTP:</label></dt>
+                <dd>
+                    <input placeholder="Username SMTP" type="text" disabled="disabled" name="UserSMTP" id="UserSMTP" size="34" style="width:250px" value="<?php echo $this->EmailSystem['UserSMTP']; ?>" />
+                    <br><span>(Tài khoản được khai báo trên Mail Server)</span>
+                </dd>
+            </dl>
+            <dl>
+                <dt><label for="email">Password SMTP:</label></dt>
+                <dd>
+                    <input placeholder="Password SMTP" type="password" disabled="disabled" name="PassSMTP" id="PassSMTP" size="34" style="width:250px" value="**********" />
+                    <br><span>(Mật khẩu được khai báo trên Mail Server)</span>
+                </dd>
+            </dl>
+            <dl class="submit">
+                <a id="btn_update" onclick="checkForm()" class="bt_blue"><span class="bt_blue_lft"></span><strong>Cập nhật</strong><span class="bt_blue_r"></span></a>
+                <a id="btn_edit" class="bt_blue"><span class="bt_blue_lft"></span><strong>Chỉnh sửa</strong><span class="bt_blue_r"></span></a>
+            </dl>
+        </fieldset>
+    </form>
+</div>
+
+<script>
+        $(function() {
+            $("#btn_update").hide();
+            $("#btn_edit").show();
+            $("#btn_edit").click(function() {
+                $(".valid_box").hide();
+                $("#btn_update").show();
+                $("#btn_edit").hide();
+                $("input").removeAttr("disabled");
+                $("#Username").focus();
+            })
+
+        })
+        function checkForm() {
+            document.frm.submit();
+        }
+</script>

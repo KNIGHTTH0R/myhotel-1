@@ -1,0 +1,89 @@
+<?php if (count($this->WarningMsg) > 0) { ?>
+    <div class="warning_box">
+        <?php echo current($this->WarningMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+    <div class="valid_box">
+        <?php echo current($this->SuccessMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+    <div class="error_box">
+        <?php echo current($this->ErrorMsg); ?>
+    </div>
+<?php } ?>
+<div class="form">
+    <form action="" method="post" class="niceform" name='frm' enctype="multipart/form-data">
+        <fieldset>
+            <dl>
+                <dt><label for="email">Tiêu đề Website (Title):</label></dt>
+                <dd>
+                    <input placeholder="Tiêu đề" type="text" name="Title" id="Title" size="34" style="width:350px" value="<?php echo $this->WebInfo['Title']; ?>" />
+                    <br><span>(Tiêu đề mặc định của website)</span>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt><label for="email">Icon:</label></dt>
+                <dd>
+                    <div class="upload-div-wrap" style="float:left">
+                        <input type="file" name="Picture" id="Picture" />
+                        <input type="text" value="" />
+                        <input type="button" value="Upload" name="" class="" />
+                    </div>
+                    <?php if ($this->WebInfo['Picture'] != "" && is_file(_PICTURE_PATH . '/' . $this->WebInfo['Picture'])) { ?>
+                        <img onclick="deletePicture('<?php echo $this->WebInfo['Picture']; ?>')" src="<?php echo _THUMB_URL . '?src=' . _PICTURE_URL . '/' . $this->WebInfo['Picture'] . '&amp;w=32&amp;h=32'; ?>" class="img_small_edit" />
+                        <span>(Click vào hình để xóa)</span>
+                    <?php } ?>  
+                    <br>
+                    <br>
+                    <span>(Dung lượng giới hạn: <?php echo round(_CONFIG_SIZE_FILE / 1048576); ?> MB / File: <?php echo _CONFIG_EXTENSION_FILE; ?>)</span>
+                </dd>
+            </dl>
+            <dl>
+                <dt><label for="email">Từ khóa (Keywords):</label></dt>
+                <dd>
+                    <textarea placeholder="Từ khóa" name="Keywords" id="Keywords"><?php echo $this->WebInfo['Keywords']; ?></textarea>
+                    <br><span>(Từ khóa mặc định của website)</span>
+                </dd>
+            </dl>
+            <dl>
+                <dt><label for="email">Mô tả (Description):</label></dt>
+                <dd>
+                    <textarea placeholder="Mô tả" name="Description" id="Description"><?php echo $this->WebInfo['Description']; ?></textarea>
+                    <br><span>(Mô tả mặc định của website)</span>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt><label for="email">Email:</label></dt>
+                <dd>
+                    <input type="text" placeholder="Email" name="Email" id="Email" size="34" style="width:350px" value="<?php echo $this->WebInfo['Email']; ?>" />
+                    <br><span>(Khách hàng liên hệ đặt hàng sẽ gửi vào Email này)</span>
+                </dd>
+            </dl>
+
+
+            <dl class="submit">
+                <a onclick="checkForm()" class="bt_blue"><span class="bt_blue_lft"></span><strong>Cập nhật</strong><span class="bt_blue_r"></span></a>
+            </dl>
+        </fieldset>
+    </form>
+</div>
+
+<script>
+        function checkForm() {
+            document.frm.submit();
+        }
+
+        function deletePicture(picture) {
+            if (confirm('Bạn có chắc chắn muốn xóa hình này?')) {
+                $.post('<?php echo _URL_ADMIN . '/web-info/delpic'; ?>', {picture: picture}, function() {
+                    $(".img_small_edit").remove();
+                });
+            }
+        }
+</script>

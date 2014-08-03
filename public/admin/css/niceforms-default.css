@@ -1,0 +1,357 @@
+.login_form {
+    background: url("../images/login_bg.png") no-repeat scroll center top transparent;
+    border: 7px solid #1E5BAE;
+    border-radius: 6px 6px 6px 6px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+    float: left;
+    height: 250px;
+    margin: 20px 0 0 155px;
+    padding: 0;
+    width: 500px;
+}
+.form {
+    clear: both;
+    float: left;
+    width: 1050px;
+}
+fieldset {
+    border: medium none;
+    clear: both;
+    padding-top: 10px;
+}
+label {
+    color: #666666;
+    font-size: 11px;
+    font-weight: bold;
+}
+label a {
+    color: #666666;
+    font-size: 11px;
+    font-weight: bold;
+}
+dl {
+    clear: both;
+    width: 900px;
+}
+dl.col2 {
+    clear: none;
+    float: left;
+    margin: 0;
+    padding: 0;
+    width: 480px;
+}
+dl.col2 dd {
+	width: 250px;
+}
+dl.submit {
+    clear: both;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    width: 400px;
+}
+dt {
+    float: left;
+    line-height: 20px;
+    padding: 0 10px 10px 0;
+    text-align: right;
+    width: 200px;
+}
+dd {
+    float: left;
+    margin: 0 0 10px;
+    width: 600px;
+}
+dd span {
+    color: #999999;
+    font-size: 11px;
+    font-style: italic;
+}
+label.check_label {
+    line-height: 32px;
+    padding: 0 0 0 5px;
+}
+.NFText {
+    background: none repeat scroll 0 0 transparent;
+    border: medium none;
+    float: left;
+    font: 12px/15px Arial,Helvetica,sans-serif;
+    vertical-align: middle;
+}
+.NFTextCenter {
+    background: url("../img/input.gif") repeat-x scroll 0 0 transparent;
+    float: left;
+    height: 26px;
+    line-height: 27px;
+    margin: 0;
+    padding: 8px 0 0;
+    width: auto;
+}
+.NFTextLeft, .NFTextRight {
+    float: left;
+    height: 34px;
+    vertical-align: middle;
+    width: 10px;
+}
+.NFTextLeft {
+    background: url("../img/input-left.gif") no-repeat scroll 0 0 transparent;
+}
+.NFTextRight {
+    background: url("../img/input-right.gif") no-repeat scroll 0 0 transparent;
+}
+.NFRadio {
+    background: url("../img/radio.gif") no-repeat scroll 0 0 transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    display: block;
+    height: 20px;
+    position: absolute;
+    width: 20px;
+    z-index: 2;
+}
+.NFCheck {
+    background: url("../img/checkbox.gif") no-repeat scroll 0 0 transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    height: 20px;
+    margin: 0;
+    position: absolute;
+    width: 20px;
+    z-index: 2;
+}
+.NFButton {
+    background: url("../img/button.gif") repeat-x scroll 0 0 transparent;
+    border: medium none;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-weight: bold;
+    height: 34px;
+    padding: 0 15px;
+    text-shadow: 1px 1px #45ADD8;
+    vertical-align: middle;
+    width: auto;
+}
+.NFButtonLeft, .NFButtonRight {
+    height: 34px;
+    vertical-align: middle;
+    width: 10px;
+}
+.NFButtonLeft {
+    background: url("../img/button-left.gif") no-repeat scroll 0 0 transparent;
+}
+.NFButtonRight {
+    background: url("../img/button-right.gif") no-repeat scroll 0 0 transparent;
+}
+.NFTextarea {
+    background: none repeat scroll 0 0 transparent;
+    border: medium none;
+    font: 12px/12px Arial,Helvetica,sans-serif;
+    margin: 0;
+}
+.NFTextareaTop, .NFTextareaBottom {
+    clear: both;
+    float: none;
+    height: 10px;
+    padding-right: 15px;
+}
+.NFTextareaTop {
+    background: url("../img/textarea-tr.gif") no-repeat scroll 100% 0 transparent;
+}
+.NFTextareaBottom {
+    background: url("../img/textarea-br.gif") no-repeat scroll 100% 0 transparent;
+    margin-bottom: 0;
+}
+.NFTextareaTopLeft, .NFTextareaBottomLeft {
+    height: 10px;
+    width: 10px;
+}
+.NFTextareaTopLeft {
+    background: url("../img/textarea-tl.gif") no-repeat scroll 0 0 #F2F2E6;
+}
+.NFTextareaBottomLeft {
+    background: url("../img/textarea-bl.gif") no-repeat scroll 0 0 #F2F2E6;
+}
+.NFTextareaLeft, .NFTextareaRight, .NFTextareaLeftH, .NFTextareaRightH {
+    float: left;
+    padding-bottom: 10px;
+}
+.NFTextareaLeft, .NFTextareaLeftH {
+    width: 10px;
+}
+.NFTextareaLeft {
+    background: url("../img/textarea-l-off.gif") repeat-y scroll 0 0 transparent;
+}
+.NFTextareaLeftH {
+    background: url("../img/textarea-l-over.gif") repeat-y scroll 0 0 transparent;
+}
+.NFTextareaRight, .NFTextareaRightH {
+    padding-bottom: 0;
+    padding-right: 5px;
+}
+.NFTextareaRight {
+    background: url("../img/textarea-r-off.gif") repeat-y scroll 100% 0 transparent;
+}
+.NFTextareaRightH {
+    background: url("../img/textarea-r-off.gif") repeat-y scroll 100% 100% transparent;
+}
+.NFFileButton {
+    background: url("../img/file.gif") no-repeat scroll 0 0 transparent;
+    cursor: pointer;
+    height: 34px;
+    padding-bottom: 0;
+    vertical-align: bottom;
+    width: 58px;
+}
+.NFFile {
+    margin-bottom: 5px;
+    position: relative;
+}
+.NFFile input.NFhidden {
+    cursor: pointer;
+    opacity: 0;
+    position: relative;
+    text-align: left;
+    z-index: 2;
+}
+.NFFileNew {
+    left: 0;
+    position: absolute;
+    top: 0;
+    z-index: 1;
+}
+.NFSelect {
+    border: 1px solid transparent;
+    height: 34px;
+    position: absolute;
+}
+.NFSelectLeft {
+    background: url("../img/select-left.gif") no-repeat scroll 0 0 transparent;
+    float: left;
+    height: 34px;
+    vertical-align: middle;
+    width: 12px;
+}
+.NFSelectRight {
+    background: url("../img/select-right.gif") no-repeat scroll 100% 0 transparent;
+    color: #000000;
+    cursor: pointer;
+    font: 12px/34px Arial,Helvetica,sans-serif;
+    height: 34px;
+    margin-left: 3px;
+    padding-left: 3px;
+    width: 310px;
+}
+.NFSelectTarget {
+    background: none repeat scroll 0 0 transparent;
+    left: 0;
+    margin-left: -13px;
+    margin-top: 0;
+    padding-bottom: 13px;
+    position: absolute;
+    top: 0;
+    z-index: 3;
+}
+.NFSelectOptions {
+    color: #000000;
+    float: left;
+    left: 0;
+    line-height: 18px;
+    list-style: none outside none;
+    margin-left: 16px;
+    margin-top: 26px;
+    max-height: 200px;
+    padding: 0;
+    position: relative;
+    top: 0;
+    z-index: 4;
+}
+.NFSelectOptions li {
+    background: none repeat scroll 0 0 #EFEFEF;
+    padding: 3px 0;
+    width: 307px;
+}
+.NFSelectOptions a {
+    background: none repeat scroll 0 0 transparent;
+    color: #000000;
+    display: block;
+    padding: 3px 0 3px 6px;
+    text-decoration: none;
+}
+.NFSelectOptions a.NFOptionActive {
+    background: none repeat scroll 0 0 #ECF8FD;
+}
+.NFSelectOptions a:hover {
+    background: none repeat scroll 0 0 #ECF8FD;
+}
+.NFMultiSelect {
+    background: none repeat scroll 0 0 transparent;
+    border: 0 none;
+    margin: 0;
+}
+.NFMultiSelectTop, .NFMultiSelectBottom {
+    clear: both;
+    float: none;
+    height: 5px;
+    padding-right: 10px;
+}
+.NFMultiSelectTop {
+    background: url("../img/textarea-tr.png") no-repeat scroll 100% 0 transparent;
+}
+.NFMultiSelectBottom {
+    background: url("../img/textarea-br.png") no-repeat scroll 100% 0 transparent;
+    margin-bottom: 5px;
+}
+.NFMultiSelectTopLeft, .NFMultiSelectBottomLeft {
+    height: 5px;
+    width: 5px;
+}
+.NFMultiSelectTopLeft {
+    background: url("../img/textarea-tl.png") no-repeat scroll 0 0 #F2F2E6;
+}
+.NFMultiSelectBottomLeft {
+    background: url("../img/textarea-bl.png") no-repeat scroll 0 0 #F2F2E6;
+}
+.NFMultiSelectLeft, .NFMultiSelectRight, .NFMultiSelectLeftH, .NFMultiSelectRightH {
+    float: left;
+    padding-bottom: 5px;
+}
+.NFMultiSelectLeft, .NFMultiSelectLeftH {
+    width: 5px;
+}
+.NFMultiSelectLeft {
+    background: url("../img/textarea-l-off.png") repeat-y scroll 0 0 transparent;
+}
+.NFMultiSelectLeftH {
+    background: url("../img/textarea-l-over.png") repeat-y scroll 0 0 transparent;
+}
+.NFMultiSelectRight, .NFMultiSelectRightH {
+    padding-bottom: 0;
+    padding-right: 5px;
+}
+.NFMultiSelectRight {
+    background: url("../img/textarea-r-off.png") repeat-y scroll 100% 0 transparent;
+}
+.NFMultiSelectRightH {
+    background: url("../img/textarea-r-over.png") repeat-y scroll 100% 0 transparent;
+}
+.NFfocused {
+    border: 1px dotted #666666;
+}
+.NFh {
+    background-position: 0 100%;
+}
+.NFhr {
+    background-position: 100% 100%;
+}
+.NFhidden {
+    opacity: 0;
+    position: relative;
+    z-index: -1;
+}
+.login_form dt {
+    width: 120px;
+}
+input[type="text"], input[type="password"] {
+    border: 1px solid #CCCCCC;
+    padding: 3px;
+}

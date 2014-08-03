@@ -1,0 +1,53 @@
+<div class="header_login">
+<!--<div class="logo"><a href="#"><img src="<?php echo _BACKEND_URL; ?>/images/logo.gif" alt="" title="" border="0" /></a></div>-->
+</div>
+<div class="login_form">
+
+    <h3>Quên mật khẩu</h3>
+
+    <a href="<?php echo _URL_ADMIN; ?>/login" class="login">Đăng nhập</a> 
+    <form action="" method="post" class="niceform" id="formLogin" name="formLogin" onsubmit="return checkForm();">
+        <fieldset>
+            <?php
+            if (count($this->errorMess) > 0) {
+                echo '<dl><dt></dt><dd style="text-align:left"><div class="errorMess">' . current($this->errorMess) . '</div></dd></dl>';
+            }
+            ?>
+            <dl>
+                <dt><label for="email">Tài khoản:</label></dt>
+                <dd><input type="text" name="username" id="" size="44" value="" /></dd>
+            </dl>
+            <dl>
+                <dt><label for="password">Email:</label></dt>
+                <dd><input type="text" name="email" id="" size="44" value="" /></dd>
+            </dl>
+
+            <dl class="submit">     
+                <a class="bt_blue" href="#" onclick="checkForm()"><span class="bt_blue_lft"></span><strong>Lấy lại mật khẩu</strong><span class="bt_blue_r"></span></a>
+            </dl>
+        </fieldset>
+    </form>
+</div>  
+<div class="footer_login">
+    <div class="left_footer_login">Thiết kế bởi <a href="#">anhtuan15071987@gmail.com</a></div>
+</div>
+
+<script>
+        function checkForm() {
+            var username = document.formLogin.username.value;
+            var email = document.formLogin.email.value;
+            if (username == '') {
+                alert('Vui lòng nhập Tài khoản.');
+                document.formLogin.username.focus();
+                return;
+            }
+            if (email == '') {
+                alert('Vui lòng nhập Email.');
+                document.formLogin.email.focus();
+                return;
+            }
+
+            document.formLogin.submit();
+        }
+
+</script>

@@ -1,0 +1,17 @@
+<?php if ($this->pageCount): ?>
+    <div class="pagination">
+        <?php if (isset($this->previous)) { ?>
+                <a href="<?php echo _URL_ADMIN . '/' . $this->controller . '/index/page/' . $this->previous;?>">Sau</a>
+        <?php } ?>
+        <?php foreach ($this->pagesInRange as $page) { ?>
+            <?php if ($page != $this->current) { ?>	
+                <a href="<?php echo _URL_ADMIN . '/' . $this->controller . '/index/page/' . $page;?>"><?php echo $page; ?></a>
+            <?php } else { ?>
+                <span class="current"><?php echo $page; ?></span>
+            <?php } ?>
+        <?php } ?>
+        <?php if (isset($this->next)) { ?>
+            <a href="<?php echo _URL_ADMIN . '/' . $this->controller . '/index/page/' . $this->next;?>">Tiếp</a></li
+        <?php } ?>
+    </div>
+<?php endif; ?>

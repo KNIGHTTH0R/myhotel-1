@@ -1,0 +1,128 @@
+<div class="row-fluid">
+    <div class="span12">
+        <h3 class="heading">Cập nhật thông tin Phòng</h3>
+        <?php
+        if (count($this->SuccessMsg) > 0) {
+            echo '<div class="form_alert form_alert-info">' . current($this->SuccessMsg) . '</div>';
+        }
+        if (count($this->ErrorMsg) > 0) {
+            echo '<div class="form_alert form_alert-error">' . current($this->ErrorMsg) . '</div>';
+        }
+        ?>
+        <form class="form_validation_ttip" name="form" method="post" action="">
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Mã phòng </label>
+                        <?php echo $this->HotelRoom['Room_Code']; ?>
+                    </div>
+                </div>
+            </div>
+
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Tên phòng</label>
+                        <?php echo $this->HotelRoom['Room_Name']; ?>
+                    </div>
+                </div>
+            </div>
+
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Mô tả phòng</label>
+                        <?php echo $this->HotelRoom['Room_Description']; ?>
+                    </div>
+                </div>
+            </div>
+
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Tình trạng</label>
+                        <?php
+                        if ($this->HotelRoom['Room_Status']) {
+                            echo "Hoạt động";
+                        } else {
+                            echo "Tạm khóa";
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Diện tích phòng tối thiểu(m2)</label>
+                        <input type="text" name="Size" value="<?php echo $this->HotelRoom['Room_Size']; ?>" class="span4" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Hướng phòng</label>
+                        <select name="RoomView">
+                            <option value=""></option>
+                            <?php foreach ($this->RoomView as $v) { ?>
+                                <option <?php echo ($this->HotelRoom['RoomView_Id'] == $v['RoomView_Id']) ? "selected='selected'" : ""; ?> value="<?php echo $v['RoomView_Id']; ?>"><?php echo $v['RoomView_Name']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Số người/phòng</label>
+                        <select name="MaxOccupancy" id="MaxOccupancy">
+                            <?php for ($i = 1; $i <= 20; $i++) { ?>
+                                <option <?php echo ($this->HotelRoom['Room_MaxOccupancy'] == $i) ? "selected='selected'" : ""; ?> value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Thông tin về giường</label>
+                        <ul class="bed">
+                            <?php $Bed = explode(',', $this->HotelRoom['Room_Bed']); ?>
+                            <?php foreach ($this->RoomBed as $v) { ?>
+                                <li>
+                                    <input <?php echo ($Bed && in_array($v['Room_Bed_Id'], $Bed)) ? "checked='checked'" : ""; ?> id="bed_<?php echo $v['Room_Bed_Id']; ?>" type="checkbox" name="Bed[<?php echo $v['Room_Bed_Id']; ?>]" value="<?php echo $v['Room_Bed_Id']; ?>" /> 
+                                    <label for="bed_<?php echo $v['Room_Bed_Id']; ?>"><?php echo ucfirst($v['Room_Bed_Name']); ?></label>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Tiện ích</label>
+                        <ul class="bed">
+                            <?php $Facilities = explode(',', $this->HotelRoom['Room_Facilities']); ?>
+                            <?php foreach ($this->RoomFacilities as $v) { ?>
+                                <li>
+                                    <input <?php echo ($Facilities && in_array($v['Facilities_Id'], $Facilities)) ? "checked='checked'" : ""; ?> id="facilities_<?php echo $v['Facilities_Id']; ?>" type="checkbox" name="Facilities[<?php echo $v['Facilities_Id']; ?>]" value="<?php echo $v['Facilities_Id']; ?>" /> 
+                                    <label for="facilities_<?php echo $v['Facilities_Id']; ?>"><?php echo ucfirst($v['Facilities_Name']); ?></label>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button id="edit_submit" class="btn btn-inverse" name="submit" type="submit">Đồng ý chỉnh sửa</button>
+            </div>
+        </form>
+    </div>                        
+</div>  

@@ -1,0 +1,195 @@
+<!-- Bootstrap framework -->
+<link rel="stylesheet" href="<?php echo _HPARTNER_URL; ?>/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="<?php echo _HPARTNER_URL; ?>/css/blue.css" />
+<link rel="stylesheet" href="<?php echo _HPARTNER_URL; ?>/css/style.css" />
+
+<div class="row-fluid">
+    <div class="span12">
+        <h3 class="heading">Thông tin cơ bản về khách sạn</h3>
+        <?php
+        if (count($this->SuccessMsg) > 0) {
+            echo '<div class="form_alert form_alert-info">' . current($this->SuccessMsg) . '</div>';
+        }
+        if (count($this->ErrorMsg) > 0) {
+            echo '<div class="form_alert form_alert-error">' . current($this->ErrorMsg) . '</div>';
+        }
+        ?>
+        <form class="form_validation_ttip" name="frm" id="frm" method="post" action="">
+            <div class="formSep order">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Tên khách hàng</label>
+                        <?php echo $this->HotelOrder['HotelOrder_ContactName']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep order">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Địa chỉ liên hệ</label>
+                        <?php echo $this->HotelOrder['HotelOrder_ContactAddress']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep order">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Điện thoại liên hệ</label>
+                        <?php echo $this->HotelOrder['HotelOrder_ContactPhone']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep order">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Email</label>
+                        <?php echo $this->HotelOrder['HotelOrder_ContactEmail']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep order">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Mã đặt phòng</label>
+                        <label class="green"><?php echo $this->HotelOrder['HotelOrder_Code']; ?></label>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep order">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Khách sạn</label>
+                        <?php echo $this->HotelOrder['Hotel_Name']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep order">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Số phòng</label>
+                        <?php echo $this->HotelOrder['HotelOrder_Room']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep order">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Ngày đặt phòng</label>
+                        <label class="blue"><?php echo MyZend_Function::formatDateYMDHIS_DMY($this->HotelOrder['HotelOrder_BookDate'], '/'); ?></label>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep order">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Ngày nhận phòng</label>
+                        <label class="blue"><?php echo MyZend_Function::formatDateYMDHIS_DMY($this->HotelOrder['HotelOrder_StayDate'], '/'); ?></label>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep order">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Ngày trả phòng</label>
+                        <label class="blue"><?php echo MyZend_Function::formatDateYMDHIS_DMY($this->HotelOrder['HotelOrder_OutDate'], '/'); ?></label>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep order">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Đêm ở</label>
+                        <?php echo $this->HotelOrder['HotelOrder_NightsStay']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep order">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Người lớn</label>
+                        <?php echo $this->HotelOrder['HotelOrder_Adult']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep order">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Giường phụ</label>
+                        <?php echo $this->HotelOrder['HotelOrder_ExtraBed']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep order">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Chính sách hủy phòng</label>
+                        <?php echo $this->HotelOrder['PolicyCancel_Name']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep order">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Tổng tiền</label>
+                        <?php echo MyZend_Function::formatPriceAddCommas($this->HotelOrder['HotelOrder_Total']); ?> VND
+                    </div>
+                </div>
+            </div>
+            <div class="formSep order">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Khuyến mãi</label>
+                        <?php echo $this->HotelOrder['RoomPromotion_Name']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep order">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Giá trị khuyến mãi</label>
+                        (<?php echo $this->HotelOrder['HotelOrder_Discount']; ?>%)/đơn hàng
+                    </div>
+                </div>
+            </div>
+            <div class="formSep order">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Thành tiền phải thanh toán</label>
+                        <label class="red"><?php echo MyZend_Function::formatPriceAddCommas($this->HotelOrder['HotelOrder_TotalAmount']); ?> VND</label>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Trạng thái</label>
+                        <?php if ($this->HotelOrder['HotelOrder_Status'] != '-1') { ?>
+                            <select name="Status">
+                                <option <?php echo ($this->HotelOrder['HotelOrder_Status'] == '1') ? "selected='selected'" : ""; ?> value="1">Đã đọc</option>
+                                <option <?php echo ($this->HotelOrder['HotelOrder_Status'] == '2') ? "selected='selected'" : ""; ?> value="2">Đã xác nhận</option>
+                                <option <?php echo ($this->HotelOrder['HotelOrder_Status'] == '3') ? "selected='selected'" : ""; ?> value="3">Chưa đọc</option>
+                                <option <?php echo ($this->HotelOrder['HotelOrder_Status'] == '4') ? "selected='selected'" : ""; ?> value="4">Đang thanh toán</option>
+                                <option <?php echo ($this->HotelOrder['HotelOrder_Status'] == '-1') ? "selected='selected'" : ""; ?> value="-1">Hủy</option>
+                            </select>
+                        <?php } else { ?>
+                            Hủy
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+            <?php if ($this->HotelOrder['HotelOrder_Status'] != '-1') { ?>
+                <div class="form-actions">
+                    <button id="edit_submit" class="btn btn-inverse" type="submit">Cập nhật đơn hàng</button>
+                </div>
+            <?php } ?>
+        </form>
+    </div>                        
+</div>  
+
+<script>
+    $(function() {
+        document.frm.onsubmit = function() {
+
+        }
+    })
+</script>

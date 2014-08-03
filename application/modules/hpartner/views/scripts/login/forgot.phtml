@@ -1,0 +1,68 @@
+<div class="forget_box">
+	<form action="<?php echo _URL_HPARTNER; ?>/login/forgot" method="post" id="formForget" name="formForget" autocomplete="off">
+		<div class="top_b">Quên mật khẩu</div>    
+
+		<?php
+		if (count($this->errorMess) > 0) {
+			echo '<div class="alert alert-error alert-login">' . current($this->errorMess) . '</div>';
+		} else {
+			?>
+			<div style="padding: 10px;">
+				Xin nhập vào Email. Tái thiết lập mật khẩu của bạn sẽ được gửi đến địa chỉ Email mà Bạn đã đăng ký.
+			</div>
+		<?php } ?>
+		<div class="cnt_b" style="padding-top: 10px">
+			<div class="formRow clearfix">
+				<div class="input-prepend">
+					<span class="add-on">@</span><input name="email" id="email" type="text" placeholder="Email" />
+				</div>
+			</div>
+			<div class="formRow clearfix">
+				<div class="input-prepend">
+					<label>Mã xác thực: <span class="f_req">*</span></label>
+					<input style="width: 100px" maxlength="5" class="" type="text" id="Captcha" name="Captcha" value="" />
+					<img id="imgCaptcha" src='<?php echo _FRONTEND_URL . '/cacheImages/' . $this->CaptchaGenerate; ?>.png' />
+					<img id="refreshCaptcha" src="<?php echo _HPARTNER_URL; ?>/images/refresh.png" />
+					<input type="hidden" name="Cid" id="Cid" value="" />
+				</div>
+			</div>
+		</div>
+		<div class="btm_b tac">
+			<button type="button" class="btn btn-inverse" onclick="checkFormForgot()">Yêu cầu mật khẩu mới</button>
+		</div>  
+	</form>
+
+</div>
+
+<div class="links_b links_btm clearfix" style="margin-top: 10px">
+	<span><a href="<?php echo _URL_HPARTNER; ?>/login">Đăng nhập</a></span>
+</div> 
+<script>
+				function checkFormForgot() {
+					var email = document.formForget.email.value;
+					if (email == '') {
+						alert('Vui lòng nhập Email.');
+						document.formForget.email.focus();
+						return;
+					} else if (checkEmail($("#email").val()) == false) {
+						alert('Email không hợp lệ. Vui lòng nhập lại.');
+						$("#email").focus();
+						return;
+					}
+					if ($("#Captcha").val() == '') {
+						alert('Vui lòng nhập Mã xác thực.');
+						$("#Captcha").focus();
+						return;
+					}
+					document.formForget.submit();
+				}
+
+				$(function() {
+					$("#refreshCaptcha").click(function() {
+						$.post("<?php echo _URL . '/hpartner/request/refresh-captcha/'; ?>", '', function(resultRefreshCaptcha) {
+							$("#imgCaptcha").attr('src', '<?php echo _FRONTEND_URL . '/cacheImages/'; ?>' + resultRefreshCaptcha + '.png');
+						});
+					});
+
+				});
+</script>

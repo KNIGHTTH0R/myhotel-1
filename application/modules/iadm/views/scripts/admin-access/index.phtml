@@ -1,0 +1,89 @@
+
+<?php if (count($this->WarningMsg) > 0) { ?>
+    <div class="warning_box">
+        <?php echo current($this->WarningMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+    <div class="valid_box">
+        <?php echo current($this->SuccessMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+    <div class="error_box">
+        <?php echo current($this->ErrorMsg); ?>
+    </div>
+<?php } ?>
+<div class="form">
+    <form action="" method="post" class="niceform" name='frm' enctype="multipart/form-data">
+        <fieldset>
+
+            <dl>
+                <dt><label for="email">Tài khoản đăng nhập:</label></dt>
+                <dd>
+                    <input placeholder="Tài khoản" type="text" disabled="disabled" name="Username" id="Username" size="34" style="width:250px" value="<?php echo $this->AdminAccess['Username']; ?>" class="require" />
+                </dd>
+            </dl>
+            <dl>
+                <dt><label for="email">Mật khẩu:</label></dt>
+                <dd>
+                    <input placeholder="Mật khẩu" type="Password" disabled="disabled" name="Password" id="PassSMTP" size="34" style="width:250px" value="**********" class="require" />
+                </dd>
+            </dl>
+            <dl>
+                <dt><label for="email">Tên:</label></dt>
+                <dd>
+                    <input placeholder="Tên" type="text" disabled="disabled" name="Name" id="Name" size="34" style="width:250px" value="<?php echo $this->AdminAccess['Name']; ?>" />                  
+                </dd>
+            </dl>
+            <dl>
+                <dt><label for="email">Email:</label></dt>
+                <dd>
+                    <input placeholder="Email" type="text" disabled="disabled" name="Email" id="Email" size="34" style="width:250px" value="<?php echo $this->AdminAccess['Email']; ?>" class="require" />                  
+                </dd>
+            </dl>
+            <dl class="submit">
+                <a id="btn_update" onclick="checkForm()" class="bt_blue"><span class="bt_blue_lft"></span><strong>Cập nhật</strong><span class="bt_blue_r"></span></a>
+                <a id="btn_edit" class="bt_blue"><span class="bt_blue_lft"></span><strong>Chỉnh sửa</strong><span class="bt_blue_r"></span></a>
+            </dl>
+        </fieldset>
+    </form>
+</div>
+
+<script>
+        $(function() {
+            $("#btn_update").hide();
+            $("#btn_edit").show();
+            $("#btn_edit").click(function() {
+                $(".valid_box").hide();
+                $("#btn_update").show();
+                $("#btn_edit").hide();
+                $("input").removeAttr("disabled");
+                $("#Username").focus();
+            })
+
+        })
+        function checkForm() {
+            var name = $("#Username").val();
+            var pass = $("#Password").val();
+            var email = $("#Email").val();
+            if (name == '') {
+                alert('Vui lòng nhập Tài khoản.');
+                $("#Username").focus();
+                return;
+            }
+            if (pass == '') {
+                alert('Vui lòng nhập Mật khẩu.');
+                $("#Password").focus();
+                return;
+            }
+            if (email == '') {
+                alert('Vui lòng nhập Email.');
+                $("#Email").focus();
+                return;
+            }
+            document.frm.submit();
+        }
+</script>

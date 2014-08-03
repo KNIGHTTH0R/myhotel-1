@@ -1,0 +1,162 @@
+          
+<?php if (count($this->WarningMsg) > 0) { ?>
+    <div class="warning_box">
+        <?php echo current($this->WarningMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+    <div class="valid_box">
+        <?php echo current($this->SuccessMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+    <div class="error_box">
+        <?php echo current($this->ErrorMsg); ?>
+    </div>
+<?php } ?>      
+<form action="<?php echo _URL_ADMIN . '/hotel-room-management/index'; ?>" name='frm' method='post'>
+    <table id="rounded-corner" class="table_set_room">
+        <thead>
+            <tr>
+                <th scope="col" class="rounded-company" colspan="4" style="padding: 4px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="font-weight: bold;">                 
+                <td>Từ ngày</td>
+                <td>Đến ngày</td>
+                <td>Khách sạn</td>  
+                <td>Loại phòng</td>
+            </tr>
+            <tr>                 
+                <td><input type="text" value="<?php echo date('d/m/Y'); ?>" style="width: 120px" id="dateFrom" /></td>
+                <td><input type="text" value="<?php echo date('d/m/Y', strtotime('+7 day')); ?>" style="width: 120px" id="dateTo" /></td>
+                <td>
+                    <select placeholder="Khách sạn" name="Hotel" id="Hotel">
+                        <option value="">&nbsp;</option>
+                        <?php foreach ($this->Hotel as $v) { ?>
+                            <option value="<?php echo $v['Hotel_Id']; ?>"><?php echo $v['Hotel_Name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </td>  
+                <td>
+                    <select name="Room" id="Room">
+                        <option></option>
+                    </select>
+                </td>
+            </tr>
+            <tr><td colspan="4"><a id="btn_search_room" class="bt_green"><span class="bt_green_lft"></span><strong>Tìm kiếm</strong><span class="bt_green_r"></span></a></td></tr>
+        </tbody>
+    </table>
+    <input type="hidden" name="typeAction" value="index" />
+    <table id="rounded-corner">
+        <thead>
+            <tr>
+                <th scope="col" class="rounded">Ngày</th>
+                <th scope="col" class="rounded">Thứ</th>
+                <th scope="col" class="rounded" align="center">Phòng chỉ định</th>
+                <th scope="col" class="rounded" align="center">Phòng chỉ định đã dùng</th>
+                <th scope="col" class="rounded" align="center">Đóng phòng thông thường</th>
+                <th scope="col" class="rounded" align="center">Toàn bộ phòng trống</th>
+            </tr>
+        </thead>
+        <tbody id="item_set_room">
+            <tr>                 
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+
+    </table>
+</form>
+<a onclick="document.frm.submit()" class="bt_green"><span class="bt_green_lft"></span><strong>Lưu</strong><span class="bt_green_r"></span></a>
+<a onclick="cancel()" class="bt_red"><span class="bt_red_lft"></span><strong>Hủy</strong><span class="bt_red_r"></span></a> 
+
+<script>
+    $(function() {
+        $("#dateFrom, #dateTo").datepicker({
+            showOn: "button",
+            buttonImage: "<?php echo _BACKEND_URL . '/images/calendar_icon.png'; ?>",
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+        $("#btn_search_room").click(function() {
+            var datefrom = $("#dateFrom").val();
+            var dateto = $("#dateTo").val();
+            var datefromArr = datefrom.split('/');
+            var datetoArr = dateto.split('/');
+            var strtoDateF = new Date(datefromArr[2], datefromArr[1], datefromArr[0]).getTime();
+            var strtoDateT = new Date(datetoArr[2], datetoArr[1], datetoArr[0]).getTime();
+
+            if (strtoDateF > strtoDateT) {
+                alert('Từ ngày không được lớn hơn Đến ngày.');
+                return;
+            }
+            if ($("#Hotel").val() == '') {
+                alert('Vui lòng chọn Khách sạn.');
+                return;
+            }
+            if ($("#Room").val() == '') {
+                alert('Vui lòng chọn Loại phòng.');
+                return;
+            }
+
+            $("#item_set_room").html("");
+            $.post("<?php echo _URL . '/iadm/hotel-room-management/search-room-preview/'; ?>",
+                    {
+                        dateFrom: $("#dateFrom").val(),
+                        dateTo: $("#dateTo").val(),
+                        hotel: $("#Hotel").val(),
+                        room: $("#Room").val(),
+                    },
+                    function(result) {
+                        var data = eval(result);
+                        var strItemSetRoom = '';
+                        $(".valid_box").remove();        
+						var dateNow = new Date('<?php echo date('Y');?>', '<?php echo date('m');?>', '<?php echo date('d');?>');
+                        $.each(data, function(i, item) {
+							dateArr = item.Date.split('-');
+                            dateItem = new Date(dateArr[2], dateArr[1], dateArr[0]);
+							
+                            OpenChk = (item.Open == 0) ? "checked='checked'" : "";
+							AllotmentInput = (dateItem >= dateNow) ? '<input style="width: 50px" type="text" name="Allotment[' + item.Id + ']" value="' + item.Allotment + '" />' : item.Allotment;
+                            OpenInput = (dateItem >= dateNow) ? '<input type="checkbox" name="Open[' + item.Id + ']" ' + OpenChk + ' value="0" />' : '<input disabled="disabled" type="checkbox" ' + OpenChk + '/>';
+							IdInput = (dateItem >= dateNow) ? '<input type="hidden" name="Id[' + item.Id + ']" value="' + item.Id + '" />' : '';
+							strItemSetRoom += '<tr>';
+                            strItemSetRoom += '<td>' + item.Date + '</td>';
+                            strItemSetRoom += '<td>' + dayName(item.Day) + '</td>';
+                            strItemSetRoom += '<td align="center">' + AllotmentInput + '</td>';                       
+                            strItemSetRoom += '<td align="center">' + item.AllotmentUsed + '</td>';                         
+                            strItemSetRoom += '<td align="center">' +  OpenInput + IdInput + '</td>';
+                            strItemSetRoom += '<td align="center">' + (parseInt(item.Allotment) - parseInt(item.AllotmentUsed)) + '</td>';
+                            strItemSetRoom += '</tr>';
+                        });
+                        $("#item_set_room").html(strItemSetRoom);
+                    });
+        });
+        $("#Hotel").change(function() {
+            if ($(this).val() != '') {
+                $.post("<?php echo _URL . '/iadm/hotel-room-management/mapping-hotel/'; ?>", {hotelId: $(this).val()}, function(result) {
+                    var strOptionRoom;
+                    var data = eval(result);
+                    strOptionRoom = "<option value=''>&nbsp;</option>";
+                    $.each(data, function(i, item) {
+                        strOptionRoom += "<option value='" + item.Room_Id + "'>" + item.Room_Name + "</option>";
+                    });
+                    $("#Room").html(strOptionRoom);
+                });
+            }
+        });
+    });
+    
+    function cancel() {
+        $("#item_set_room").html("");
+    }
+
+</script>

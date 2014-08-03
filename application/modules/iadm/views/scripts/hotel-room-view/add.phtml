@@ -1,0 +1,55 @@
+
+
+<?php if (count($this->WarningMsg) > 0) { ?>
+    <div class="warning_box">
+        <?php echo current($this->WarningMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+    <div class="valid_box">
+        <?php echo current($this->SuccessMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+    <div class="error_box">
+        <?php echo current($this->ErrorMsg); ?>
+    </div>
+<?php } ?>
+<div class="form">
+    <form action="" enctype="multipart/form-data" method="post" class="niceform" name='frm'>
+        <fieldset>
+            <dl>
+                <dt><label for="email">Hướng phòng:</label></dt>
+                <dd><input placeholder="Hướng phòng" type="text" name="Name" id="Name" size="34" class="require" /></dd>
+            </dl>
+
+            
+            <dl>
+                <dt><label for="color">Hiển thị</label></dt>
+                <dd>
+                    <input type="radio" name="Status" id="Status_1" value="1" checked="checked" /><label for="Status_1" class="check_label">Có</label>
+                    <input type="radio" name="Status" id="Status_0" value="0" /><label for="Status_0" class="check_label">Không</label>
+                </dd>
+            </dl>
+
+            <dl class="submit">
+                <a onclick="checkForm()" class="bt_blue"><span class="bt_blue_lft"></span><strong>Thêm mới</strong><span class="bt_blue_r"></span></a>
+            </dl>
+
+        </fieldset>
+    </form>
+</div>
+
+<script>
+        function checkForm() {
+            var name = $("#Name").val();
+            if (name == '') {
+                alert('Vui lòng nhập Hướng phòng.');
+                $("#Name").focus();
+                return;
+            }
+            document.frm.submit();
+        }
+</script>

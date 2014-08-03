@@ -1,0 +1,163 @@
+
+<div class="row-fluid">
+    <div class="span12">
+        <h3 class="heading">Quản lý giá phòng</h3>
+		<?php
+		if (count($this->SuccessMsg) > 0) {
+			echo '<div class="form_alert form_alert-info">' . current($this->SuccessMsg) . '</div>';
+		}
+		if (count($this->ErrorMsg) > 0) {
+			echo '<div class="form_alert form_alert-error">' . current($this->ErrorMsg) . '</div>';
+		}
+		?>
+		<form action="<?php echo _URL_HPARTNER . '/hotel-room-price-management/index'; ?>" name='frm' method='post'>
+			<table id="rounded-corner" class="table_set_room">
+				<thead>
+					<tr>
+						<th scope="col" class="rounded-company" colspan="4" style="padding: 4px;"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr style="font-weight: bold;">                 
+						<td>Từ ngày</td>
+						<td>Đến ngày</td>
+						<td>Khách sạn</td>  
+						<td>Loại phòng</td>
+					</tr>
+					<tr>                 
+						<td><input type="text" readonly="readonly" value="<?php echo date('d/m/Y'); ?>" style="width: 120px" id="dateFrom" /></td>
+						<td><input type="text" readonly="readonly" value="<?php echo date('d/m/Y', strtotime('+7 day')); ?>" style="width: 120px" id="dateTo" /></td>
+						<td>
+							<?php echo $this->HotelInfo['Hotel_Name']; ?>
+						</td>  
+						<td>
+							<select name="Room" id="Room">
+								<option></option>
+								<?php foreach ($this->Room as $v) { ?>
+									<option value="<?php echo $v['Room_Id']; ?>"><?php echo $v['Room_Name']; ?></option>
+								<?php } ?>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="4" align="right">
+							<button id="btn_search_room" class="btn btn-inverse" name="submit" type="button">Tìm kiếm</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<input type="hidden" name="typeAction" value="index" />
+			<table id="rounded-corner">
+				<thead>
+					<tr>
+						<th scope="col" class="rounded">Ngày</th>
+						<th scope="col" class="rounded">Thứ</th>
+						<th scope="col" class="rounded" colspan="2" align="center">Giường đơn</th>
+						<th scope="col" class="rounded" colspan="2" align="center">Giường đôi</th>
+						<th scope="col" class="rounded" colspan="2" align="center">Giường phụ</th>
+						<th scope="col" class="rounded">Khuyến mãi</th>
+						<th scope="col" class="rounded">Ăn sáng</th>
+					</tr>
+				</thead>
+				<tbody id="item_set_room">
+					<tr>                 
+						<td></td>
+						<td></td>
+
+						<td></td>
+						<td></td> 
+
+						<td></td>
+						<td></td>
+
+						<td></td>
+						<td></td>
+
+						<td></td>
+						<td></td>
+					</tr>
+				</tbody>
+
+			</table>
+			<div class="form-actions" style="text-align: right">
+                <button id="edit_submit" class="btn btn-inverse" type="submit">Lưu</button>
+            </div>
+		</form>
+	</div>
+</div>
+<script>
+	$(function() {
+		$("#dateFrom, #dateTo").datepicker({
+			showOn: "button",
+			buttonImage: "<?php echo _HPARTNER_URL . '/images/calendar_icon.png'; ?>",
+			buttonImageOnly: true,
+			dateFormat: "dd/mm/yy"
+		});
+		$("#btn_search_room").click(function() {
+			var datefrom = $("#dateFrom").val();
+			var dateto = $("#dateTo").val();
+			var fromDate = datefrom.split("/");
+			var toDate = dateto.split("/");
+			var fdate = new Date(fromDate[2], fromDate[1], fromDate[0]);
+			var tdate = new Date(toDate[2], toDate[1], toDate[0]);
+
+			if (fdate > tdate) {
+				alert('Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc.');
+				return;
+			}
+			if (tdate - fdate > 7776000000) {
+				alert("Bạn chỉ được xem trong khoảng thời gian tối đa 90 ngày / lần.");
+				return false;
+			}
+			if ($("#Hotel").val() == '') {
+				alert('Vui lòng chọn Khách sạn.');
+				return;
+			}
+			if ($("#Room").val() == '') {
+				alert('Vui lòng chọn Loại phòng.');
+				return;
+			}
+
+			$("#item_set_room").html("");
+			$.post("<?php echo _URL . '/hpartner/hotel-room-price-management/search-room-preview/'; ?>",
+					{
+						dateFrom: $("#dateFrom").val(),
+						dateTo: $("#dateTo").val(),
+						hotel: $("#Hotel").val(),
+						room: $("#Room").val(),
+					},
+					function(result) {
+						var data = eval(result);
+						var strItemSetRoom = '';
+						$(".valid_box").remove();
+						var dateNow = new Date('<?php echo date('Y'); ?>', '<?php echo date('m'); ?>', '<?php echo date('d'); ?>');
+						strItemSetRoom += '<tr><td></td><td></td><td align="center" style="font-weight: bold">Trước thuế</td><td align="center" style="font-weight: bold">Gồm thuế</td><td align="center" style="font-weight: bold">Trước thuế</td><td align="center" style="font-weight: bold">Gồm thuế</td><td align="center" style="font-weight: bold">Trước thuế</td><td align="center" style="font-weight: bold">Gồm thuế</td><td></td><td></td></tr>';
+						$.each(data, function(i, item) {
+							dateArr = item.Date.split('-');
+							dateItem = new Date(dateArr[2], dateArr[1], dateArr[0]);
+							Breakfastchk = (item.Breakfast == 1) ? "checked='checked'" : "";
+							Promotionchk = (item.Promotion == 1) ? "checked='checked'" : "";
+							SingleNetRateInput = (dateItem >= dateNow) ? '<input style="width: 80px" type="text" name="SingleNetRate[' + item.Id + ']" value="' + item.SingleNetRate + '" />' : item.SingleNetRate;
+							DoubleNetRateInput = (dateItem >= dateNow) ? '<input style="width: 80px" type="text" name="DoubleNetRate[' + item.Id + ']" value="' + item.DoubleNetRate + '" />' : item.DoubleNetRate;
+							ExtraBedInput = (dateItem >= dateNow) ? '<input style="width: 80px" type="text" name="ExtraBed[' + item.Id + ']" value="' + item.ExtraBed + '" />' : item.ExtraBed;
+							PromotionchkInput = (dateItem >= dateNow) ? '<input type="checkbox" name="Promotion[' + item.Id + ']" ' + Promotionchk + ' value="1" />' : '<input disabled="disabled" type="checkbox" ' + Promotionchk + ' />';
+							BreakfastchkInput = (dateItem >= dateNow) ? '<input type="checkbox" name="Breakfast[' + item.Id + ']" ' + Breakfastchk + ' value="1" />' : '<input disabled="disabled" type="checkbox" ' + Breakfastchk + ' />';
+							IdInput = (dateItem >= dateNow) ? '<input type="hidden" name="Id[' + item.Id + ']" value="' + item.Id + '" />' : '';
+							strItemSetRoom += '<tr>';
+							strItemSetRoom += '<td>' + item.Date + '</td>';
+							strItemSetRoom += '<td>' + dayName(item.Day) + '</td>';
+							strItemSetRoom += '<td align="center">' + item.TaxSingleNetRate + '</td>';
+							strItemSetRoom += '<td align="center">' + SingleNetRateInput + '</td>';
+							strItemSetRoom += '<td align="center">' + item.TaxDoubleNetRate + '</td>';
+							strItemSetRoom += '<td align="center">' + DoubleNetRateInput + '</td>';
+							strItemSetRoom += '<td align="center">' + item.TaxExtraBed + '</td>';
+							strItemSetRoom += '<td align="center">' + ExtraBedInput + '</td>';
+							strItemSetRoom += '<td>' + PromotionchkInput + '</td>';
+							strItemSetRoom += '<td>' + BreakfastchkInput + IdInput + '</td>';
+							strItemSetRoom += '</tr>';
+						});
+						$("#item_set_room").html(strItemSetRoom);
+					});
+		});
+	});
+</script>

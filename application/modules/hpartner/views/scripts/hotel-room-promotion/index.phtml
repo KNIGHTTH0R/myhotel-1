@@ -1,0 +1,67 @@
+<div class="row-fluid">
+    <div class="span12">
+        <h3 class="heading">Khuyến mãi</h3>
+        <table class="table table-bordered table-striped table_vam" id="dt_enterprises">
+            <thead>
+                <tr>               
+                    <th>Tên</th>
+                    <th>Loại phòng</th>
+					<th>Ngày ở từ</th>
+					<th>Ngày ở đến</th>
+					<th>Nhận phòng này</th>
+                    <th>Trạng thái</th>
+                    <th>Sửa</th
+                </tr>
+            </thead>
+            <tbody>
+				<?php
+				$stt = 1;
+				foreach ($this->Promotion as $v) {
+					?>
+					<tr>
+						<td><?php echo $v['RoomPromotion_Name']; ?></td>
+						<td>
+							<?php
+							$strRoomName = '';
+							foreach ($v['RoomType'] as $vv) {
+								$strRoomName .= ', ' . $vv['Room_Name'];
+							}
+							echo substr($strRoomName, 1);
+							?>
+						</td>
+						<td><?php echo MyZend_Function::formatDateYMDHIS_DMY($v['RoomPromotion_StayDateFrom'], '/'); ?></td>
+						<td><?php echo MyZend_Function::formatDateYMDHIS_DMY($v['RoomPromotion_StayDateTo'], '/'); ?></td>
+						<td>
+							<?php
+							$RoomPromotion_DayGetRoom = explode(',', $v['RoomPromotion_DayGetRoom']);
+							?>
+							<input type="checkbox" disabled="disabled" <?php echo (in_array(0, $RoomPromotion_DayGetRoom)) ? "checked='checked'" : ""; ?> id="DayGetRoomCheckbox_0" name="DayGetRoomCheckbox[0]" value="0" /> CN
+							<input type="checkbox" disabled="disabled" <?php echo (in_array(1, $RoomPromotion_DayGetRoom)) ? "checked='checked'" : ""; ?> id="DayGetRoomCheckbox_1" name="DayGetRoomCheckbox[1]" value="1" /> Hai
+							<input type="checkbox" disabled="disabled" <?php echo (in_array(2, $RoomPromotion_DayGetRoom)) ? "checked='checked'" : ""; ?> id="DayGetRoomCheckbox_2" name="DayGetRoomCheckbox[2]" value="2" /> Ba
+							<input type="checkbox" disabled="disabled" <?php echo (in_array(3, $RoomPromotion_DayGetRoom)) ? "checked='checked'" : ""; ?> id="DayGetRoomCheckbox_3" name="DayGetRoomCheckbox[3]" value="3" /> Tư
+							<input type="checkbox" disabled="disabled" <?php echo (in_array(4, $RoomPromotion_DayGetRoom)) ? "checked='checked'" : ""; ?> id="DayGetRoomCheckbox_4" name="DayGetRoomCheckbox[4]" value="4" /> Năm
+							<input type="checkbox" disabled="disabled" <?php echo (in_array(5, $RoomPromotion_DayGetRoom)) ? "checked='checked'" : ""; ?> id="DayGetRoomCheckbox_5" name="DayGetRoomCheckbox[5]" value="5" /> Sáu
+							<input type="checkbox" disabled="disabled" <?php echo (in_array(6, $RoomPromotion_DayGetRoom)) ? "checked='checked'" : ""; ?> id="DayGetRoomCheckbox_6" name="DayGetRoomCheckbox[6]" value="6" /> Bảy
+						</td>
+						<td><img class="status-img" id="status_<?php echo $v['RoomPromotion_Id']; ?>" 
+								 src="<?php echo _BACKEND_URL . '/images/' . (($v['RoomPromotion_Status'] == 1) ? 'icon_approve.png' : 'icon_unapprove.png'); ?>" /></td>
+						<td>
+							<a href="<?php echo _URL_HPARTNER . '/hotel-room-promotion/edit/id/' . $v['RoomPromotion_Id']; ?>" class="sepV_a" title="Sửa"><i class="icon-pencil"></i></a>
+						</td>
+					</tr>
+					<?php
+					$stt++;
+				}
+				?>
+				<tr>
+					<td colspan="7">
+						<?php echo $this->paginationControl($this->page, 'Sliding', 'page.phtml', array('controller' => 'hotel-room-promotion')); ?>
+					</td>
+				</tr>
+            </tbody>
+        </table>
+        <div class="form-actions" style='text-align:right'>
+			<button onclick="javascript:location.href = '<?php echo _URL_HPARTNER; ?>/hotel-room-promotion/add'" id="edit_submit" class="btn btn-inverse" type="button">Tạo mới</button>
+		</div>
+    </div>
+</div>

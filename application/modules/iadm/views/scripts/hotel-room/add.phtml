@@ -1,0 +1,224 @@
+<!-- Fancybox -->
+<script type="text/javascript" src="<?php echo _BACKEND_URL; ?>/js/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo _BACKEND_URL; ?>/fancybox/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="<?php echo _BACKEND_URL; ?>/fancybox/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo _BACKEND_URL; ?>/fancybox/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+
+
+<?php if (count($this->WarningMsg) > 0) { ?>
+    <div class="warning_box">
+        <?php echo current($this->WarningMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+    <div class="valid_box">
+        <?php echo current($this->SuccessMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+    <div class="error_box">
+        <?php echo current($this->ErrorMsg); ?>
+    </div>
+<?php } ?>
+
+<div class="form">
+    <form action="" enctype="multipart/form-data" method="post" class="niceform" name='frm'>
+        <fieldset>
+            <dl class="col2">
+                <dt><label>Loại phòng:</label></dt>
+                <dd><input placeholder="Loại phòng" type="text" name="Name" id="Name" size="34" class="require" /></dd>
+            </dl>
+
+
+            <dl class="col2">
+                <dt><label>Khách sạn:</label></dt>
+                <dd>
+                    <select placeholder="Khách sạn" name="Hotel" id="Hotel" class="require">
+                        <option value="">&nbsp;</option>
+                        <?php foreach ($this->Hotel as $v) { ?>
+                            <option value="<?php echo $v['Hotel_Id']; ?>"><?php echo $v['Hotel_Name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </dd>
+            </dl>  
+            <dl class="col2">
+                <dt><label>Diện tích (m2):</label></dt>
+                <dd><input placeholder="Kích thước" type="text" name="Size" id="Size" size="34" /></dd>
+            </dl>
+
+            <dl class="col2">
+                <dt><label>Hướng nhìn:</label></dt>
+                <dd>
+                    <select placeholder="Hướng nhìn" name="RoomView_Id" id="RoomView_Id">
+                        <option value="">&nbsp;</option>
+                        <?php foreach ($this->RoomView as $v) { ?>
+                            <option value="<?php echo $v['RoomView_Id']; ?>"><?php echo $v['RoomView_Name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </dd>
+            </dl>
+            <dl class="col2">
+                <dt><label>Số lượng phòng:</label></dt>
+                <dd><input value="" placeholder="Số lượng phòng" type="text" name="Quantity" id="Quantity" size="34" /></dd>
+            </dl>
+            <dl class="col2">
+                <dt><label>Số khách tối đa:</label></dt>
+                <dd>
+                    <select name="MaxOccupancy" id="MaxOccupancy">
+                        <?php for ($i = 1; $i <= 20; $i++) { ?>
+                            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                        <?php } ?>
+                    </select>
+                </dd>
+            </dl>
+            <dl class="col2">
+                <dt><label>Giường phụ tối đa:</label></dt>
+                <dd>
+                    <select name="MaxExtrabeds" id="MaxExtrabeds">
+                        <?php for ($i = 0; $i <= 10; $i++) { ?>
+                            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                        <?php } ?>
+                    </select>
+                </dd>
+            </dl>
+            <dl class="col2">
+                <dt><label>Bao ăn sáng:</label></dt>
+                <dd>
+                    <input type="radio" name="Breakfast" value="1" id="Breakfast1" checked="checked"  /> <label for="Breakfast1">Có</label>
+                    &nbsp;&nbsp;&nbsp;
+                    <input type="radio" name="Breakfast" value="0" id="Breakfast0" /> <label for="Breakfast0">Không</label>
+                </dd>
+            </dl>
+            <dl>
+                <dt><label>Hình ảnh:</label></dt>
+                <dd>
+                    <a id="link2" href="<?php echo _URL_ADMIN . '/upload-image'; ?>">Chọn hình ảnh upload</a>
+                    <div id="showListImage" class="showListImage"></div>
+                    <div style="display: none;">
+                        <div id="uploadImage" class="uploadImage">
+                        </div>
+                    </div>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt><label>Tiện ích:</label></dt>
+                <dd>
+                    <ul class="facilities">
+                        <?php foreach ($this->Facilities as $v) { ?>
+                            <li>
+                                <input id="facilities_<?php echo $v['Facilities_Id']; ?>" type="checkbox" name="Facilities[<?php echo $v['Facilities_Id']; ?>]" value="<?php echo $v['Facilities_Id']; ?>" /> <label for="facilities_<?php echo $v['Facilities_Id']; ?>"><?php echo $v['Facilities_Name']; ?></label>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt><label>Loại giường:</label></dt>
+                <dd>
+                    <ul class="facilities">
+                        <?php foreach ($this->Bed as $v) { ?>
+                            <li>
+                                <input id="bed_<?php echo $v['Room_Bed_Id']; ?>" type="checkbox" name="Bed[<?php echo $v['Room_Bed_Id']; ?>]" value="<?php echo $v['Room_Bed_Id']; ?>" /> <label for="bed_<?php echo $v['Room_Bed_Id']; ?>"><?php echo $v['Room_Bed_Name']; ?></label>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt><label>Mô tả:</label></dt>
+                <dd>
+                    <textarea placeholder="Mô tả" id="Description" name="Description" class="Editor_Body"></textarea>
+                </dd>
+            </dl>
+
+
+            <dl>
+                <dt><label for="color">Trạng thái</label></dt>
+                <dd>
+                    <select style="width: 100px" name="Status" id="Status">
+                        <option value="1">Hoạt động</option>
+                        <option value="0">Tạm dừng</option>
+                    </select>
+                </dd>
+            </dl>
+
+            <dl class="submit">
+                <a onclick="checkForm()" class="bt_blue"><span class="bt_blue_lft"></span><strong>Thêm mới</strong><span class="bt_blue_r"></span></a>
+            </dl>
+
+        </fieldset>
+    </form>
+</div>
+
+<script>
+                    $.noConflict();
+                    jQuery(document).ready(function() {
+                        jQuery("#link2").fancybox({
+                            'width': '75%',
+                            'height': '75%',
+                            'autoScale': false,
+                            'transitionIn': 'none',
+                            'transitionOut': 'none',
+                            'type': 'iframe',
+                            'onClosed': function() {
+                                $.post("<?php echo _URL_ADMIN . '/hotel-room/get-image-list'; ?>", {token: '<?php echo $this->Token; ?>'}, function(result) {
+                                    data = eval(result);
+                                    $("#showListImage").html("");
+                                    var table_img_list = '<ul id="sortable">';
+                                    $.each(data, function(i, item) {
+                                        table_img_list += '<li id="li_imgList_' + item.upload_id + '" class="ui-state-default"><div class="del_img" onclick="delPicTemp(' + item.upload_id + ', \'' + item.image_name + '\', this)">X</div><table class="table_img_list" id="table_img_list_' + item.upload_id + '">';
+                                        table_img_list += '<tr><td class="img">';
+                                        table_img_list += '<img  class="imgList" src="<?php echo _THUMB_URL . "?src=" . _PICTURE_HOTEL_TEMP_URL; ?>/' + item.image_name + '&amp;w=106&amp;h=106" />';
+                                        table_img_list += '</td></tr>';
+                                        table_img_list += '<tr><td><select name="status_imgList[' + item.upload_id + ']"><option value="1">Hiển thị</option><option value="0">Ẩn</option></select></td></tr>';                                    
+                                        table_img_list += '</table><input type="hidden" name="position_imgList[' + item.upload_id + ']" class="position_imgList" /></li>';
+                                    });
+                                    table_img_list += '</ul>';
+                                    $("#showListImage").append(table_img_list);
+                                    $("#sortable").sortable({
+                                        stop: function(event, ui) {
+                                            $.map($(this).find('li'), function(el) {
+                                                $("#" + el.id).find(".position_imgList").val($(el).index());
+
+                                            });
+                                        }
+                                    });
+                                    $("#sortable").disableSelection();
+                                });
+                            }
+                        });
+                    });
+
+                    function delPicTemp(uploadid, imagename, thIs) {
+                        if (confirm('Bạn có chắc chắn muốn xóa?')) {
+                            $.post("<?php echo _URL_ADMIN . '/hotel-room/del-pic-temp'; ?>", {id: uploadid, image: imagename}, function(data) {
+                                $("#li_imgList_" + uploadid).remove();
+                            });
+                        }
+                    }
+
+
+                    function checkForm() {
+                        var name = $("#Name").val();
+                        var hotel = $("#Hotel").val();
+
+                        if (name == '') {
+                            alert('Vui lòng nhập Loại phòng.');
+                            $("#Name").focus();
+                            return;
+                        }
+                        if (hotel == '') {
+                            alert('Vui lòng chọn Khách sạn.');
+                            return;
+                        }
+
+                        document.frm.submit();
+
+                    }
+</script>
+

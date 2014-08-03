@@ -1,0 +1,88 @@
+          
+<?php if (count($this->WarningMsg) > 0) { ?>
+    <div class="warning_box">
+        <?php echo current($this->WarningMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+    <div class="valid_box">
+        <?php echo current($this->SuccessMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+    <div class="error_box">
+        <?php echo current($this->ErrorMsg); ?>
+    </div>
+<?php } ?>       
+
+<form action="<?php echo _URL_ADMIN . '/hotel-type/delete'; ?>" name='frm' method='post'>
+    <table id="rounded-corner">
+        <thead>
+            <tr>
+                <th scope="col" class="rounded-company"><input type="checkbox" name="checkAll" id="checkAll" value="" /></th>
+                <th scope="col" class="rounded">Loại khách sạn</th>
+                <th scope="col" class="rounded">Trạng thái</th>
+                <th scope="col" class="rounded">Sửa</th>
+                <th scope="col" class="rounded-q4">Xóa</th>
+            </tr>
+        </thead>
+        <?php if (count($this->listHotelType) > 0) { ?>
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="rounded-foot-left"><em>Hiển thị <?php echo $this->fromItem; ?> đến <?php echo $this->toItem; ?> / <?php echo $this->countHotelTypeAll; ?> kết quả</em></td>
+                    <td class="rounded-foot-right">&nbsp;</td>
+
+                </tr>
+            </tfoot>
+            <tbody>
+                <?php foreach ($this->listHotelType as $v) { ?>
+                    <tr>
+                        <td><input type="checkbox" name="checkboxDel[]" value="<?php echo $v['HotelType_Id']; ?>" /></td>
+                        <td><?php echo $v['HotelType_Name']; ?></td>
+                        <td>
+                            <img class="status-img" id="status_<?php echo $v['HotelType_Id']; ?>" 
+                                 onclick="updateStatus(<?php echo $v['HotelType_Id']; ?>)" 
+                                 src="<?php echo _BACKEND_URL . '/images/' . (($v['HotelType_Status'] == 1) ? 'icon_approve.png' : 'icon_unapprove.png'); ?>" />
+                        </td>
+                        <td><a href="<?php echo _URL_ADMIN . '/hotel-type/edit/id/' . $v['HotelType_Id']; ?>"><img src="<?php echo _BACKEND_URL; ?>/images/user_edit.png" alt="" title="" border="0" /></a></td>
+                        <td><a href="<?php echo _URL_ADMIN . '/hotel-type/delete/id/' . $v['HotelType_Id']; ?>" class="ask"><img src="<?php echo _BACKEND_URL; ?>/images/trash.png" alt="" title="" border="0" /></a></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        <?php } else { ?>
+            <tr>
+                <td colspan="5" class="result">
+                    <div class='no-result'>Không tìm thấy kết quả</a>
+                </td>
+            </tr>
+        <?php } ?>
+    </table>
+</form>
+<a href="<?php echo _URL_ADMIN . '/hotel-type/add'; ?>" class="bt_green"><span class="bt_green_lft"></span><strong>Thêm</strong><span class="bt_green_r"></span></a>
+<a onclick="checkForm()" class="bt_red"><span class="bt_red_lft"></span><strong>Xóa</strong><span class="bt_red_r"></span></a> 
+        <?php echo $this->paginationControl($this->page, 'Sliding', 'page.phtml', array('controller' => 'hotel-type')); ?>
+
+<script>
+                             function checkForm() {
+                                 var checkValue = $("input[name='checkboxDel[]']:checked").length;
+                                 if (checkValue == 0) {
+                                     alert('Vui lòng chọn dòng cần xóa.');
+                                     return false;
+                                 }
+                                 if (confirm('Bạn có chắc chắn muốn xóa?')) {
+                                     document.frm.submit();
+                                 }
+                             }
+
+                             function updateStatus(id) {
+                                 $.post('<?php echo _URL_ADMIN . '/hotel-type/updatestatus/'; ?>', {id: id, table: '<?php echo _PREFIX; ?>hotel_type', statusName: 'HotelType_Status', idName: 'HotelType_Id'}, function(result) {
+                                     if (result == 1) {
+                                         $("#status_" + id).attr("src", "<?php echo _BACKEND_URL . '/images/icon_approve.png'; ?>");
+                                     } else {
+                                         $("#status_" + id).attr("src", "<?php echo _BACKEND_URL . '/images/icon_unapprove.png'; ?>");
+                                     }
+                                 })
+                             }
+</script>

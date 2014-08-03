@@ -1,0 +1,132 @@
+
+
+<?php if (count($this->WarningMsg) > 0) { ?>
+	<div class="warning_box">
+		<?php echo current($this->WarningMsg); ?>
+	</div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+	<div class="valid_box">
+		<?php echo current($this->SuccessMsg); ?>
+	</div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+	<div class="error_box">
+		<?php echo current($this->ErrorMsg); ?>
+	</div>
+<?php } ?>
+<style>
+    input[type=text], input[type=password] {
+        width: 300px;
+    }
+</style>
+<div class="form">
+    <form action="" enctype="multipart/form-data" method="post" class="niceform" name='frm'>
+        <fieldset>
+			<dl class="part_title">Thông tin cơ bản</dl>
+            <dl>
+                <dt><label>Tên:</label></dt>
+                <dd><input placeholder="Tên" type="text" name="Name" id="Name" size="34" class="require" /></dd>
+            </dl>
+            <dl>
+                <dt><label>Ngày sinh:</label></dt>
+                <dd><input type="text" value="" style="width: 120px" id="Birthday" name='Birthday' /></dd>
+            </dl>
+			<dl>
+                <dt><label>Số điện thoại:</label></dt>
+                <dd><input type="text" value="" id="Phone" name='Phone' /></dd>
+            </dl>
+			<dl>
+                <dt><label>Địa chỉ:</label></dt>
+                <dd><input type="text" value="" id="Address" name='Address' /></dd>
+            </dl>
+			<dl class="part_title">Thông tin đăng nhập</dl>
+            <dl>
+                <dt><label>Email:</label></dt>
+                <dd><input placeholder="Email" type="text" name="Email" id="Email" size="34" class="require" /></dd>
+            </dl>
+            <dl>
+                <dt><label>Mật khẩu:</label></dt>
+                <dd><input placeholder="Mật khẩu" type="password" name="Password" id="Password" size="34" class="require" /></dd>
+            </dl>
+            <dl>
+                <dt><label>Nhập lại mật khẩu:</label></dt>
+                <dd><input placeholder="Nhập lại mật khẩu" type="password" name="RePassword" id="RePassword" size="34" class="require" /></dd>
+            </dl>
+            <dl>
+                <dt><label for="color">Trạng thái</label></dt>
+                <dd>
+                    <select style="width: 100px" name="Status" id="Status">
+                        <option value="1">Hoạt động</option>
+                        <option value="0">Tạm dừng</option>
+                    </select>
+                </dd>
+            </dl>
+
+            <dl class="submit">
+                <a onclick="checkForm()" class="bt_blue"><span class="bt_blue_lft"></span><strong>Thêm mới</strong><span class="bt_blue_r"></span></a>
+            </dl>
+
+        </fieldset>
+    </form>
+</div>
+
+<script>
+					function checkForm() {
+						var name = $("#Name").val();
+						var email = $("#Email").val();
+						var password = $("#Password").val();
+						var repassword = $("#RePassword").val();
+
+						if (name == '') {
+							alert('Vui lòng nhập Tên.');
+							$("#Name").focus();
+							return;
+						}
+
+						if (email == '') {
+							alert('Vui lòng nhập Email.');
+							$("#Email").focus();
+							return;
+						} else if (!checkEmail(email)) {
+							alert('Email không hợp lệ. Vui lòng nhập lại.');
+							$("#Email").focus();
+							return;
+						} else {
+							$.post("<?php echo _URL . '/iadm/member/check-email/'; ?>", {email: email}, function(data) {
+								if (data == 1) {
+									alert('Email đã tồn tại. Vui lòng nhập Email khác.');
+									$("#Email").focus();
+									return;
+								}
+								if (password == '') {
+									alert('Vui lòng nhập Mật khẩu đăng nhập.');
+									$("#Password").focus();
+									return;
+								}
+								if (repassword == '') {
+									alert('Vui lòng nhập lại Mật khẩu.');
+									$("#RePassword").focus();
+									return;
+								} else if (repassword != password) {
+									alert('Nhập lại mật khẩu không đúng. Vui lòng nhập lại.');
+									$("#RePassword").focus();
+									return;
+								}
+								document.frm.submit();
+							});
+						}
+
+
+					}
+					$(function() {
+						$("#Birthday").datepicker({
+							showOn: "button",
+							buttonImage: "<?php echo _BACKEND_URL . '/images/calendar_icon.png'; ?>",
+							buttonImageOnly: true,
+							dateFormat: "dd/mm/yy"
+						});
+					});
+</script>

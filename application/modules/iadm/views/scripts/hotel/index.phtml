@@ -1,0 +1,167 @@
+          
+<?php if (count($this->WarningMsg) > 0) { ?>
+    <div class="warning_box">
+        <?php echo current($this->WarningMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+    <div class="valid_box">
+        <?php echo current($this->SuccessMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+    <div class="error_box">
+        <?php echo current($this->ErrorMsg); ?>
+    </div>
+<?php } ?>      
+
+<form name="frsearch" action="<?php echo _URL_ADMIN . '/hotel'; ?>" method="post">
+    <fieldset class="fr-search">
+        <legend>Tìm kiếm</legend>
+        <table>
+            <tr>
+                <td style="width: 70px;" align="right">Đối tác</td>
+                <td>
+                    <select name="PartnerSearch">
+                        <option value="">Tất cả</option>
+                        <?php foreach ($this->Partner as $v) { ?>
+                            <option <?php echo ($this->search['PartnerSearch'] == $v['Partner_Id']) ? "selected='selected'" : ""; ?> value="<?php echo $v['Partner_Id']; ?>"><?php echo $v['Partner_Name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </td>
+                <td align="right">Trạng thái</td>
+                <td>
+                    <select name="StatusSearch">
+                        <option value="">Tất cả</option>
+                        <option value="1" <?php echo ($this->search['StatusSearch'] == "1") ? "selected='selected'" : ""; ?>>Hoạt động</option>
+                        <option value="0" <?php echo ($this->search['StatusSearch'] == "0") ? "selected='selected'" : ""; ?>>Tạm dừng</option>
+						<option value="2" <?php echo ($this->search['StatusSearch'] == "2") ? "selected='selected'" : ""; ?>>Chờ duyệt</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Số sao</td>
+                <td>
+                    <select name="StarSearch">
+                        <option value="">Tất cả</option>
+                        <?php for ($i = 0; $i <= 5; $i++) { ?>
+                            <option <?php echo ($this->search['StarSearch'] != "" && $this->search['StarSearch'] == $i) ? "selected='selected'" : ""; ?> value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                        <?php } ?>
+                    </select>
+                </td>
+                <td>Tỉnh/Thành</td>
+                <td>
+                    <select placeholder="Tỉnh/Thành" name="ProvinceSearch" id="ProvinceSearch">
+                        <option value="">Tất cả</option>
+                        <?php foreach ($this->Province as $v) { ?>
+                            <option <?php echo ($this->search['ProvinceSearch'] == $v['Province_Id']) ? "selected='selected'" : ""; ?> value="<?php echo $v['Province_Id']; ?>"><?php echo $v['Province_Name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <input type="hidden" name="typeAction" value="search" />
+                    <a onclick="document.frsearch.submit()" class="bt_green"><span class="bt_green_lft"></span><strong>Tìm kiếm</strong><span class="bt_green_r"></span></a>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</form>
+
+<form action="<?php echo _URL_ADMIN . '/hotel/delete'; ?>" name='frm' method='post'>
+    <input type="hidden" name="typeAction" value="index" />
+    <table id="rounded-corner">
+        <thead>
+            <tr>
+                <th scope="col" class="rounded-company"><input type="checkbox" name="checkAll" id="checkAll" value="" /></th>
+                <th scope="col" class="rounded" align="center">STT</th>
+                <th scope="col" class="rounded">Khách sạn</th>
+                <th scope="col" class="rounded">Đối tác</th>
+                <th scope="col" class="rounded">Ngày tạo</th>
+                <th scope="col" class="rounded">Trạng thái</th>
+                <th scope="col" class="rounded">Sửa</th>
+                <th scope="col" class="rounded-q4">Xóa</th>
+            </tr>
+        </thead>
+        <?php if (count($this->listHotel) > 0) { ?>
+            <tfoot>
+                <tr>
+                    <td colspan="7" class="rounded-foot-left"><em>Hiển thị <?php echo $this->fromItem; ?> đến <?php echo $this->toItem; ?> / <?php echo $this->countPartnerAll; ?> kết quả</em></td>
+                    <td class="rounded-foot-right">&nbsp;</td>
+
+                </tr>
+            </tfoot>
+            <tbody>
+                <?php
+                $i = $this->fromItem;
+                foreach ($this->listHotel as $v) {
+                    ?>
+                    <tr>                 
+                        <td><input type="checkbox" name="checkboxDel[]" value="<?php echo $v['Hotel_Id']; ?>" /></td>
+                        <td align="center"><?php echo $i; ?></td>
+                        <td><?php echo $v['Hotel_Name']; ?></td>  
+                        <td><?php echo $v['User_Name']; ?></td>
+                        <td><?php echo MyZend_Function::formatDateYMDHIS_DMYHIS($v['Hotel_Date_create']); ?></td>
+                        <td>
+                            <?php
+								switch ($v['Hotel_Status']) {
+									case 1: 
+										echo 'Hoạt động';
+										break;
+									case 0:
+										echo 'Tạm dừng';
+										break;
+									case 2:
+										echo 'Chờ duyệt';
+										break;
+								}
+							?>
+                        </td>
+                        <td><a href="<?php echo _URL_ADMIN . '/hotel/edit/id/' . $v['Hotel_Id']; ?>"><img src="<?php echo _BACKEND_URL; ?>/images/user_edit.png" alt="" title="" border="0" /></a></td>
+                        <td><a href="<?php echo _URL_ADMIN . '/hotel/delete/id/' . $v['Hotel_Id']; ?>" class="ask"><img src="<?php echo _BACKEND_URL; ?>/images/trash.png" alt="" title="" border="0" /></a></td>
+                    </tr>
+                    <?php $i++;
+                }
+                ?>
+            </tbody>
+<?php } else { ?>
+            <tr>
+                <td colspan="8" class="result">
+                    <div class='no-result'>Không tìm thấy kết quả</a>
+                </td>
+            </tr>
+<?php } ?>
+    </table>
+</form>
+<a href="<?php echo _URL_ADMIN . '/hotel/add'; ?>" class="bt_green"><span class="bt_green_lft"></span><strong>Thêm</strong><span class="bt_green_r"></span></a>
+<a onclick="checkForm()" class="bt_red"><span class="bt_red_lft"></span><strong>Xóa</strong><span class="bt_red_r"></span></a> 
+<?php echo $this->paginationControl($this->page, 'Sliding', 'page.phtml', array('controller' => 'hotel')); ?>
+
+<script>
+                        function checkForm() {
+                            var checkValue = $("input[name='checkboxDel[]']:checked").length;
+                            if (checkValue == 0) {
+                                alert('Vui lòng chọn dòng cần xóa.');
+                                return false;
+                            }
+                            if (confirm('Bạn có chắc chắn muốn xóa?')) {
+                                document.frm.submit();
+                            }
+                        }
+
+                        function updateStatus(id) {
+                            $.post('<?php echo _URL_ADMIN . '/hotel/updatestatus/'; ?>', {id: id, table: '<?php echo _PREFIX; ?>hotel', statusName: 'Hotel_Status', idName: 'Hotel_Id'}, function(result) {
+                                if (result == 1) {
+                                    $("#status_" + id).attr("src", "<?php echo _BACKEND_URL . '/images/icon_approve.png'; ?>");
+                                } else {
+                                    $("#status_" + id).attr("src", "<?php echo _BACKEND_URL . '/images/icon_unapprove.png'; ?>");
+                                }
+                            })
+                        }
+</script>

@@ -1,0 +1,157 @@
+<?php if (count($this->WarningMsg) > 0) { ?>
+	<div class="warning_box">
+		<?php echo current($this->WarningMsg); ?>
+	</div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+	<div class="valid_box">
+		<?php echo current($this->SuccessMsg); ?>
+	</div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+	<div class="error_box">
+		<?php echo current($this->ErrorMsg); ?>
+	</div>
+<?php } ?>
+<style>
+    input[type=text], input[type=password] {
+        width: 300px;
+    }
+
+    #Email, #Password, #RePassword, #dl-repass, #dl-sendmail {
+        display: none;
+    }
+
+    #update-email, #update-password {
+        text-decoration: underline;
+        color: #1E5BAE;
+        cursor: pointer;
+    }    
+</style>
+<div class="form">
+    <form action="" method="post" class="niceform" name='frm' enctype="multipart/form-data">
+        <fieldset>
+            <dl>
+                <dt><label for="email">Tên đại diện:</label></dt>
+                <dd><input placeholder="Tên đại diện" type="text" name="Name" id="Name" size="34" class="require" value="<?php echo $this->Partner['User_Name']; ?>" /></dd>
+            </dl>
+            <dl>
+                <dt><label>Điện thoại liên hệ:</label></dt>
+                <dd><input placeholder="Điện thoại" type="text" name="Phone" id="Phone" size="34" class="require" value="<?php echo $this->Partner['User_Phone']; ?>" /></dd>
+            </dl>
+            <dl>
+                <dt><label>Email:</label></dt>
+                <dd><span id="update-email">Cập nhật</span><input placeholder="Email" type="text" name="Email" id="Email" size="34" class="require" value="<?php echo $this->Partner['User_Email']; ?>" /></dd>
+            </dl>
+            <dl>
+                <dt><label>Mật khẩu:</label></dt>
+                <dd><span id="update-password">Cập nhật</span><input placeholder="Mật khẩu" type="password" name="Password" id="Password" size="34" class="require" value="" /></dd>
+            </dl>
+            <dl id="dl-repass">
+                <dt><label>Nhập lại mật khẩu:</label></dt>
+                <dd><input placeholder="Nhập lại mật khẩu" type="password" name="RePassword" id="RePassword" size="34" class="require" value="" /></dd>
+            </dl>
+			<?php if ($this->Partner['User_Status'] == 2) {?>
+			<dl id="dl-sendmail">
+				<dt></dt>
+                <dd><input <?php echo ($this->Partner['User_Status'] == 2) ? "checked='checked'" : ""; ?> type="checkbox" name="Sendmail" id="Sendmail" value="1" /> <label for="Sendmail">Gửi thông tin đến Email của đối tác</label></dd>
+            </dl>
+			<?php }?>
+            <dl>
+                <dt><label for="color">Trạng thái</label></dt>
+                <dd>
+                    <select style="width: 100px" name="Status" id="Status">
+                        <option value="1" <?php echo ($this->Partner['User_Status'] == 1) ? "selected='selected'" : ""; ?>>Hoạt động</option>
+                        <option value="0" <?php echo ($this->Partner['User_Status'] == 0) ? "selected='selected'" : ""; ?>>Tạm dừng</option>
+						<?php if ($this->Partner['User_Status'] == 2) {?>
+						<option value="2" <?php echo ($this->Partner['User_Status'] == 2) ? "selected='selected'" : ""; ?>>Chờ duyệt</option>
+						<?php }?>
+					</select>
+                </dd>
+            </dl>
+
+            <dl class="submit">
+                <a onclick="checkForm()" class="bt_blue"><span class="bt_blue_lft"></span><strong>Cập nhật</strong><span class="bt_blue_r"></span></a>
+            </dl>
+        </fieldset>
+    </form>
+</div>
+
+<script>
+
+					$("#Password,#RePassword,#dl-sendmail").focus(function() {
+						$(this).val("");
+					});
+
+
+					function checkForm() {
+						var name = $("#Name").val();
+						var email = $("#Email").val();
+						var phone = $("#Phone").val();
+						var password = $("#Password").val();
+						var repassword = $("#RePassword").val();
+						if (name == '') {
+							alert('Vui lòng nhập Tên.');
+							$("#Name").focus();
+							return;
+						}
+						if (phone == '') {
+							alert('Vui lòng nhập Điện thoại liên hệ.');
+							$("#Phone").focus();
+							return;
+						} else if (!checkPhone(phone)) {
+							alert('Điện thoại liên hệ không hợp lệ. Vui lòng nhập lại.');
+							$("#Phone").focus();
+							return;
+						}
+
+						if ($("#Email").is(":visible") && email == '') {
+							alert('Vui lòng nhập Email.');
+							$("#Email").focus();
+							return;
+						} else if (!checkEmail(email)) {
+							alert('Email không hợp lệ. Vui lòng nhập lại.');
+							$("#Email").focus();
+							return;
+<?php if ($this->Partner['User_Status'] == 2) { ?>
+							} else if ($("#Password").val() == '' && $("#Status").val() != 2) {
+								alert('Vui lòng cập nhật mật khẩu mới cho Đối tác.');
+								return;
+<?php } ?>
+						} else {
+							$.post("<?php echo _URL . '/iadm/hotel-partner/check-email/'; ?>", {email: email}, function(data) {
+								if (email != '<?php echo $this->Partner['User_Email']; ?>') {
+									if (data == 1) {
+										alert('Email đã tồn tại. Vui lòng nhập Email khác.');
+										$("#Email").focus();
+										return;
+									}
+								}
+								if ($("#Password").is(":visible") && (password != "" || repassword != "") && password != repassword) {
+									alert('Nhập lại mật khẩu không đúng. Vui lòng nhập lại.');
+									$("#RePassword").focus();
+									return;
+								}
+								document.frm.submit();
+							});
+						}
+					}
+
+					$(function() {
+						$("#update-email").click(function() {
+							$("#Email").show();
+							$(this).hide();
+						});
+						$("#update-password").click(function() {
+							$("#Password").show();
+							$("#RePassword").show();
+							$("#dl-repass").show();
+							$("#dl-sendmail").show();
+							$(this).hide();
+						});
+					});
+
+
+</script>

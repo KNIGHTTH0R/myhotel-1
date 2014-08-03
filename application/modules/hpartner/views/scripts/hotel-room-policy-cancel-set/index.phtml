@@ -1,0 +1,52 @@
+<div class="row-fluid">
+    <div class="span12">
+        <h3 class="heading">Chính sách hủy phòng</h3>
+        <table class="table table-bordered table-striped table_vam" id="dt_enterprises">
+            <thead>
+                <tr>               
+                    <th>Chính sách hủy phòng</th>
+					<th>Loại phòng</th>
+					<th>Ngày đến</th>
+					<th>Ngày đi</th>
+                    <th>Trạng thái</th>
+                    <th>Sửa</th
+                </tr>
+            </thead>
+            <tbody>
+				<?php
+				$stt = 1;
+				foreach ($this->PolicyCancelSet as $v) {
+					?>
+					<tr>
+						<td><?php echo $v['PolicyCancel_Name']; ?></td>
+						<td>
+							<?php
+							$RoomId = explode(',', $v['Room_Id']);
+							foreach ($this->Room as $vv) {?>
+								<input disabled="disabled" class="RoomType" <?php echo (in_array($vv['Room_Id'], $RoomId)) ? "checked='checked'" : ""; ?> type='checkbox' /> <?php echo $vv['Room_Name']; ?>&nbsp;&nbsp;&nbsp;
+							<?php } ?>
+						</td>
+						<td><?php echo MyZend_Function::formatDateYMDHIS_DMY($v['PolicyCancelSet_DateFrom']); ?></td>
+						<td><?php echo MyZend_Function::formatDateYMDHIS_DMY($v['PolicyCancelSet_DateTo']); ?></td>
+						<td><img class="status-img" id="status_<?php echo $v['PolicyCancelSet_Id']; ?>" 
+								 src="<?php echo _BACKEND_URL . '/images/' . (($v['PolicyCancelSet_Active'] == 1) ? 'icon_approve.png' : 'icon_unapprove.png'); ?>" /></td>
+						<td>
+							<a href="<?php echo _URL_HPARTNER . '/hotel-room-policy-cancel-set/edit/id/' . $v['PolicyCancelSet_Id']; ?>" class="sepV_a" title="Sửa"><i class="icon-pencil"></i></a>
+						</td>
+					</tr>
+					<?php
+					$stt++;
+				}
+				?>
+				<tr>
+					<td colspan="6">
+						<?php echo $this->paginationControl($this->page, 'Sliding', 'page.phtml', array('controller' => 'hotel-room-policy-cancel-set')); ?>
+					</td>
+				</tr>
+            </tbody>
+        </table>
+        <div class="form-actions" style='text-align:right'>
+			<button onclick="javascript:location.href = '<?php echo _URL_HPARTNER; ?>/hotel-room-policy-cancel-set/add'" id="edit_submit" class="btn btn-inverse" type="button">Tạo mới</button>
+		</div>
+    </div>
+</div>

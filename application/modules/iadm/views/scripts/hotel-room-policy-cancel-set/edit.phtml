@@ -1,0 +1,125 @@
+<?php if (count($this->WarningMsg) > 0) { ?>
+    <div class="warning_box">
+        <?php echo current($this->WarningMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+    <div class="valid_box">
+        <?php echo current($this->SuccessMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+    <div class="error_box">
+        <?php echo current($this->ErrorMsg); ?>
+    </div>
+<?php } ?>
+<div class="form">
+    <form action="" method="post" class="niceform" name='frm' enctype="multipart/form-data">
+        <fieldset>
+            <dl>
+                <dt><label for="email">Chính sách hủy phòng:</label></dt>
+                <dd>
+                    <select name="PolicyCancel" id="PolicyCancel" class="require">
+                        <option value="">&nbsp;</option>
+                        <?php foreach ($this->PolicyCancel as $v) { ?>
+                            <option <?php echo ($this->PolicyCancelSet['PolicyCancel_Id'] == $v['PolicyCancel_Id']) ? "selected='selected'" : ""; ?> value="<?php echo $v['PolicyCancel_Id']; ?>"><?php echo $v['PolicyCancel_Name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </dd>
+            </dl>
+            <dl>
+                <dt><label>Khách sạn:</label></dt>
+                <dd>
+                    <select placeholder="Khách sạn" name="Hotel" id="Hotel" class="require">
+                        <option value="">&nbsp;</option>
+                        <?php foreach ($this->Hotel as $v) { ?>
+                            <option <?php echo ($this->PolicyCancelSet['Hotel_Id'] == $v['Hotel_Id']) ? "selected='selected'" : ""; ?> value="<?php echo $v['Hotel_Id']; ?>"><?php echo $v['Hotel_Name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </dd>
+            </dl> 
+            <dl>
+                <dt><label>Loại phòng:</label></dt>
+                <dd>	
+					<div id="showRoom">
+                        <?php
+                        $RoomId = explode(',', $this->PolicyCancelSet['Room_Id']);
+                        foreach ($this->Room as $v) {
+                            ?>
+                            <input <?php echo (in_array($v['Room_Id'], $RoomId)) ? "checked='checked'" : ""; ?> type='checkbox' name='RoomTypes[<?php echo $v['Room_Id']; ?>]' value='<?php echo $v['Room_Id']; ?>' /><?php echo $v['Room_Name']; ?>&nbsp;&nbsp;&nbsp;
+                        <?php } ?>
+                    </div>
+                </dd>
+            </dl> 
+            <dl>
+                <dt><label>Ngày nhận phòng:</label></dt>
+                <dd>
+                    <input type="text" readonly="readonly" name="DateFrom" value="<?php echo MyZend_Function::formatDateYMDHIS_DMY($this->PolicyCancelSet['PolicyCancelSet_DateFrom'], '/'); ?>" style="width: 120px" id="dateFrom" />
+                </dd>
+            </dl> 
+            <dl>
+                <dt><label>Ngày trả phòng:</label></dt>
+                <dd>
+                    <input type="text" readonly="readonly" name="DateTo" value="<?php echo MyZend_Function::formatDateYMDHIS_DMY($this->PolicyCancelSet['PolicyCancelSet_DateTo'], '/'); ?>" style="width: 120px" id="dateTo" />
+                </dd>
+            </dl>
+
+            <dl>
+                <dt><label for="color">Hiển thị</label></dt>
+                <dd>
+                    <input <?php echo ($this->PolicyCancelSet['PolicyCancelSet_Status'] == 1) ? "checked='checked'" : ""; ?> type="radio" name="Status" id="Status_1" value="1" checked="checked" /><label for="Status_1" class="check_label">Có</label>
+                    <input <?php echo ($this->PolicyCancelSet['PolicyCancelSet_Status'] == 0) ? "checked='checked'" : ""; ?> type="radio" name="Status" id="Status_0" value="0" /><label for="Status_0" class="check_label">Không</label>
+                </dd>
+            </dl>
+
+            <dl class="submit">
+                <a onclick="checkForm()" class="bt_blue"><span class="bt_blue_lft"></span><strong>Cập nhật</strong><span class="bt_blue_r"></span></a>
+            </dl>
+        </fieldset>
+    </form>
+</div>
+
+<script>
+                    function checkForm() {
+                        if ($("#PolicyCancel").val() == '') {
+                            alert('Vui lòng chọn Chính sách hủy phòng.');
+                            return;
+                        }
+                        if ($("#Hotel").val() == '') {
+                            alert('Vui lòng chọn Khách sạn.');
+                            return;
+                        }
+                        if ($("#Room").val() == '') {
+                            alert('Vui lòng chọn Loại phòng.');
+                            return;
+                        }
+                        document.frm.submit();
+                    }
+                    $(function() {
+                        $("#Hotel").change(function() {
+                            if ($(this).val() != '') {
+                                $.post("<?php echo _URL . '/iadm/hotel-room-promotion/mapping-hotel/'; ?>", {hotelId: $(this).val()}, function(result) {
+                                    var strOptionRoom;
+                                    var data = eval(result);
+                                    strOptionRoom = "";
+                                    $.each(data, function(i, item) {
+                                        strOptionRoom += "<input type='checkbox' name='RoomTypes[" + item.Room_Id + "]' value='" + item.Room_Id + "' /> " + item.Room_Name + "&nbsp;&nbsp;&nbsp;";
+                                    });
+                                    $("#showRoom").html(strOptionRoom);
+                                });
+                            } else {
+                                $("#showRoom").html('chọn khách sạn');
+                            }
+
+                        });
+
+                        $("#dateFrom, #dateTo").datepicker({
+                            showOn: "button",
+                            buttonImage: "<?php echo _BACKEND_URL . '/images/calendar_icon.png'; ?>",
+                            buttonImageOnly: true,
+                            dateFormat: "dd/mm/yy"
+                        });
+                    });
+</script>

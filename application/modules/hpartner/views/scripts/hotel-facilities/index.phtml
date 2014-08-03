@@ -1,0 +1,35 @@
+<div class="row-fluid">
+    <div class="span12">
+        <h3 class="heading">Tiện nghi khách sạn</h3>
+        <?php
+        if (count($this->SuccessMsg) > 0) {
+            echo '<div class="form_alert form_alert-info">' . current($this->SuccessMsg) . '</div>';
+        }
+        if (count($this->ErrorMsg) > 0) {
+            echo '<div class="form_alert form_alert-error">' . current($this->ErrorMsg) . '</div>';
+        }
+        ?>
+        <form name="form_useful" id="form_useful" method="post" action="">
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <p style="font-weight: bold">Chọn tất cả &nbsp;&nbsp;<input type="checkbox" name="checkAll" id="checkAll" value="" /></p>
+                        <ul class="bed">
+                            <?php $Facilities = explode(',', $this->HotelInfo['Hotel_Facilities']); ?>
+                            <?php foreach ($this->Facilities as $v) { ?>
+                                <li>
+                                    <input <?php echo ($Facilities && in_array($v['Facilities_Id'], $Facilities)) ? "checked='checked'" : ""; ?> id="facilities_<?php echo $v['Facilities_Id']; ?>" type="checkbox" name="Facilities[<?php echo $v['Facilities_Id']; ?>]" value="<?php echo $v['Facilities_Id']; ?>" /> 
+                                    <label for="facilities_<?php echo $v['Facilities_Id']; ?>"><?php echo ucfirst($v['Facilities_Name']); ?></label>
+                                </li>
+                            <?php }?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button id="edit_submit" class="btn btn-inverse" type="submit">Đồng ý chỉnh sửa</button>
+            </div>
+        </form>
+    </div>                        
+</div>                      

@@ -1,0 +1,77 @@
+<?php if (count($this->WarningMsg) > 0) { ?>
+    <div class="warning_box">
+        <?php echo current($this->WarningMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+    <div class="valid_box">
+        <?php echo current($this->SuccessMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+    <div class="error_box">
+        <?php echo current($this->ErrorMsg); ?>
+    </div>
+<?php } ?>
+<div class="form">
+    <form action="" method="post" class="niceform" name='frm' enctype="multipart/form-data">
+        <fieldset>
+            <dl>
+                <dt><label for="email">Tiện nghi:</label></dt>
+                <dd><input placeholder="Tiện nghi" type="text" name="Name" id="Name" size="34" class="require" value="<?php echo $this->Facilities['Facilities_Name']; ?>" /></dd>
+            </dl>
+            <dl>
+                <dt><label for="email">Ảnh đại diện:</label></dt>
+                <dd>
+                    <div class="upload-div-wrap" style="float:left">
+                        <input type="file" name="Picture" id="Picture" />
+                        <input type="text" value="" />
+                        <input type="button" value="Upload" name="" class="" />
+                    </div>
+                    <?php if ($this->Facilities['Facilities_Picture'] != "" && is_file(_PICTURE_PATH . '/' . $this->Facilities['Facilities_Picture'])) { ?>
+                        <img onclick="deletePicture(<?php echo $this->Facilities['Facilities_Id']; ?>, '<?php echo $this->Facilities['Facilities_Picture']; ?>')" src="<?php echo _THUMB_URL . '?src=' . _PICTURE_URL . '/' . $this->Facilities['Facilities_Picture'] . '&amp;w=32&amp;h=32'; ?>" class="img_small_edit" />
+                        <span class="click-del-img">(Click vào hình để xóa)</span>
+                    <?php } ?>
+                    <br>
+                    <br>
+                    <span>(Dung lượng giới hạn: <?php echo round(_CONFIG_SIZE_FILE / 1048576); ?> MB / File: <?php echo _CONFIG_EXTENSION_FILE; ?>)</span>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt><label for="color">Hiển thị</label></dt>
+                <dd>
+                    <input <?php echo ($this->Facilities['Facilities_Status'] == 1) ? "checked='checked'" : ""; ?> type="radio" name="Status" id="Status_1" value="1" checked="checked" /><label for="Status_1" class="check_label">Có</label>
+                    <input <?php echo ($this->Facilities['Facilities_Status'] == 0) ? "checked='checked'" : ""; ?> type="radio" name="Status" id="Status_0" value="0" /><label for="Status_0" class="check_label">Không</label>
+                </dd>
+            </dl>
+
+            <dl class="submit">
+                <a onclick="checkForm()" class="bt_blue"><span class="bt_blue_lft"></span><strong>Cập nhật</strong><span class="bt_blue_r"></span></a>
+            </dl>
+        </fieldset>
+    </form>
+</div>
+
+<script>
+        function checkForm() {
+            var name = $("#Name").val();
+            if (name == '') {
+                alert('Vui lòng nhập Tên.');
+                $("#Name").focus();
+                return;
+            }
+            document.frm.submit();
+        }
+
+        function deletePicture(id, picture) {
+            if (confirm('Bạn có chắc chắn muốn xóa hình này?')) {
+                $.post('<?php echo _URL_ADMIN . '/hotel-room-facilities/delpic'; ?>', {id: id, picture: picture}, function() {
+                    $(".img_small_edit").remove();
+                    $(".click-del-img").hide();
+                });
+            }
+        }
+</script>

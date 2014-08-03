@@ -1,0 +1,59 @@
+<form name="frm" id="frm" method="post" action="">
+
+    <div class="row-fluid">
+        <div class="span12">
+            <h3 class="heading">Cài đặt phòng</h3>
+            <?php
+            if (count($this->SuccessMsg) > 0) {
+                echo '<div class="form_alert form_alert-info">' . current($this->SuccessMsg) . '</div>';
+            }
+            if (count($this->ErrorMsg) > 0) {
+                echo '<div class="form_alert form_alert-error">' . current($this->ErrorMsg) . '</div>';
+            }
+            ?>
+            <p>Giá phòng mặc định dùng để <strong>Cài đặt Biểu giá và phòng chỉ định</strong>.</p>
+            <p>Giá này đã bao gồm thuế (Thuế của khách sạn <strong><?php echo $this->HotelInfo['Hotel_Name']; ?></strong>: <?php echo $this->HotelInfo['Hotel_Tax']; ?>%).</p>
+            <table class="table table-bordered table-striped table_vam" id="dt_enterprises">
+                <thead>
+                    <tr>               
+                        <th style="width:50px">STT</th>
+                        <th>Loại phòng</th>
+                        <th>Giường đơn (VND)</th>
+                        <th>Giường đôi (VND)</th>
+                        <th>Giường bổ sung (VND)</th>
+                        <th>Số phòng chỉ định</th>
+                        <th>Bao gồm ăn sáng</th>
+                        <th>Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $stt = 1;
+                    foreach ($this->Room as $v) {
+                        ?>
+                        <tr>
+                            <td><?php echo $stt; ?></td>
+                            <td><?php echo $v['Room_Name']; ?></td>
+                            <td align="center"><input onkeyup="this.value = (addCommas(this.value));" style="width: 100px" type="text" value="<?php echo MyZend_Function::formatPriceAddCommas($v['Room_Price_SingleNetRate']); ?>" name="SingleNetRate[<?php echo $v['Room_Id']; ?>]" /></td>
+                            <td align="center"><input onkeyup="this.value = (addCommas(this.value));" style="width: 100px" type="text" value="<?php echo MyZend_Function::formatPriceAddCommas($v['Room_Price_DoubleNetRate']); ?>" name="DoubleNetRate[<?php echo $v['Room_Id']; ?>]" /></td>
+                            <td align="center"><input onkeyup="this.value = (addCommas(this.value));" style="width: 100px" type="text" value="<?php echo MyZend_Function::formatPriceAddCommas($v['Room_Price_ExtraBed']); ?>" name="ExtraBed[<?php echo $v['Room_Id']; ?>]" /></td>
+                            <td align="center"><input style="width: 100px" type="text" value="<?php echo $v['Room_Allotment']; ?>" name="Allotment[<?php echo $v['Room_Id']; ?>]" /></td>
+                            <td align="center"><input type="checkbox" <?php echo ($v['Room_Breakfast'] == 1) ? "checked='checked'" : ""; ?> value="1" name="Breakfast[<?php echo $v['Room_Id']; ?>]" /></td>
+                            <td><img class="status-img" id="status_<?php echo $v['Room_Id']; ?>" 
+                                     src="<?php echo _BACKEND_URL . '/images/' . (($v['Room_Status'] == 1) ? 'icon_approve.png' : 'icon_unapprove.png'); ?>" />
+                                <input type="hidden" name="id[<?php echo $v['Room_Id']; ?>]" value="<?php echo $v['Room_Id']; ?>" />
+                            </td>
+
+                        </tr>
+                        <?php
+                        $stt++;
+                    }
+                    ?>
+                </tbody>
+            </table>
+            <div class="form-actions">
+                <button id="edit_submit" class="btn btn-inverse" type="submit">Đồng ý chỉnh sửa</button>
+            </div>
+        </div>
+    </div>
+</form>

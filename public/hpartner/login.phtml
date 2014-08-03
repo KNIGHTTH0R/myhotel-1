@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Partner Admin</title>
+
+        <!-- Bootstrap framework -->
+        <link rel="stylesheet" href="<?php echo _HPARTNER_URL; ?>/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="<?php echo _HPARTNER_URL; ?>/bootstrap/css/bootstrap-responsive.min.css" />
+        <!-- theme color-->
+        <link rel="stylesheet" href="<?php echo _HPARTNER_URL; ?>/css/blue.css" />
+        <!-- tooltip -->    
+        <link rel="stylesheet" href="<?php echo _HPARTNER_URL; ?>/lib/qtip2/jquery.qtip.min.css" />
+        <!-- main styles -->
+        <link rel="stylesheet" href="<?php echo _HPARTNER_URL; ?>/css/style.css" />
+        <script src="<?php echo _HPARTNER_URL; ?>/js/jquery-1.9.1.js"></script>
+        <!-- script all js -->
+        <script src="<?php echo _HPARTNER_URL; ?>/bootstrap/js/script-all.js"></script>
+
+        <!-- Favicons and the like (avoid using transparent .png) -->
+        <link rel="shortcut icon" href="favicon.ico" />
+        <link rel="apple-touch-icon-precomposed" href="icon.png" />
+
+        <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+
+        <!--[if lte IE 8]>
+            <script src="js/ie/html5.js"></script>
+                        <script src="js/ie/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    <body class="login_page">
+        <header>
+            <div class="navbar navbar-fixed-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="brand" href=""><i
+                                class="icon-home icon-white"></i> Đối tác khách sạn</a>
+                        <a data-target=".nav-collapse" data-toggle="collapse"
+                           class="btn_menu"> <span class="icon-align-justify icon-white"></span>
+                        </a>						
+                    </div>
+                </div>
+            </div>		
+        </header>
+        <div id="contentwrapper" style="margin-top: 10px;">
+            <?php echo $this->layout()->content; ?> 
+        </div>
+        <div class="footer_login">
+            ©2014 Agoda Company Pte. Ltd., Giữ toàn quyền.<br>
+            AGODA ® là thương hiệu được đăng ký của AGIP LLC, sử dụng theo giấy phép của Agoda Company Pte. Ltd.
+        </div>
+    </body>
+</html>

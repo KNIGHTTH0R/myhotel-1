@@ -1,0 +1,262 @@
+
+<div class="row-fluid">
+    <div class="span12">
+        <h3 class="heading">Cài đặt Biểu giá và phòng chỉ định</h3>
+		<?php
+		if (count($this->SuccessMsg) > 0) {
+			echo '<div class="form_alert form_alert-info">' . current($this->SuccessMsg) . '</div>';
+		}
+		if (count($this->ErrorMsg) > 0) {
+			echo '<div class="form_alert form_alert-error">' . current($this->ErrorMsg) . '</div>';
+		}
+		?>
+        <form action="<?php echo _URL_HPARTNER . '/hotel-room-set/index'; ?>" name='frm' method='post'>
+            <table id="rounded-corner" class="table_set_room">
+                <thead>
+                    <tr>
+                        <th scope="col" class="rounded-company" colspan="4" style="padding: 4px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="font-weight: bold;">  
+                        <td>Khách sạn</td>
+                        <td>Loại phòng</td>
+                    </tr>
+                    <tr>               
+                        <td><?php echo $this->HotelInfo['Hotel_Name']; ?></td>
+                        <td>
+                            <select name="Room" id="Room">
+                                <option></option>
+								<?php foreach ($this->Room as $v) { ?>
+									<option value="<?php echo $v['Room_Id']; ?>"><?php echo $v['Room_Name']; ?></option>
+								<?php } ?>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table id="rounded-corner" class="table_set_room">
+                <thead>
+                    <tr>
+                        <th scope="col" class="rounded-company" colspan="4" style="padding: 4px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="font-weight: bold;">                 
+                        <td>Từ ngày</td>
+                        <td>Đến ngày</td>
+                        <td>Ngày áp dụng trong tuần</td>  
+                        <td>Bổ sung chính sách hủy phòng</td>
+                    </tr>
+                    <tr>                 
+                        <td><input type="text" readonly="readonly" value="<?php echo date('d/m/Y'); ?>" style="width: 120px" id="dateFrom" /></td>
+                        <td><input type="text" readonly="readonly" value="<?php echo date('d/m/Y', strtotime('+7 day')); ?>" style="width: 120px" id="dateTo" /></td>
+                        <td>
+                            <input type="checkbox" checked="checked" id="dayCheckbox_0"/> CN
+                            <input type="checkbox" checked="checked" id="dayCheckbox_1"/> Hai
+                            <input type="checkbox" checked="checked" id="dayCheckbox_2"/> Ba
+                            <input type="checkbox" checked="checked" id="dayCheckbox_3"/> Tư
+                            <input type="checkbox" checked="checked" id="dayCheckbox_4"/> Năm
+                            <input type="checkbox" checked="checked" id="dayCheckbox_5"/> Sáu
+                            <input type="checkbox" checked="checked" id="dayCheckbox_6"/> Bảy
+                        </td>  
+                        <td><input type="checkbox" checked="checked" id="isSetExistedPolicy" name="isSetExistedPolicy" value="1"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table id="rounded-corner" class="table_set_room">
+                <tbody>
+                    <tr style="font-weight: bold;">    
+                        <td></td>
+                        <td>Đơn</td>
+                        <td>Đôi</td>
+                        <td>Giường Bổ Sung</td>  
+                        <td>Tiền</td>
+                        <td>Số phòng chỉ định</td>
+                        <td>Bao gồm ăn sáng</td>
+                    </tr>
+                    <tr>       
+                        <td>Bao gồm thuế <span id="Tax"><?php echo $this->HotelInfo['Hotel_Tax']; ?></span>%</td>
+                        <td><input type="text" id="txtSingleNetRate" value="" style="width: 60px" onkeyup="this.value = (addCommas(this.value));" /></td>
+                        <td><input type="text" id="txtDoubleNetRate" value="" style="width: 60px" onkeyup="this.value = (addCommas(this.value));" /></td>
+                        <td><input type="text" id="txtExtraBed" value="" style="width: 60px" onkeyup="this.value = (addCommas(this.value));" /></td>  
+                        <td>VND</td>
+                        <td><input type="text" id="txtAllotment" value="" style="width: 30px"/></td>
+                        <td><input type="checkbox" checked="checked" id="chkBFIncludedCheckBox" name="chkBFIncludedCheckBox" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" align="right">
+                            <button id="btn_set_room" class="btn btn-inverse" name="submit" type="button">Thêm</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <input type="hidden" name="typeAction" value="index" />
+            <table id="rounded-corner">
+                <thead>
+                    <tr>
+                        <th scope="col" class="rounded">Thứ</th>
+                        <th scope="col" class="rounded">Mệnh giá</th>
+                        <th scope="col" class="rounded">Đơn</th>
+                        <th scope="col" class="rounded">Đôi</th>
+                        <th scope="col" class="rounded">Giường Bổ Sung</th>
+                        <th scope="col" class="rounded">Số phòng chỉ định</th>
+                        <th scope="col" class="rounded-q4">Bữa sáng</th>
+                    </tr>
+                </thead>
+                <tbody id="item_set_room">
+                    <tr>                 
+                        <td></td>
+                        <td></td>
+                        <td></td>  
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="form-actions" style="text-align: right">
+                <button id="edit_submit" class="btn btn-inverse" type="submit">Lưu</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+							var roomInfo = <?php echo json_encode($this->Room); ?>;
+							$(function() {
+								$("#dateFrom, #dateTo").datepicker({
+									showOn: "button",
+									buttonImage: "<?php echo _HPARTNER_URL . '/images/calendar_icon.png'; ?>",
+									buttonImageOnly: true,
+									dateFormat: "dd/mm/yy"
+								});
+
+								$("#Room").change(function() {
+									if ($(this).val() != '') {
+										$.each(roomInfo, function(i, v) {
+											if ($("#Room").val() == v.Room_Id) {
+												$("#txtSingleNetRate").val(addCommas(v.Room_Price_SingleNetRate));
+												$("#txtDoubleNetRate").val(addCommas(v.Room_Price_DoubleNetRate));
+												$("#txtExtraBed").val(addCommas(v.Room_Price_ExtraBed));
+												$("#txtAllotment").val(v.Room_Allotment);
+												if (v.Breakfast == 1) {
+													$("#chkBFIncludedCheckBox").checked = true;
+												} else {
+													$("#chkBFIncludedCheckBox").checked = false;
+												}
+											}
+										});
+									} else {
+										$("#txtSingleNetRate").val('');
+										$("#txtDoubleNetRate").val('');
+										$("#txtExtraBed").val('');
+										$("#txtAllotment").val('');
+										$("#chkBFIncludedCheckBox").checked = true;
+									}
+								});
+
+								$("#btn_set_room").click(function() {
+									var datefrom = $("#dateFrom").val();
+									var dateto = $("#dateTo").val();
+									var fromDate = datefrom.split("/");
+									var toDate = dateto.split("/");
+									var fdate = new Date(fromDate[2], fromDate[1], fromDate[0]);
+									var tdate = new Date(toDate[2], toDate[1], toDate[0]);
+									var cdate = new Date('<?php echo date('Y'); ?>', '<?php echo date('m'); ?>', '<?php echo date('d'); ?>');
+									var SingleNetRate = $("#txtSingleNetRate").val().split('.').join('');
+									var DoubleNetRate = $("#txtDoubleNetRate").val().split('.').join('');
+									
+									if (fdate < cdate) {
+										alert("Ngày Bạn chọn lớn hơn ngày hiện tại. Vui lòng chọn lại.");
+										return;
+									}
+									if (tdate - fdate < 0) {
+										alert("Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc.");
+										return false;
+									}
+									if (tdate - fdate > 7776000000) {
+										alert("Bạn chỉ được xem trong khoảng thời gian tối đa 90 ngày / lần.");
+										return false;
+									}
+									if ($("#Room").val() == '') {
+										alert('Vui lòng chọn Loại phòng.');
+										return;
+									}
+									if ($("#txtSingleNetRate").val() == '' || $("#txtSingleNetRate").val() == 0) {
+										alert('Vui lòng nhập giá phòng Đơn.');
+										$("#txtSingleNetRate").focus();
+										return;
+									}
+									if ($("#txtDoubleNetRate").val() == '' || $("#txtDoubleNetRate").val() == 0) {
+										alert('Vui lòng nhập giá phòng Đôi.');
+										$("#txtDoubleNetRate").focus();
+										return;
+									}
+									if ($("#txtExtraBed").val() == '' || $("#txtExtraBed").val() == 0) {
+										alert('Vui lòng nhập giá Giường Phụ.');
+										$("#txtExtraBed").focus();
+										return;
+									}
+									if ($("#txtAllotment").val() == '' || $("#txtAllotment").val() == 0) {
+										alert('Vui lòng nhập Số phòng chỉ định.');
+										$("#txtAllotment").focus();
+										return;
+									}
+									if (SingleNetRate > DoubleNetRate) {
+										alert('Giá Phòng Đơn không thể lớn hơn Phòng Đôi.');
+										return;
+									}
+
+									var chkBFIncludedCheckBox = 0;
+									if ($("#chkBFIncludedCheckBox").is(":checked")) {
+										chkBFIncludedCheckBox = 1;
+									}
+									$("#item_set_room").html("");
+									$.post("<?php echo _URL . '/hpartner/hotel-room-set/set-room-preview/'; ?>",
+											{
+												dateFrom: $("#dateFrom").val(),
+												dateTo: $("#dateTo").val(),
+												SingleNetRate: $("#txtSingleNetRate").val(),
+												DoubleNetRate: $("#txtDoubleNetRate").val(),
+												ExtraBed: $("#txtExtraBed").val(),
+												Allotment: $("#txtAllotment").val(),
+												chkBFIncludedCheckBox: chkBFIncludedCheckBox,
+											},
+											function(result) {
+												var data = eval(result);
+												var strItemSetRoom = '';
+												$(".valid_box").remove();
+												var stt = 1;
+												$.each(data, function(i, item) {
+
+													if (stt > 7) {
+														var hidden = "style='display:none'";
+													}
+													if ($("#dayCheckbox_" + item.Day).is(":checked")) {
+														CheckchkBFIncludedCheckBox = (item.chkBFIncludedCheckBox == 1) ? "Có" : "Không";
+														strItemSetRoom += '<tr ' + hidden + '>';
+														strItemSetRoom += '<td>' + dayName(item.Day) + '</td>';
+														strItemSetRoom += '<td>VND</td>';
+														strItemSetRoom += '<td>' + item.SingleNetRate + '</td>';
+														strItemSetRoom += '<td>' + item.DoubleNetRate + '</td>';
+														strItemSetRoom += '<td>' + item.ExtraBed + '</td>';
+														strItemSetRoom += '<td>' + item.Allotment + '</td>';
+														strItemSetRoom += '<td>' + CheckchkBFIncludedCheckBox + '</td>';
+														strItemSetRoom += '<input type="hidden" name="Date[' + item.Stt + ']" value="' + item.DateFormat + '" />';
+														strItemSetRoom += '<input type="hidden" name="SingleNetRate[' + item.Stt + ']" value="' + item.SingleNetRate + '" />';
+														strItemSetRoom += '<input type="hidden" name="DoubleNetRate[' + item.Stt + ']" value="' + item.DoubleNetRate + '" />';
+														strItemSetRoom += '<input type="hidden" name="ExtraBed[' + item.Stt + ']" value="' + item.ExtraBed + '" />';
+														strItemSetRoom += '<input type="hidden" name="Allotment[' + item.Stt + ']" value="' + item.Allotment + '" />';
+														strItemSetRoom += '<input type="hidden" name="CheckchkBFIncludedCheckBox[' + item.Stt + ']" value="' + item.chkBFIncludedCheckBox + '" />';
+														strItemSetRoom += '</tr>';
+														stt++;
+													}
+
+												});
+												$("#item_set_room").html(strItemSetRoom);
+											});
+								});
+							});
+</script>

@@ -1,0 +1,112 @@
+<form class="form_validation_ttip" name="frm" id="frm" method="post" action="">
+    <div class="row-fluid">
+        <div class="span12">
+            <h3 class="heading">Chính sách hủy phòng</h3>
+			<?php
+			if (count($this->SuccessMsg) > 0) {
+				echo '<div class="form_alert form_alert-info">' . current($this->SuccessMsg) . '</div>';
+			}
+			if (count($this->ErrorMsg) > 0) {
+				echo '<div class="form_alert form_alert-error">' . current($this->ErrorMsg) . '</div>';
+			}
+			?>
+
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Chính sách hủy phòng <span class="f_req">*</span></label>
+                        <select name="PolicyCancel" id="PolicyCancel">
+                            <option value="">&nbsp;</option>
+							<?php foreach ($this->PolicyCancel as $v) { ?>
+								<option <?php echo ($this->PolicyCancelSet['PolicyCancel_Id'] == $v['PolicyCancel_Id']) ? "selected='selected'" : ""; ?> value="<?php echo $v['PolicyCancel_Id']; ?>"><?php echo $v['PolicyCancel_Name']; ?></option>
+							<?php } ?>
+                        </select>
+                        <div id="quote-policy">
+							<?php
+							foreach ($this->PolicyCancel as $v) {
+								echo ($this->PolicyCancelSet['PolicyCancel_Id'] == $v['PolicyCancel_Id']) ? $v['PolicyCancel_Body'] : "";
+							}
+							?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Loại phòng <span class="f_req">*</span></label>
+						<?php
+						$RoomId = explode(',', $this->PolicyCancelSet['Room_Id']);
+						foreach ($this->Room as $v) {
+							?>
+							<input class="RoomType" <?php echo (in_array($v['Room_Id'], $RoomId)) ? "checked='checked'" : ""; ?> type='checkbox' name='RoomTypes[<?php echo $v['Room_Id']; ?>]' value='<?php echo $v['Room_Id']; ?>' /> <?php echo $v['Room_Name']; ?>&nbsp;&nbsp;&nbsp;
+						<?php } ?>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Ngày nhận phòng</label>
+                        <input type="text" readonly="readonly" name="DateFrom" value="<?php echo MyZend_Function::formatDateYMDHIS_DMY($this->PolicyCancelSet['PolicyCancelSet_DateFrom'], '/'); ?>" style="width: 120px" id="dateFrom" />
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Ngày trả phòng</label>
+                        <input type="text" readonly="readonly" name="DateTo" value="<?php echo MyZend_Function::formatDateYMDHIS_DMY($this->PolicyCancelSet['PolicyCancelSet_DateTo'], '/'); ?>" style="width: 120px" id="dateTo" />
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Trạng thái</label>
+                        <input <?php echo ($this->PolicyCancelSet['PolicyCancelSet_Active'] == 1) ? "checked='checked'" : ""; ?> type="radio" name="Status" id="Status_1" value="1" checked="checked" /> <span for="Status_1" class="check_label">Kích hoạt</span>
+                        &nbsp;&nbsp;&nbsp;<input <?php echo ($this->PolicyCancelSet['PolicyCancelSet_Active'] == 0) ? "checked='checked'" : ""; ?> type="radio" name="Status" id="Status_0" value="0" /> <span for="Status_0" class="check_label">Hủy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-actions">
+        <button id="edit_submit" class="btn btn-inverse" type="submit">Đồng ý chỉnh sửa</button>
+    </div>
+</form>
+</div>                        
+</div>  
+
+<script>
+	$(function() {
+		$("#dateFrom, #dateTo").datepicker({
+			showOn: "button",
+			buttonImage: "<?php echo _BACKEND_URL . '/images/calendar_icon.png'; ?>",
+			buttonImageOnly: true,
+			dateFormat: "dd/mm/yy"
+		});
+		document.frm.onsubmit = function() {
+			if ($("#PolicyCancel").val() == '') {
+				alert('Vui lòng chọn Chính sách hủy phòng.');
+				return false;
+			}
+			if ($(".RoomType").is(":checked") == false) {
+				alert('Vui lòng chọn Loại phòng.');
+				return false;
+			}
+		}
+		var policyCancel = <?php echo json_encode($this->PolicyCancel); ?>;
+		$("#PolicyCancel").change(function() {
+			$.each(policyCancel, function(i, item) {
+				if ($("#PolicyCancel").val() != '') {
+					if ($("#PolicyCancel").val() == item.PolicyCancel_Id) {
+						$("#quote-policy").html(item.PolicyCancel_Body);
+					}
+				} else {
+					$("#quote-policy").html('');
+				}
+			});
+		});
+	})
+</script>

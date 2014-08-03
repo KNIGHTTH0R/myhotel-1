@@ -1,0 +1,287 @@
+<?php if (count($this->WarningMsg) > 0) { ?>
+    <div class="warning_box">
+        <?php echo current($this->WarningMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+    <div class="valid_box">
+        <?php echo current($this->SuccessMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+    <div class="error_box">
+        <?php echo current($this->ErrorMsg); ?>
+    </div>
+<?php } ?>
+<?php
+$TimePickerBookTimeTo = explode(':', $this->Promotion['RoomPromotion_TimePickerBookTimeTo']);
+$TimePickerBookTimeFrom = explode(':', $this->Promotion['RoomPromotion_TimePickerBookTimeFrom']);
+$TimePickerBookTimeTo_Hour = $TimePickerBookTimeTo[0];
+$TimePickerBookTimeTo_Minute = $TimePickerBookTimeTo[1];
+$TimePickerBookTimeFrom_Hour = $TimePickerBookTimeFrom[0];
+$TimePickerBookTimeFrom_Minute = $TimePickerBookTimeFrom[1];
+?>
+
+<div class="form">
+    <form action="" method="post" class="niceform" name='frm' enctype="multipart/form-data">
+        <fieldset>
+            <dl>
+                <dt><label>Tên khuyến mãi:</label></dt>
+                <dd>
+                    <input type="text" name="Name" value="<?php echo $this->Promotion['RoomPromotion_Name'];?>" id="Name" class="require"/>
+                </dd>
+            </dl>
+            <dl>
+                <dt><label>Khách sạn:</label></dt>
+                <dd>
+                    <select placeholder="Khách sạn" name="Hotel" id="Hotel" class="require">
+                        <option value="">&nbsp;</option>
+                        <?php foreach ($this->Hotel as $v) { ?>
+                            <option <?php echo ($this->Promotion['Hotel_Id'] == $v['Hotel_Id']) ? "selected='selected'" : ""; ?> value="<?php echo $v['Hotel_Id']; ?>"><?php echo $v['Hotel_Name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </dd>
+            </dl>
+            <dl>
+                <dt><label for="email">Loại phòng:</label></dt>
+                <dd>
+                    <div id="showRoom">
+                        <?php
+                        $Promotion = explode(',', $this->Promotion['RoomPromotion_RoomTypes']);
+                        foreach ($this->Room as $v) {
+                            ?>
+                            <input <?php echo (in_array($v['Room_Id'], $Promotion)) ? "checked='checked'" : ""; ?> type='checkbox' name='RoomTypes[<?php echo $v['Room_Id']; ?>]' value='<?php echo $v['Room_Id']; ?>' /><?php echo $v['Room_Name']; ?>&nbsp;&nbsp;&nbsp;
+                        <?php } ?>
+                    </div>
+                </dd>
+            </dl>
+            <dl>
+                <dt><label>Loại khuyến mãi:</label></dt>
+                <dd>
+                    <select name="DiscountType" id="DiscountType">
+                        <option value="1">% Discount</option>
+                    </select>
+                </dd>
+            </dl>
+            <dl>
+                <dt><label>Tặng:</label></dt>
+                <dd>
+                    <input type="text" name="DiscountValue" value="<?php echo $this->Promotion['RoomPromotion_DiscountValue']; ?>" id="DiscountValue" /> % Discount
+                </dd>
+            </dl>
+            <dl>
+                <dt><label for="email">Phòng tối thiểu:</label></dt>
+                <dd>
+                    <select name="MinRooms" id="MinRooms">
+                        <?php for ($i = 1; $i <= 5; $i++) { ?>
+                            <option <?php echo ($this->Promotion['RoomPromotion_MinRooms'] == $i) ? "selected='selected'" : ""; ?> value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                        <?php } ?>
+                    </select>
+                </dd>
+            </dl>
+            <dl>
+                <dt><label for="email">Ở tối thiểu:</label></dt>
+                <dd>
+                    <select name="MinNightsStay" id="MinNightsStay">
+                        <?php for ($i = 1; $i <= 10; $i++) { ?>
+                            <option <?php echo ($this->Promotion['RoomPromotion_MinNightsStay'] == $i) ? "selected='selected'" : ""; ?> value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                        <?php } ?>
+                    </select> đêm
+                </dd>
+            </dl>
+            <dl>
+                <dt><label for="email">Ở tối đa:</label></dt>
+                <dd>
+                    <select name="MaxNightsStay" id="MaxNightsStay">
+                        <option value="">Không</option>
+                        <?php for ($i = 1; $i <= 10; $i++) { ?>
+                            <option <?php echo ($this->Promotion['RoomPromotion_MaxNightsStay'] == $i) ? "selected='selected'" : ""; ?> value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                        <?php } ?>
+                    </select> đêm
+                </dd>
+            </dl>
+            <dl>
+                <dt><label for="email">Ngày đặt phòng từ:</label></dt>
+                <dd>
+                    <input type="text" readonly="readonly" name="BookDateFrom" value="<?php echo MyZend_Function::formatDateYMDHIS_DMY($this->Promotion['RoomPromotion_BookDateFrom'], '/'); ?>" style="width: 120px" id="BookDateFrom" />
+                </dd>
+            </dl>
+            <dl>
+                <dt><label for="email">Ngày đặt phòng đến:</label></dt>
+                <dd>
+                    <input type="text" readonly="readonly" name="BookDateTo" value="<?php echo MyZend_Function::formatDateYMDHIS_DMY($this->Promotion['RoomPromotion_BookDateTo'], '/'); ?>" style="width: 120px" id="BookDateTo" />
+                </dd>
+            </dl>
+            <dl>
+                <dt><label>Ngày ở từ:</label></dt>
+                <dd>
+                    <input type="text" readonly="readonly" name="StayDateFrom" value="<?php echo MyZend_Function::formatDateYMDHIS_DMY($this->Promotion['RoomPromotion_StayDateFrom'], '/'); ?>" style="width: 120px" id="StayDateFrom" />
+                </dd>
+            </dl> 
+            <dl>
+                <dt><label>Ngày trả phòng:</label></dt>
+                <dd>
+                    <input type="text" readonly="readonly" name="StayDateTo" value="<?php echo MyZend_Function::formatDateYMDHIS_DMY($this->Promotion['RoomPromotion_StayDateTo'], '/'); ?>" style="width: 120px" id="StayDateTo" />
+                </dd>
+            </dl>
+            <dl>
+                <dt><label>Đặt phòng ngày:</label></dt>
+                <dd>
+                    <?php
+                    $RoomPromotion_DayBook = explode(',', $this->Promotion['RoomPromotion_DayBook']);
+                    ?>
+                    <input type="checkbox" <?php echo (in_array('0', $RoomPromotion_DayBook)) ? "checked='checked'" : ""; ?> id="DayBookCheckbox_0" name="DayBookCheckbox[0]" value="0" /> CN
+                    <input type="checkbox" <?php echo (in_array('1', $RoomPromotion_DayBook)) ? "checked='checked'" : ""; ?> id="DayBookCheckbox_1" name="DayBookCheckbox[1]" value="1" /> Hai
+                    <input type="checkbox" <?php echo (in_array('2', $RoomPromotion_DayBook)) ? "checked='checked'" : ""; ?> id="DayBookCheckbox_2" name="DayBookCheckbox[2]" value="2" /> Ba
+                    <input type="checkbox" <?php echo (in_array('3', $RoomPromotion_DayBook)) ? "checked='checked'" : ""; ?> id="DayBookCheckbox_3" name="DayBookCheckbox[3]" value="3" /> Tư
+                    <input type="checkbox" <?php echo (in_array('4', $RoomPromotion_DayBook)) ? "checked='checked'" : ""; ?> id="DayBookCheckbox_4" name="DayBookCheckbox[4]" value="4" /> Năm
+                    <input type="checkbox" <?php echo (in_array('5', $RoomPromotion_DayBook)) ? "checked='checked'" : ""; ?> id="DayBookCheckbox_5" name="DayBookCheckbox[5]" value="5" /> Sáu
+                    <input type="checkbox" <?php echo (in_array('6', $RoomPromotion_DayBook)) ? "checked='checked'" : ""; ?> id="DayBookCheckbox_6" name="DayBookCheckbox[6]" value="6" /> Bảy
+                </dd>
+            </dl>
+            <dl>
+                <dt><label>Nhận phòng ngày:</label></dt>
+                <dd>
+                    <?php
+                    $RoomPromotion_DayGetRoom = explode(',', $this->Promotion['RoomPromotion_DayGetRoom'])
+                    ?>
+                    <input type="checkbox" <?php echo (in_array(0, $RoomPromotion_DayGetRoom)) ? "checked='checked'" : ""; ?> id="DayGetRoomCheckbox_0" name="DayGetRoomCheckbox[0]" value="0" /> CN
+                    <input type="checkbox" <?php echo (in_array(1, $RoomPromotion_DayGetRoom)) ? "checked='checked'" : ""; ?> id="DayGetRoomCheckbox_1" name="DayGetRoomCheckbox[1]" value="1" /> Hai
+                    <input type="checkbox" <?php echo (in_array(2, $RoomPromotion_DayGetRoom)) ? "checked='checked'" : ""; ?> id="DayGetRoomCheckbox_2" name="DayGetRoomCheckbox[2]" value="2" /> Ba
+                    <input type="checkbox" <?php echo (in_array(3, $RoomPromotion_DayGetRoom)) ? "checked='checked'" : ""; ?> id="DayGetRoomCheckbox_3" name="DayGetRoomCheckbox[3]" value="3" /> Tư
+                    <input type="checkbox" <?php echo (in_array(4, $RoomPromotion_DayGetRoom)) ? "checked='checked'" : ""; ?> id="DayGetRoomCheckbox_4" name="DayGetRoomCheckbox[4]" value="4" /> Năm
+                    <input type="checkbox" <?php echo (in_array(5, $RoomPromotion_DayGetRoom)) ? "checked='checked'" : ""; ?> id="DayGetRoomCheckbox_5" name="DayGetRoomCheckbox[5]" value="5" /> Sáu
+                    <input type="checkbox" <?php echo (in_array(6, $RoomPromotion_DayGetRoom)) ? "checked='checked'" : ""; ?> id="DayGetRoomCheckbox_6" name="DayGetRoomCheckbox[6]" value="6" /> Bảy
+                </dd>
+            </dl>
+            <dl>
+                <dt><label>Thời gian đặt phòng từ:</label></dt>
+                <dd>
+                    <select name="TimePickerBookTimeFrom_Hour" id="TimePickerBookTimeFrom_Hour" style='width: 60px'>
+                        <?php for ($i = 0; $i <= 23; $i++) { ?>
+                            <?php
+                            if ($i < 10) {
+                                $zero = 0;
+                            } else {
+                                $zero = null;
+                            }
+                            ?>
+                            <option <?php echo ($TimePickerBookTimeFrom_Hour == $zero . $i) ? "selected='selected'" : ""; ?> value="<?php echo $zero . $i; ?>"><?php echo $zero . $i; ?></option>
+                        <?php } ?>
+                    </select>
+                    <select name="TimePickerBookTimeFrom_Minute" id="TimePickerBookTimeFrom_Minute" style='width: 60px'>
+                        <?php for ($i = 0; $i <= 59; $i++) { ?>
+                            <?php
+                            if ($i < 10) {
+                                $zero = 0;
+                            } else {
+                                $zero = null;
+                            }
+                            ?>
+                            <option <?php echo ($TimePickerBookTimeFrom_Minute == $zero . $i) ? "selected='selected'" : ""; ?> value="<?php echo $zero . $i; ?>"><?php echo $zero . $i; ?></option>
+                        <?php } ?>
+                    </select>
+                    Giơ địa phương
+                </dd>
+            </dl>
+            <dl>
+                <dt><label>Thời gian đặt phòng đến:</label></dt>
+                <dd>
+                    <select name="TimePickerBookTimeTo_Hour" id="TimePickerBookTimeTo_Hour" style='width: 60px'>
+                        <?php for ($i = 0; $i <= 23; $i++) { ?>
+                            <?php
+                            if ($i < 10) {
+                                $zero = 0;
+                            } else {
+                                $zero = null;
+                            }
+                            ?>
+                            <option <?php echo ($TimePickerBookTimeTo_Hour == $zero . $i) ? "selected='selected'" : ""; ?> value="<?php echo $zero . $i; ?>"><?php echo $zero . $i; ?></option>
+                        <?php } ?>
+                    </select>
+                    <select name="TimePickerBookTimeTo_Minute" id="TimePickerBookTimeTo_Minute" style='width: 60px'>
+                        <?php for ($i = 0; $i <= 59; $i++) { ?>
+                            <?php
+                            if ($i < 10) {
+                                $zero = 0;
+                            } else {
+                                $zero = null;
+                            }
+                            ?>
+                            <option <?php echo ($TimePickerBookTimeTo_Minute == $zero . $i) ? "selected='selected'" : ""; ?> value="<?php echo $zero . $i; ?>"><?php echo $zero . $i; ?></option>
+                        <?php } ?>
+                    </select>
+                    Giơ địa phương
+                </dd>
+            </dl>
+
+
+            <dl>
+                <dt><label for="email">Chính sách hủy phòng:</label></dt>
+                <dd>
+                    <select name="PolicyCancel" id="PolicyCancel">
+                        <option value="">&nbsp;</option>
+                        <?php foreach ($this->PolicyCancel as $v) { ?>
+                            <option <?php echo ($this->Promotion['PolicyCancel_Id'] == $v['PolicyCancel_Id']) ? "selected='selected'" : ""; ?> value="<?php echo $v['PolicyCancel_Id']; ?>"><?php echo $v['PolicyCancel_Name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt><label for="color">Hiển thị</label></dt>
+                <dd>
+                    <input <?php echo ($this->Promotion['RoomPromotion_Status'] == 1) ? "checked='checked'" : ""; ?> type="radio" name="Status" id="Status_1" value="1" /><label for="Status_1" class="check_label">Có</label>
+                    <input <?php echo ($this->Promotion['RoomPromotion_Status'] == 0) ? "checked='checked'" : ""; ?> type="radio" name="Status" id="Status_0" value="0" /><label for="Status_0" class="check_label">Không</label>
+                </dd>
+            </dl>
+
+            <dl class="submit">
+                <a onclick="checkForm()" class="bt_blue"><span class="bt_blue_lft"></span><strong>Cập nhật</strong><span class="bt_blue_r"></span></a>
+            </dl>
+        </fieldset>
+    </form>
+</div>
+
+<script>
+                    function checkForm() {
+                        var name = $("#Hotel").val();
+                        if ($("#Name").val() == '') {
+                            alert('Vui lòng Tên.');
+                            $("#Name").focus();
+                            return;
+                        }
+                        if (name == '') {
+                            alert('Vui lòng chọn Khách sạn.');
+                            return;
+                        }
+                        document.frm.submit();
+                    }
+                    $(function() {
+                        $("#BookDateFrom, #BookDateTo, #StayDateFrom, #StayDateTo").datepicker({
+                            showOn: "button",
+                            buttonImage: "<?php echo _BACKEND_URL . '/images/calendar_icon.png'; ?>",
+                            buttonImageOnly: true,
+                            dateFormat: "dd/mm/yy"
+                        });
+
+                        $("#Hotel").change(function() {
+                            if ($(this).val() != '') {
+                                $.post("<?php echo _URL . '/iadm/hotel-room-promotion/mapping-hotel/'; ?>", {hotelId: $(this).val()}, function(result) {
+                                    var strOptionRoom;
+                                    var data = eval(result);
+                                    strOptionRoom = "";
+                                    $.each(data, function(i, item) {
+                                        strOptionRoom += "<input type='checkbox' name='RoomTypes[" + item.Room_Id + "]' value='" + item.Room_Id + "' /> " + item.Room_Name + "&nbsp;&nbsp;&nbsp;";
+                                    });
+                                    $("#showRoom").html(strOptionRoom);
+                                });
+                            } else {
+                                $("#showRoom").html('chọn khách sạn');
+                            }
+
+                        });
+                    })
+</script>

@@ -1,0 +1,86 @@
+<div class="row-fluid">
+    <div class="span12">
+        <h3 class="heading">Thông tin cơ bản về khách sạn</h3>
+        <?php
+        if (count($this->SuccessMsg) > 0) {
+            echo '<div class="form_alert form_alert-info">' . current($this->SuccessMsg) . '</div>';
+        }
+        if (count($this->ErrorMsg) > 0) {
+            echo '<div class="form_alert form_alert-error">' . current($this->ErrorMsg) . '</div>';
+        }
+        ?>
+        <form class="form_validation_ttip" name="frm" id="frm" method="post" action="">
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Tên khách sạn <span class="f_req">*</span></label>
+                        <input maxlength="255" class="no_border input_readonly span8" type="text" id="Hotel_Name" name="Hotel_Name" value="<?php echo $this->HotelInfo['Hotel_Name']; ?>" />
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Số sao </label>
+                        <?php echo $this->HotelInfo['Hotel_Star']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Số phòng hiện có </label>
+                        <?php echo $this->HotelInfo['Hotel_Room']; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Địa chỉ <span class="f_req">*</span></label>
+                        <input maxlength="255" class="no_border input_readonly span8" type="text" id="Hotel_Address" name="Hotel_Address" value="<?php echo $this->HotelInfo['Hotel_Address']; ?>" />
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Điện thoại <span class="f_req">*</span></label>	
+                        <input maxlength="11" class="no_border input_readonly span8" type="text" id="Hotel_Phone" name="Hotel_Phone" value="<?php echo $this->HotelInfo['Hotel_Phone']; ?>" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button id="edit_submit" class="btn btn-inverse" type="submit">Đồng ý chỉnh sửa</button>
+            </div>
+        </form>
+    </div>                        
+</div>  
+
+<script>
+    $(function() {
+        document.frm.onsubmit = function() {
+            if ($("#Hotel_Name").val() == '') {
+                alert('Vui lòng nhập Tên khách sạn.');
+                $("#Hotel_Name").focus();
+                return false;
+            }
+            if ($("#Hotel_Address").val() == '') {
+                alert('Vui lòng nhập Địa chỉ khách sạn.');
+                $("#Hotel_Address").focus();
+                return false;
+            }
+            if ($("#Hotel_Phone").val() == '') {
+                alert('Vui lòng nhập Số điện thoại.');
+                $("#Hotel_Phone").focus();
+                return false;
+            } else {
+                if (checkNumber($("#Hotel_Phone").val()) == false) {
+                    alert('Số điện thoại không hợp lệ.');
+                    $("#Hotel_Phone").focus();
+                    return false;
+                }
+            }
+        }
+    })
+</script>

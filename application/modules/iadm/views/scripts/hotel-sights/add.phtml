@@ -1,0 +1,200 @@
+<!-- Maps marker-->
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<script>
+// The following example creates a marker in Stockholm, Sweden
+// using a DROP animation. Clicking on the marker will toggle
+// the animation between a BOUNCE animation and no animation.
+
+    var latDefault = 14.060154519818523;
+    var lngDefault = 108.27189977929686;
+    var zoomDefault = 5;
+
+    function initialize() {
+        getPosition();
+        var vietnam = new google.maps.LatLng(lat, lng);
+        var parliament = new google.maps.LatLng(lat, lng);
+        var marker;
+        var map;
+
+        var mapOptions = {
+            zoom: zoom,
+            center: vietnam
+        };
+
+        map = new google.maps.Map(document.getElementById('map'),
+                mapOptions);
+
+        marker = new google.maps.Marker({
+            map: map,
+            draggable: true,
+            animation: google.maps.Animation.DROP,
+            position: parliament
+        });
+
+        // Create a DIV to hold the control and call HomeControl()
+        var homeControlDiv = document.createElement('div');
+        var homeControl = new HomeControl(homeControlDiv, map);
+        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(homeControlDiv);
+
+        google.maps.event.addListener(marker, 'click', function(event) {
+            toggleBounce();
+        });
+        google.maps.event.addListener(marker, 'dragend', function(event) {
+            $("#lat").val(event.latLng.lat());
+            $("#lng").val(event.latLng.lng());
+            $("#zoom").val(map.getZoom());
+
+        });
+    }
+
+    function toggleBounce() {
+        if (marker.getAnimation() != null) {
+            marker.setAnimation(null);
+        } else {
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+    }
+    //google.maps.event.addDomListener(window, 'load', initialize);
+
+    function getPosition() {
+        var latInput = $("#lat").val();
+        var lngInput = $("#lng").val();
+        var zoomInput = $("#zoom").val();
+
+        lat = latDefault;
+        lng = lngDefault;
+        zoom = zoomDefault;
+
+        if (latInput != "") {
+            lat = latInput;
+        }
+        if (lngInput != "") {
+            lng = lngInput;
+        }
+        if (zoomInput != "") {
+            zoom = zoomInput;
+        }
+    }
+
+    // Add a Home control that returns the user to London
+    function HomeControl(controlDiv, map) {
+        homePosition = new google.maps.LatLng(latDefault, lngDefault);
+        controlDiv.style.padding = '5px';
+        var controlUI = document.createElement('div');
+        controlUI.style.backgroundColor = 'yellow';
+        controlUI.style.border = '1px solid';
+        controlUI.style.cursor = 'pointer';
+        controlUI.style.textAlign = 'center';
+        controlUI.title = 'Set map to London';
+        controlDiv.appendChild(controlUI);
+        var controlText = document.createElement('div');
+        controlText.style.fontFamily = 'Arial,sans-serif';
+        controlText.style.fontSize = '12px';
+        controlText.style.paddingLeft = '4px';
+        controlText.style.paddingRight = '4px';
+        controlText.innerHTML = '<b>Home<b>'
+        controlUI.appendChild(controlText);
+
+        // Setup click-event listener: simply set the map to London
+        google.maps.event.addDomListener(controlUI, 'click', function() {
+            map.setCenter(homePosition);
+        });
+    }
+
+    function callOpenMap() {
+        setTimeout("initialize()", 0);
+    }
+</script>
+
+
+<!-- Fancybox -->
+<script type="text/javascript" src="<?php echo _BACKEND_URL; ?>/js/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo _BACKEND_URL; ?>/fancybox/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="<?php echo _BACKEND_URL; ?>/fancybox/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo _BACKEND_URL; ?>/fancybox/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+
+
+<?php if (count($this->WarningMsg) > 0) { ?>
+    <div class="warning_box">
+        <?php echo current($this->WarningMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+    <div class="valid_box">
+        <?php echo current($this->SuccessMsg); ?>
+    </div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+    <div class="error_box">
+        <?php echo current($this->ErrorMsg); ?>
+    </div>
+<?php } ?>
+<div class="form">
+    <form action="" enctype="multipart/form-data" method="post" class="niceform" name='frm'>
+        <fieldset>
+            <dl>
+                <dt><label>Tên Địa danh:</label></dt>
+                <dd><input placeholder="Địa danh" type="text" name="Name" id="Name" size="34" class="require" /></dd>
+            </dl>
+            <dl>
+                <dt><label>Thuộc Tỉnh/Thành:</label></dt>
+                <dd>
+                    <select name='Province'>
+                        <option></option>
+                        <?php foreach ($this->listProvince as $v) { ?>
+                            <option value="<?php echo $v['Province_Id']; ?>"><?php echo $v['Province_Name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </dd>
+            </dl>
+            <dl>
+                <dt><label for="email">Giới thiệu về Địa danh:</label></dt>
+                <dd><textarea name="Body" id="Body" class="Editor_Body"></textarea></dd>
+            </dl>
+
+            <dl>
+                <dt><label for="email">Bản đồ:</label></dt>
+                <dd>
+                    <a onclick="callOpenMap()" id="link1" href="#map">Chọn địa điểm</a>
+                    <div style="display: none;">
+                        <div id="map" style="width:800px;height:400px;"></div>
+                    </div>
+                    <input type="hidden" id="lat" name="lat" value="" />
+                    <input type="hidden" id="lng" name="lng" value="" />
+                    <input type="hidden" id="zoom" name="zoom" value="" />
+                </dd>
+            </dl>
+
+            <dl>
+                <dt><label for="color">Hiển thị</label></dt>
+                <dd>
+                    <input type="radio" name="Status" id="Status_1" value="1" checked="checked" /><label for="Status_1" class="check_label">Có</label>
+                    <input type="radio" name="Status" id="Status_0" value="0" /><label for="Status_0" class="check_label">Không</label>
+                </dd>
+            </dl>
+
+            <dl class="submit">
+                <a onclick="checkForm()" class="bt_blue"><span class="bt_blue_lft"></span><strong>Thêm mới</strong><span class="bt_blue_r"></span></a>
+            </dl>
+
+        </fieldset>
+    </form>
+</div>
+
+<script>
+    $.noConflict();
+    jQuery(document).ready(function() {
+        jQuery("#link1").fancybox();
+    });
+    function checkForm() {
+        var name = $("#Name").val();
+        if (name == '') {
+            alert('Vui lòng nhập Tên.');
+            $("#Name").focus();
+            return;
+        }
+        document.frm.submit();
+    }
+</script>

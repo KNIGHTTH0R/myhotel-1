@@ -1,0 +1,155 @@
+          
+<?php if (count($this->WarningMsg) > 0) { ?>
+	<div class="warning_box">
+		<?php echo current($this->WarningMsg); ?>
+	</div>
+<?php } ?>
+
+<?php if (count($this->SuccessMsg) > 0) { ?>
+	<div class="valid_box">
+		<?php echo current($this->SuccessMsg); ?>
+	</div>
+<?php } ?>
+
+<?php if (count($this->ErrorMsg) > 0) { ?>
+	<div class="error_box">
+		<?php echo current($this->ErrorMsg); ?>
+	</div>
+<?php } ?>       
+<form name="frsearch" action="<?php echo _URL_ADMIN . '/hotel-room-policy-cancel-set'; ?>" method="post">
+    <fieldset class="fr-search">
+        <legend>Tìm kiếm</legend>
+        <table>
+            <tr>
+                <td style="width: 70px;" align="right">Khách sạn</td>
+                <td>
+                    <select name="HotelSearch" id="HotelSearch">
+                        <option value="">Tất cả</option>
+						<?php foreach ($this->Hotel as $v) { ?>
+							<option <?php echo ($this->search['HotelSearch'] == $v['Hotel_Id']) ? "selected='selected'" : ""; ?> value="<?php echo $v['Hotel_Id']; ?>"><?php echo $v['Hotel_Name']; ?></option>
+						<?php } ?>
+                    </select>
+                </td>
+                <td align="right">Trạng thái</td>
+                <td>
+                    <select name="StatusSearch">
+                        <option value="">Tất cả</option>
+                        <option value="1" <?php echo ($this->search['StatusSearch'] == "1") ? "selected='selected'" : ""; ?>>Hoạt động</option>
+                        <option value="0" <?php echo ($this->search['StatusSearch'] == "0") ? "selected='selected'" : ""; ?>>Tạm dừng</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <input type="hidden" name="typeAction" value="search" />
+                    <a onclick="document.frsearch.submit()" class="bt_green"><span class="bt_green_lft"></span><strong>Tìm kiếm</strong><span class="bt_green_r"></span></a>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</form>
+<form action="<?php echo _URL_ADMIN . '/hotel-room-promotion/delete'; ?>" name='frm' method='post'>
+    <table id="rounded-corner">
+        <thead>
+            <tr>
+                <th scope="col" class="rounded-company"><input type="checkbox" name="checkAll" id="checkAll" value="" /></th>
+                <th scope="col" class="rounded">Khách sạn</th>
+				<th scope="col" class="rounded">Loại phòng</th>
+				<th scope="col" class="rounded">Ngày ở từ</th>
+				<th scope="col" class="rounded">Ngày ở đến</th>
+				<th scope="col" class="rounded">Chính sách hủy phòng</th>
+                <th scope="col" class="rounded">Trạng thái</th>
+                <th scope="col" class="rounded">Sửa</th>
+                <th scope="col" class="rounded-q4">Xóa</th>
+            </tr>
+        </thead>
+		<?php if (count($this->listPromotion) > 0) { ?>
+			<tfoot>
+				<tr>
+					<td colspan="8" class="rounded-foot-left"><em>Hiển thị <?php echo $this->fromItem; ?> đến <?php echo $this->toItem; ?> / <?php echo $this->countPromotionAll; ?> kết quả</em></td>
+					<td class="rounded-foot-right">&nbsp;</td>
+
+				</tr>
+			</tfoot>
+			<tbody>
+				<?php foreach ($this->listPromotion as $v) { ?>
+					<tr>
+						<td><input type="checkbox" name="checkboxDel[]" value="<?php echo $v['RoomPromotion_Id']; ?>" /></td>
+						<td><?php echo $v['Hotel_Name']; ?></td>
+						<td>
+							<?php
+							$strRoomName = '';
+							foreach ($v['RoomType'] as $vv) {
+								$strRoomName .= ', ' . $vv['Room_Name'];
+							}
+							echo substr($strRoomName, 1);
+							?>
+						</td>
+						<td><?php echo MyZend_Function::formatDateYMDHIS_DMY($v['RoomPromotion_StayDateFrom'], '/'); ?></td>
+						<td><?php echo MyZend_Function::formatDateYMDHIS_DMY($v['RoomPromotion_StayDateTo'], '/'); ?></td>
+						<td><a href="#" title="<?php echo strip_tags($v['PolicyCancel_Body']); ?>">Chính sách <img src="<?php echo _BACKEND_URL . '/images/find.png';?>" /></a></td>
+						<td>
+							<img class="status-img" id="status_<?php echo $v['RoomPromotion_Id']; ?>" 
+								 onclick="updateStatus(<?php echo $v['RoomPromotion_Id']; ?>)" 
+								 src="<?php echo _BACKEND_URL . '/images/' . (($v['RoomPromotion_Status'] == 1) ? 'icon_approve.png' : 'icon_unapprove.png'); ?>" />
+						</td>
+						<td><a href="<?php echo _URL_ADMIN . '/hotel-room-promotion/edit/id/' . $v['RoomPromotion_Id']; ?>"><img src="<?php echo _BACKEND_URL; ?>/images/user_edit.png" alt="" title="" border="0" /></a></td>
+						<td><a href="<?php echo _URL_ADMIN . '/hotel-room-promotion/delete/id/' . $v['RoomPromotion_Id']; ?>" class="ask"><img src="<?php echo _BACKEND_URL; ?>/images/trash.png" alt="" title="" border="0" /></a></td>
+					</tr>
+				<?php } ?>
+			</tbody>
+		<?php } else { ?>
+			<tr>
+				<td colspan="9" class="result">
+					<div class='no-result'>Không tìm thấy kết quả</a>
+				</td>
+			</tr>
+		<?php } ?>
+    </table>
+</form>
+<a href="<?php echo _URL_ADMIN . '/hotel-room-promotion/add'; ?>" class="bt_green"><span class="bt_green_lft"></span><strong>Thêm</strong><span class="bt_green_r"></span></a>
+<a onclick="checkForm()" class="bt_red"><span class="bt_red_lft"></span><strong>Xóa</strong><span class="bt_red_r"></span></a> 
+		<?php echo $this->paginationControl($this->page, 'Sliding', 'page.phtml', array('controller' => 'hotel-room-promotion')); ?>
+
+<script>
+							 function checkForm() {
+								 var checkValue = $("input[name='checkboxDel[]']:checked").length;
+								 if (checkValue == 0) {
+									 alert('Vui lòng chọn dòng cần xóa.');
+									 return false;
+								 }
+								 if (confirm('Bạn có chắc chắn muốn xóa?')) {
+									 document.frm.submit();
+								 }
+							 }
+
+							 function updateStatus(id) {
+								 $.post('<?php echo _URL_ADMIN . '/hotel-room-promotion/updatestatus/'; ?>', {id: id, table: '<?php echo _PREFIX; ?>hotel_room_promotion', statusName: 'RoomPromotion_Status', idName: 'RoomPromotion_Id'}, function(result) {
+									 if (result == 1) {
+										 $("#status_" + id).attr("src", "<?php echo _BACKEND_URL . '/images/icon_approve.png'; ?>");
+									 } else {
+										 $("#status_" + id).attr("src", "<?php echo _BACKEND_URL . '/images/icon_unapprove.png'; ?>");
+									 }
+								 })
+							 }
+
+							 $(function() {
+								 $(document).tooltip({
+									 position: {
+										 my: "center bottom-20",
+										 at: "center top",
+										 using: function(position, feedback) {
+											 $(this).css(position);
+											 $("<div>")
+													 .addClass("arrow")
+													 .addClass(feedback.vertical)
+													 .addClass(feedback.horizontal)
+													 .appendTo(this);
+										 }
+									 }
+								 });
+							 });
+</script>

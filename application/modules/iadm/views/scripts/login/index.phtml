@@ -1,0 +1,63 @@
+<div class="header_login">
+<!--<div class="logo"><a href="#"><img src="<?php echo _BACKEND_URL; ?>/images/logo.gif" alt="" title="" border="0" /></a></div>-->
+</div>
+<div class="login_form">
+
+    <h3>Đăng nhập</h3>
+
+    <a href="<?php echo _URL_ADMIN; ?>/login/forgot" class="forgot_pass">Quên mật khẩu</a> 
+    <form action="<?php echo _URL_ADMIN; ?>/login" method="post" class="niceform" id="formLogin" name="formLogin" onsubmit="return checkForm();">
+        <fieldset>
+            <?php
+            if (count($this->errorMess) > 0) {
+                echo '<dl><dt></dt><dd style="text-align:left"><div class="errorMess">' . current($this->errorMess) . '</div></dd></dl>';
+            }
+            ?>
+
+            <?php
+            if (count($this->message) > 0) {
+                echo '<dl><dt></dt><dd style="text-align:left"><div class="message">' . current($this->message) . '</div></dd></dl>';
+            }
+            ?>
+            <dl>
+                <dt><label for="email">Tài khoản:</label></dt>
+                <dd><input type="text" name="username" id="" size="44" value="<?php echo $this->Username; ?>" /></dd>
+            </dl>
+            <dl>
+                <dt><label for="password">Mật khẩu:</label></dt>
+                <dd><input type="password" name="password" id="" size="44" value="<?php echo $this->Password; ?>" /></dd>
+            </dl>
+            <dl>
+                <dt><label></label></dt>
+                <dd>
+                    <input type="checkbox" name="rememberLogin" id="rememberLogin" value="1" <?php echo ($this->RememberLogin == 1) ? "checked='checked'" : ""; ?> /><label for="rememberLogin" class="check_label">Lưu lại thông tin đăng nhập</label>
+                </dd>
+            </dl>
+            <dl class="submit">     
+                <a class="bt_blue" style="margin:0" href="#" onclick="checkForm()"><span class="bt_blue_lft"></span><strong>Đăng nhập</strong><span class="bt_blue_r"></span></a>
+            </dl>
+        </fieldset>
+    </form>
+</div>  
+<div class="footer_login">
+<!--    <div class="left_footer_login">Thiết kế bởi <a href="#">anhtuan15071987@gmail.com</a></div>-->
+</div>
+
+<script>
+        function checkForm() {
+            var username = document.formLogin.username.value;
+            var password = document.formLogin.password.value;
+            if (username == '') {
+                alert('Vui lòng nhập Tài khoản.');
+                document.formLogin.username.focus();
+                return;
+            }
+            if (password == '') {
+                alert('Vui lòng nhập Mật khẩu.');
+                document.formLogin.password.focus();
+                return;
+            }
+
+            document.formLogin.submit();
+        }
+</script>

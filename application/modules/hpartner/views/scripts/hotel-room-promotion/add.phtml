@@ -1,0 +1,283 @@
+<div class="row-fluid">
+    <div class="span12">
+        <h3 class="heading">Khuyến mãi</h3>
+        <?php
+        if (count($this->SuccessMsg) > 0) {
+            echo '<div class="form_alert form_alert-info">' . current($this->SuccessMsg) . '</div>';
+        }
+        if (count($this->ErrorMsg) > 0) {
+            echo '<div class="form_alert form_alert-error">' . current($this->ErrorMsg) . '</div>';
+        }
+        ?>
+
+        <form class="form_validation_ttip" name="frm" id="frm" method="post" action="">
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Tên khuyến mãi <span class="f_req">*</span></label>
+                        <input type="text" name="Name" value="" id="Name" class="span8 require"/>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Loại phòng <span class="f_req">*</span></label>
+                        <?php                    
+                        foreach ($this->Room as $v) {
+                            ?>
+                            <input class="RoomType" type='checkbox' name='RoomTypes[<?php echo $v['Room_Id']; ?>]' value='<?php echo $v['Room_Id']; ?>' /> <?php echo $v['Room_Name']; ?>&nbsp;&nbsp;&nbsp;
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Loại khuyến mãi</label>
+                        <select name="DiscountType" id="DiscountType">
+                            <option value="1">% Discount</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Tặng <span class="f_req">*</span></label>
+                        <input type="text" name="DiscountValue" value="" id="DiscountValue" /> % Discount
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Phòng tối thiểu</label>
+                        <select name="MinRooms" id="MinRooms">
+                            <?php for ($i = 1; $i <= 5; $i++) { ?>
+                                <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Ở tối thiểu</label>
+                        <select name="MinNightsStay" id="MinNightsStay">
+                            <?php for ($i = 1; $i <= 10; $i++) { ?>
+                                <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                            <?php } ?>
+                        </select> đêm
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Ở tối đa</label>
+                        <select name="MaxNightsStay" id="MaxNightsStay">
+                            <option value="">Không</option>
+                            <?php for ($i = 1; $i <= 10; $i++) { ?>
+                                <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                            <?php } ?>
+                        </select> đêm
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Ngày đặt phòng từ</label>
+                        <input type="text" readonly="readonly" name="BookDateFrom" value="<?php echo date('d/m/Y'); ?>" style="width: 120px" id="BookDateFrom" />
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Ngày đặt phòng đến</label>
+                        <input type="text" readonly="readonly" name="BookDateTo" value="<?php echo date('d/m/Y', strtotime('+7 day')); ?>" style="width: 120px" id="BookDateTo" />
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Ngày ở từ</label>
+                        <input type="text" readonly="readonly" name="StayDateFrom" value="<?php echo date('d/m/Y'); ?>" style="width: 120px" id="StayDateFrom" />
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Ngày trả phòng</label>
+                        <input type="text" readonly="readonly" name="StayDateTo" value="<?php echo date('d/m/Y', strtotime('+7 day')); ?>" style="width: 120px" id="StayDateTo" />
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Đặt phòng ngày</label>
+                        <input type="checkbox" checked="checked" id="DayBookCheckbox_0" name="DayBookCheckbox[0]" value="0" /> CN
+                        <input type="checkbox" checked="checked" id="DayBookCheckbox_1" name="DayBookCheckbox[1]" value="1" /> Hai
+                        <input type="checkbox" checked="checked" id="DayBookCheckbox_2" name="DayBookCheckbox[2]" value="2" /> Ba
+                        <input type="checkbox" checked="checked" id="DayBookCheckbox_3" name="DayBookCheckbox[3]" value="3" /> Tư
+                        <input type="checkbox" checked="checked" id="DayBookCheckbox_4" name="DayBookCheckbox[4]" value="4" /> Năm
+                        <input type="checkbox" checked="checked" id="DayBookCheckbox_5" name="DayBookCheckbox[5]" value="5" /> Sáu
+                        <input type="checkbox" checked="checked" id="DayBookCheckbox_6" name="DayBookCheckbox[6]" value="6" /> Bảy
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Nhận phòng ngày</label>
+                        <input type="checkbox" checked="checked" id="DayGetRoomCheckbox_0" name="DayGetRoomCheckbox[0]" value="0" /> CN
+                        <input type="checkbox" checked="checked" id="DayGetRoomCheckbox_1" name="DayGetRoomCheckbox[1]" value="1" /> Hai
+                        <input type="checkbox" checked="checked" id="DayGetRoomCheckbox_2" name="DayGetRoomCheckbox[2]" value="2" /> Ba
+                        <input type="checkbox" checked="checked" id="DayGetRoomCheckbox_3" name="DayGetRoomCheckbox[3]" value="3" /> Tư
+                        <input type="checkbox" checked="checked" id="DayGetRoomCheckbox_4" name="DayGetRoomCheckbox[4]" value="4" /> Năm
+                        <input type="checkbox" checked="checked" id="DayGetRoomCheckbox_5" name="DayGetRoomCheckbox[5]" value="5" /> Sáu
+                        <input type="checkbox" checked="checked" id="DayGetRoomCheckbox_6" name="DayGetRoomCheckbox[6]" value="6" /> Bảy
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Thời gian đặt phòng từ</label>
+                        <select name="TimePickerBookTimeFrom_Hour" id="TimePickerBookTimeFrom_Hour" style='width: 60px'>
+                            <?php for ($i = 0; $i <= 23; $i++) { ?>
+                                <?php
+                                if ($i < 10) {
+                                    $zero = 0;
+                                } else {
+                                    $zero = null;
+                                }
+                                ?>
+                                <option value="<?php echo $zero . $i; ?>"><?php echo $zero . $i; ?></option>
+                            <?php } ?>
+                        </select>
+                        <select name="TimePickerBookTimeFrom_Minute" id="TimePickerBookTimeFrom_Minute" style='width: 60px'>
+                            <?php for ($i = 0; $i <= 59; $i++) { ?>
+                                <?php
+                                if ($i < 10) {
+                                    $zero = 0;
+                                } else {
+                                    $zero = null;
+                                }
+                                ?>
+                                <option value="<?php echo $zero . $i; ?>"><?php echo $zero . $i; ?></option>
+                            <?php } ?>
+                        </select>
+                        Giơ địa phương
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Thời gian đặt phòng đến</label>
+                        <select name="TimePickerBookTimeTo_Hour" id="TimePickerBookTimeTo_Hour" style='width: 60px'>
+                            <?php for ($i = 0; $i <= 23; $i++) { ?>
+                                <?php
+                                if ($i < 10) {
+                                    $zero = 0;
+                                } else {
+                                    $zero = null;
+                                }
+                                ?>
+                                <option value="<?php echo $zero . $i; ?>"><?php echo $zero . $i; ?></option>
+                            <?php } ?>
+                        </select>
+                        <select name="TimePickerBookTimeTo_Minute" id="TimePickerBookTimeTo_Minute" style='width: 60px'>
+                            <?php for ($i = 0; $i <= 59; $i++) { ?>
+                                <?php
+                                if ($i < 10) {
+                                    $zero = 0;
+                                } else {
+                                    $zero = null;
+                                }
+                                ?>
+                                <option value="<?php echo $zero . $i; ?>"><?php echo $zero . $i; ?></option>
+                            <?php } ?>
+                        </select>
+                        Giơ địa phương
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Chính sách hủy phòng</label>
+                        <select name="PolicyCancel" id="PolicyCancel">
+                            <option value="">&nbsp;</option>
+                            <?php foreach ($this->PolicyCancel as $v) { ?>
+                                <option value="<?php echo $v['PolicyCancel_Id']; ?>"><?php echo $v['PolicyCancel_Name']; ?></option>
+                            <?php } ?>
+                        </select>
+                        <div id="quote-policy"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="formSep">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <label>Trạng thái</label>
+                        <input  type="radio" name="Status" id="Status_1" value="1" checked="checked" /> <span for="Status_1" class="check_label">Kích hoạt</span>
+                        &nbsp;&nbsp;&nbsp;<input type="radio" name="Status" id="Status_0" value="0" /> <span for="Status_0" class="check_label">Hủy</span>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+<div class="form-actions">
+    <button id="edit_submit" class="btn btn-inverse" type="submit">Đồng ý tạo mới</button>
+</div>
+</form>
+</div>                        
+</div>  
+
+<script>
+    $(function() {
+        $("#BookDateFrom, #BookDateTo, #StayDateFrom, #StayDateTo").datepicker({
+            showOn: "button",
+            buttonImage: "<?php echo _BACKEND_URL . '/images/calendar_icon.png'; ?>",
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+        document.frm.onsubmit = function() {
+            if ($("#Name").val() == '') {
+                alert('Vui lòng nhập Tên khuyến mãi.');
+                $("#Name").focus();
+                return false;
+            }
+            if ($(".RoomType").is(":checked") == false) {
+                alert('Vui lòng chọn Loại phòng.');
+                return false;
+            }
+            if ($("#DiscountValue").val() == '' || $("#DiscountValue").val() == 0) {
+                alert('Vui lòng nhập giá trị giảm giá.');
+                $("#DiscountValue").focus();
+                return false;
+            }
+        }
+        var policyCancel = <?php echo json_encode($this->PolicyCancel); ?>;
+        $("#PolicyCancel").change(function() {
+            $.each(policyCancel, function(i, item) {
+                if ($("#PolicyCancel").val() != '') {
+                    if ($("#PolicyCancel").val() == item.PolicyCancel_Id) {
+                        $("#quote-policy").html(item.PolicyCancel_Body);
+                    }
+                } else {
+                    $("#quote-policy").html('');
+                }
+            });
+        });
+    });
+</script>

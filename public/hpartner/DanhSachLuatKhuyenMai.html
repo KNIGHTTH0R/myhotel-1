@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Gebo Admin Panel</title>
+    
+        <!-- Bootstrap framework -->
+            <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+            <link rel="stylesheet" href="bootstrap/css/bootstrap-responsive.min.css" />
+        <!-- gebo blue theme-->
+            <link rel="stylesheet" href="css/blue.css" id="link_theme" />
+        <!-- breadcrumbs-->
+            <link rel="stylesheet" href="lib/jBreadcrumbs/css/BreadCrumb.css" />
+        <!-- tooltips-->
+            <link rel="stylesheet" href="lib/qtip2/jquery.qtip.min.css" />
+        <!-- notifications -->
+            <link rel="stylesheet" href="lib/sticky/sticky.css" />
+		<!-- colorbox -->
+            <link rel="stylesheet" href="lib/colorbox/colorbox.css" />
+	    <!-- notifications -->
+            <link rel="stylesheet" href="lib/sticky/sticky.css" />    
+        <!-- splashy icons -->
+            <link rel="stylesheet" href="img/splashy/splashy.css" />
+		
+        <!-- main styles -->
+            <link rel="stylesheet" href="css/style.css" />
+			
+            <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans" />
+	
+        <!-- Favicon -->
+            <link rel="shortcut icon" href="favicon.ico" />
+		
+        <!--[if lte IE 8]>
+            <link rel="stylesheet" href="css/ie.css" />
+            <script src="js/ie/html5.js"></script>
+			<script src="js/ie/respond.min.js"></script>
+        <![endif]-->
+		
+		<script>
+			//* hide all elements & show preloader
+			document.documentElement.className += 'js';
+		</script>
+    </head>
+    <body>
+		<div id="loading_layer" style="display:none"><img src="img/ajax_loader.gif" alt="" /></div>
+		<div class="style_switcher">
+			<div class="sepH_c">
+				<p>Colors:</p>
+				<div class="clearfix">
+					<a href="javascript:void(0)" class="style_item jQclr blue_theme style_active" title="blue">blue</a>
+					<a href="javascript:void(0)" class="style_item jQclr dark_theme" title="dark">dark</a>
+					<a href="javascript:void(0)" class="style_item jQclr green_theme" title="green">green</a>
+					<a href="javascript:void(0)" class="style_item jQclr brown_theme" title="brown">brown</a>
+					<a href="javascript:void(0)" class="style_item jQclr eastern_blue_theme" title="eastern_blue">eastern blue</a>
+					<a href="javascript:void(0)" class="style_item jQclr tamarillo_theme" title="tamarillo">tamarillo</a>
+				</div>
+			</div>
+			<div class="sepH_c">
+				<p>Backgrounds:</p>
+				<div class="clearfix">
+					<span class="style_item jQptrn style_active ptrn_def" title=""></span>
+					<span class="ssw_ptrn_a style_item jQptrn" title="ptrn_a"></span>
+					<span class="ssw_ptrn_b style_item jQptrn" title="ptrn_b"></span>
+					<span class="ssw_ptrn_c style_item jQptrn" title="ptrn_c"></span>
+					<span class="ssw_ptrn_d style_item jQptrn" title="ptrn_d"></span>
+					<span class="ssw_ptrn_e style_item jQptrn" title="ptrn_e"></span>
+				</div>
+			</div>
+			<div class="sepH_c">
+				<p>Layout:</p>
+				<div class="clearfix">
+					<label class="radio inline"><input type="radio" name="ssw_layout" id="ssw_layout_fluid" value="" checked /> Fluid</label>
+					<label class="radio inline"><input type="radio" name="ssw_layout" id="ssw_layout_fixed" value="gebo-fixed" /> Fixed</label>
+				</div>
+			</div>
+			<div class="sepH_c">
+				<p>Sidebar position:</p>
+				<div class="clearfix">
+					<label class="radio inline"><input type="radio" name="ssw_sidebar" id="ssw_sidebar_left" value="" checked /> Left</label>
+					<label class="radio inline"><input type="radio" name="ssw_sidebar" id="ssw_sidebar_right" value="sidebar_right" /> Right</label>
+				</div>
+			</div>
+			<div class="sepH_c">
+				<p>Show top menu on:</p>
+				<div class="clearfix">
+					<label class="radio inline"><input type="radio" name="ssw_menu" id="ssw_menu_click" value="" checked /> Click</label>
+					<label class="radio inline"><input type="radio" name="ssw_menu" id="ssw_menu_hover" value="menu_hover" /> Hover</label>
+				</div>
+			</div>
+			
+			<div class="gh_button-group">
+				<a href="#" id="showCss" class="btn btn-primary btn-mini">Show CSS</a>
+				<a href="#" id="resetDefault" class="btn btn-mini">Reset</a>
+			</div>
+			<div class="hide">
+				<ul id="ssw_styles">
+					<li class="small ssw_mbColor sepH_a" style="display:none">body {<span class="ssw_mColor sepH_a" style="display:none"> color: #<span></span>;</span> <span class="ssw_bColor" style="display:none">background-color: #<span></span> </span>}</li>
+					<li class="small ssw_lColor sepH_a" style="display:none">a { color: #<span></span> }</li>
+				</ul>
+			</div>
+		</div>
+		
+		<div id="maincontainer" class="clearfix">
+			<!-- header -->
+            <header>
+			<div class="navbar navbar-fixed-top">
+				<div class="navbar-inner">
+					<div class="container-fluid">
+						<a class="brand" href="DanhSachDoanhNghiep.html"><i
+							class="icon-home icon-white"></i> Payoo Admin</a>
+						<ul class="nav user_menu pull-right">							
+							<li class="divider-vertical hidden-phone hidden-tablet"></li>
+							<li class="dropdown"><a href="#" class="dropdown-toggle"
+								data-toggle="dropdown">Johny Smith <b class="caret"></b></a>
+								<ul class="dropdown-menu">
+									<li><a href="user_profile.html">Hồ sơ</a></li>
+									<li><a href="login.html">Đăng xuất</a></li>
+								</ul></li>
+						</ul>
+						<a data-target=".nav-collapse" data-toggle="collapse"
+							class="btn_menu"> <span class="icon-align-justify icon-white"></span>
+						</a>						
+					</div>
+				</div>
+			</div>		
+		</header>
+            
+            <!-- main content -->
+            <div id="contentwrapper">
+                <div class="main_content">
+					<div class="row-fluid">
+						<div class="span12">
+						<h3 class="heading">Danh sách luật khuyến mãi</h3>
+							<table class="table table-bordered table-striped table_vam" id="dt_enterprises">
+								<thead>
+									<tr>
+										<th class="table_checkbox"><input type="checkbox" name="select_rows" class="select_rows" data-tableid="dt_enterprises" /></th>
+										<th style="width:200px">Tên khuyến mãi</th>
+										<th style="width:100px">Từ giá tiền (VNĐ)</th>
+										<th style="width:100px">Đến giá tiền (VNĐ)</th>
+										<th style="width:100px">Tỉ lệ giảm giá</th>
+										<th style="width:200px">Số lượng Voucher</th>										
+										<th>Tùy chọn</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><input type="checkbox" name="row_sel" class="row_sel" /></td>
+										<td style="width:60px">Voucher giảm giá của Coopmart</td>
+										<td>200.000</td>
+										<td>500.000</td>
+										<td>50.0000</td>
+										<td>50</td>
+										<td>
+											<a href="#" class="sepV_a" title="Sửa"><i class="icon-pencil"></i></a>											
+											<a href="#" title="Xóa"><i class="icon-trash"></i></a>
+										</td>
+									</tr>
+									<tr>
+										
+										<td><input type="checkbox" name="row_sel" class="row_sel" /></td>
+										<td style="width:60px">Voucher giảm giá của Coopmart</td>
+										<td>200.000</td>
+										<td>500.000</td>
+										<td>50.0000</td>
+										<td>50</td>
+										<td>
+											<a href="#" class="sepV_a" title="Sửa"><i class="icon-pencil"></i></a>											
+											<a href="#" title="Xóa"><i class="icon-trash"></i></a>
+										</td>
+									</tr>
+									<tr>
+										
+										<td><input type="checkbox" name="row_sel" class="row_sel" /></td>
+										<td style="width:60px">Voucher giảm giá của Coopmart</td>
+										<td>200.000</td>
+										<td>500.000</td>
+										<td>50.0000</td>
+										<td>50</td>
+										<td>
+											<a href="#" class="sepV_a" title="Sửa"><i class="icon-pencil"></i></a>											
+											<a href="#" title="Xóa"><i class="icon-trash"></i></a>
+										</td>
+									</tr>
+									<tr>
+										
+										<td><input type="checkbox" name="row_sel" class="row_sel" /></td>
+										<td style="width:60px">Voucher giảm giá của Coopmart</td>
+										<td>200.000</td>
+										<td>500.000</td>
+										<td>50.0000</td>
+										<td>50</td>
+										<td>
+											<a href="#" class="sepV_a" title="Sửa"><i class="icon-pencil"></i></a>											
+											<a href="#" title="Xóa"><i class="icon-trash"></i></a>
+										</td>
+									</tr>
+									<tr>
+										
+										<td><input type="checkbox" name="row_sel" class="row_sel" /></td>
+										<td style="width:60px">Voucher giảm giá của Coopmart</td>
+										<td>200.000</td>
+										<td>500.000</td>
+										<td>50.0000</td>
+										<td>50</td>
+										<td>
+											<a href="#" class="sepV_a" title="Sửa"><i class="icon-pencil"></i></a>											
+											<a href="#" title="Xóa"><i class="icon-trash"></i></a>
+										</td>
+									</tr>
+									<tr>
+										
+										<td><input type="checkbox" name="row_sel" class="row_sel" /></td>
+										<td style="width:60px">Voucher giảm giá của Coopmart</td>
+										<td>200.000</td>
+										<td>500.000</td>
+										<td>50.0000</td>
+										<td>50</td>
+										<td>
+											<a href="#" class="sepV_a" title="Sửa"><i class="icon-pencil"></i></a>											
+											<a href="#" title="Xóa"><i class="icon-trash"></i></a>
+										</td>
+									</tr>
+									<tr>
+										
+										<td><input type="checkbox" name="row_sel" class="row_sel" /></td>
+										<td style="width:60px">Voucher giảm giá của Coopmart</td>
+										<td>200.000</td>
+										<td>500.000</td>
+										<td>50.0000</td>
+										<td>50</td>
+										<td>
+											<a href="#" class="sepV_a" title="Sửa"><i class="icon-pencil"></i></a>											
+											<a href="#" title="Xóa"><i class="icon-trash"></i></a>
+										</td>
+									</tr>
+									<tr>
+										
+										<td><input type="checkbox" name="row_sel" class="row_sel" /></td>
+										<td style="width:60px">Voucher giảm giá của Coopmart</td>
+										<td>200.000</td>
+										<td>500.000</td>
+										<td>50.0000</td>
+										<td>50</td>
+										<td>
+											<a href="#" class="sepV_a" title="Sửa"><i class="icon-pencil"></i></a>											
+											<a href="#" title="Xóa"><i class="icon-trash"></i></a>
+										</td>
+									</tr>
+									<tr>
+										
+										<td><input type="checkbox" name="row_sel" class="row_sel" /></td>
+										<td style="width:60px">Voucher giảm giá của Coopmart</td>
+										<td>200.000</td>
+										<td>500.000</td>
+										<td>50.0000</td>
+										<td>50</td>
+										<td>
+											<a href="#" class="sepV_a" title="Sửa"><i class="icon-pencil"></i></a>											
+											<a href="#" title="Xóa"><i class="icon-trash"></i></a>
+										</td>
+									</tr>
+									<tr>
+										
+										<td><input type="checkbox" name="row_sel" class="row_sel" /></td>
+										<td style="width:60px">Voucher giảm giá của Coopmart</td>
+										<td>200.000</td>
+										<td>500.000</td>
+										<td>50.0000</td>
+										<td>50</td>
+										<td>
+											<a href="#" class="sepV_a" title="Sửa"><i class="icon-pencil"></i></a>											
+											<a href="#" title="Xóa"><i class="icon-trash"></i></a>
+										</td>
+									</tr>
+									<tr>
+										
+										<td><input type="checkbox" name="row_sel" class="row_sel" /></td>
+										<td style="width:60px">Voucher giảm giá của Coopmart</td>
+										<td>200.000</td>
+										<td>500.000</td>
+										<td>50.0000</td>
+										<td>50</td>
+										<td>
+											<a href="#" class="sepV_a" title="Sửa"><i class="icon-pencil"></i></a>											
+											<a href="#" title="Xóa"><i class="icon-trash"></i></a>
+										</td>
+									</tr>
+									<tr>
+										
+										<td><input type="checkbox" name="row_sel" class="row_sel" /></td>
+										<td style="width:60px">Voucher giảm giá của Coopmart</td>
+										<td>200.000</td>
+										<td>500.000</td>
+										<td>50.0000</td>
+										<td>50</td>
+										<td>
+											<a href="#" class="sepV_a" title="Sửa"><i class="icon-pencil"></i></a>											
+											<a href="#" title="Xóa"><i class="icon-trash"></i></a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							
+						</div>
+					</div>
+					
+					<!-- hide elements (for later use) -->
+					<div class="hide">
+						<!-- actions for datatables -->
+						<div class="dt_enterprises_actions">
+							<div class="btn-group">
+								<button data-toggle="dropdown" class="btn dropdown-toggle">Tùy chọn<span class="caret"></span></button>
+								<ul class="dropdown-menu">
+									<li><a href="#" class="delete_rows_dt" data-tableid="dt_enterprises"><i class="icon-trash"></i> Xóa</a></li>									
+								</ul>
+							</div>
+						</div>
+						<!-- confirmation box -->
+						<div id="confirm_dialog" class="cbox_content">
+							<div class="sepH_c tac"><strong>Bạn chắc chắn muốn xóa (các) dòng này?</strong></div>
+							<div class="tac">
+								<a href="#" class="btn btn-gebo confirm_yes">Vâng</a>
+								<a href="#" class="btn confirm_no">Không</a>
+						</div>
+					</div>
+                        
+                </div>
+            </div>
+            
+			<!-- sidebar -->
+            <a href="javascript:void(0)" class="sidebar_switch on_switch ttip_r" title="Hide Sidebar">Sidebar switch</a>
+            <div class="sidebar">
+
+			<div class="antiScroll">
+				<div class="antiscroll-inner">
+					<div class="antiscroll-content">
+						<div class="sidebar_inner">
+							<form action="index.php?uid=1&amp;page=search_page"
+								class="input-append" method="post">
+								<input autocomplete="off" name="query"
+									class="search_query input-medium" size="16" type="text"
+									placeholder="Search..." />
+								<button type="submit" class="btn">
+									<i class="icon-search"></i>
+								</button>
+							</form>
+							<div id="side_accordion" class="accordion">
+
+								<div class="accordion-group">
+									<div class="accordion-heading">
+										<a href="#collapseOne" data-parent="#side_accordion"
+											data-toggle="collapse" class="accordion-toggle"> <i
+											class="icon-user"></i> Doanh nghiệp
+										</a>
+									</div>
+									<div class="accordion-body collapse" id="collapseOne">
+										<div class="accordion-inner">
+											<ul class="nav nav-list">
+												<li><a href="ThemDoanhNghiep.html">Thêm doanh nghiệp</a></li>
+												<li><a href="DanhSachDoanhNghiep.html">Danh sách doanh nghiệp</a></li>												
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="accordion-group">
+									<div class="accordion-heading">
+										<a href="#collapseTwo" data-parent="#side_accordion"
+											data-toggle="collapse" class="accordion-toggle"> <i
+											class="icon-heart"></i> Khuyến mãi
+										</a>
+									</div>
+									<div class="accordion-body collapse" id="collapseTwo">
+										<div class="accordion-inner">
+											<ul class="nav nav-list">
+												<li><a href="ThemKhuyenMai.html">Thêm khuyến mãi</a></li>
+												<li><a href="ThemLuatKhuyenMai.html">Thêm luật khuyến mãi</a></li>
+												<li><a href="DanhSachKhuyenMai.html">Danh sách khuyến mãi</a></li>
+												<li><a href="DanhSachLuatKhuyenMai.html">Danh sách luật khuyến mãi</a></li>
+												<li><a href="DanhSachVoucher.html">Danh sách Voucher</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="accordion-group">
+									<div class="accordion-heading">
+										<a href="#collapseThree" data-parent="#side_accordion"
+											data-toggle="collapse" class="accordion-toggle"> <i
+											class="icon-star"></i> Tích lũy điểm
+										</a>
+									</div>
+									<div class="accordion-body collapse" id="collapseThree">
+										<div class="accordion-inner">
+											<ul class="nav nav-list">
+												<li><a href="ThemLuatTichLuyDiem.html">Thêm luật tích lũy điểm</a></li>
+												<li><a href="ThemQuaTang.html">Thêm quà tặng</a></li>
+												<li><a href="DanhSachLuatTichLuyDiem.html">Danh sách tích lũy điểm</a></li>
+												<li><a href="DanhSachQuaTang.html">Danh sách quà tặng</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>								
+								<div class="accordion-group">
+									<div class="accordion-heading">
+										<a href="#collapse7" data-parent="#side_accordion"
+											data-toggle="collapse" class="accordion-toggle"> <i
+											class="icon-th"></i> Máy tính
+										</a>
+									</div>
+									<div class="accordion-body collapse in" id="collapse7">
+										<div class="accordion-inner">
+											<form name="Calc" id="calc">
+												<div class="formSep control-group input-append">
+													<input type="text" style="width: 142px" name="Input" />
+													<button type="button" class="btn" name="clear" value="c"
+														onclick="Calc.Input.value = ''">
+														<i class="icon-remove"></i>
+													</button>
+												</div>
+												<div class="control-group">
+													<input type="button" class="btn btn-large" name="seven"
+														value="7" onclick="Calc.Input.value += '7'" /> <input
+														type="button" class="btn btn-large" name="eight" value="8"
+														onclick="Calc.Input.value += '8'" /> <input type="button"
+														class="btn btn-large" name="nine" value="9"
+														onclick="Calc.Input.value += '9'" /> <input type="button"
+														class="btn btn-large" name="div" value="/"
+														onclick="Calc.Input.value += ' / '">
+												</div>
+												<div class="control-group">
+													<input type="button" class="btn btn-large" name="four"
+														value="4" onclick="Calc.Input.value += '4'" /> <input
+														type="button" class="btn btn-large" name="five" value="5"
+														onclick="Calc.Input.value += '5'" /> <input type="button"
+														class="btn btn-large" name="six" value="6"
+														onclick="Calc.Input.value += '6'" /> <input type="button"
+														class="btn btn-large" name="times" value="x"
+														onclick="Calc.Input.value += ' * '" />
+												</div>
+												<div class="control-group">
+													<input type="button" class="btn btn-large" name="one"
+														value="1" onclick="Calc.Input.value += '1'" /> <input
+														type="button" class="btn btn-large" name="two" value="2"
+														onclick="Calc.Input.value += '2'" /> <input type="button"
+														class="btn btn-large" name="three" value="3"
+														onclick="Calc.Input.value += '3'" /> <input type="button"
+														class="btn btn-large" name="minus" value="-"
+														onclick="Calc.Input.value += ' - '" />
+												</div>
+												<div class="formSep control-group">
+													<input type="button" class="btn btn-large" name="dot"
+														value="." onclick="Calc.Input.value += '.'" /> <input
+														type="button" class="btn btn-large" name="zero" value="0"
+														onclick="Calc.Input.value += '0'" /> <input type="button"
+														class="btn btn-large" name="DoIt" value="="
+														onclick="Calc.Input.value = Math.round( eval(Calc.Input.value) * 1000)/1000" />
+													<input type="button" class="btn btn-large" name="plus"
+														value="+" onclick="Calc.Input.value += ' + '" />
+												</div>
+												Contributed by <a href="http://themeforest.net/user/maumao">maumao</a>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="push"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+            
+            <script src="js/jquery.min.js"></script>
+			<!-- smart resize event -->
+			<script src="js/jquery.debouncedresize.min.js"></script>
+			<!-- hidden elements width/height -->
+			<script src="js/jquery.actual.min.js"></script>
+			<!-- js cookie plugin -->
+			<script src="js/jquery.cookie.min.js"></script>
+			<!-- main bootstrap js -->
+			<script src="bootstrap/js/bootstrap.min.js"></script>
+			<!-- bootstrap plugins -->
+			<script src="js/bootstrap.plugins.min.js"></script>
+			<!-- tooltips -->
+			<script src="lib/qtip2/jquery.qtip.min.js"></script>
+			<!-- jBreadcrumbs -->
+			<script src="lib/jBreadcrumbs/js/jquery.jBreadCrumb.1.1.min.js"></script>
+			<!-- sticky messages -->
+            <script src="lib/sticky/sticky.min.js"></script>
+			<!-- fix for ios orientation change -->
+			<script src="js/ios-orientationchange-fix.js"></script>
+			<!-- scrollbar -->
+			<script src="lib/antiscroll/antiscroll.js"></script>
+			<script src="lib/antiscroll/jquery-mousewheel.js"></script>
+            <!-- common functions -->
+			<script src="js/gebo_common.js"></script>
+    
+			<!-- colorbox -->
+			<script src="lib/colorbox/jquery.colorbox.min.js"></script>
+			<!-- datatable -->
+			<script src="lib/datatables/jquery.dataTables.min.js"></script>
+			<!-- additional sorting for datatables -->
+			<script src="lib/datatables/jquery.dataTables.sorting.js"></script>
+			<!-- tables functions -->
+			<script src="js/danh_sach_luat_khuyen_mai.js"></script>
+	
+			<script>
+				$(document).ready(function() {
+					//* show all elements & remove preloader
+					setTimeout('$("html").removeClass("js")',1000);
+				});
+			</script>
+		
+		</div>
+	</body>
+</html>
